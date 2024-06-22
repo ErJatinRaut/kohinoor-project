@@ -1,0 +1,881 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <style type="text/css">
+    #searchCodeInput {
+        margin-left: 10px;
+        margin-top: 10px;
+        padding: 5px;
+        width: 25%;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+    }
+    .card-header:first-child {
+    border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+    background-color: lightcyan;
+    }
+    </style>
+</head>
+
+<body>
+
+       <!--start content-->
+          <main class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+              <div class="breadcrumb-title pe-3">Reports</div>
+              <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item"><a href="/reports-data/"><i class="bx bx-home-alt"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Reports Info</li>
+                  </ol>
+                </nav>
+              </div>
+              
+            </div>
+            <!--end breadcrumb-->
+
+              <div class="card">
+                <div class="card-header py-3">
+                  <div class="row g-3">
+                    
+                    
+                  </div>
+                 </div>
+                <form id="searchForm"  >
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input type="text" id="searchCodeInput" class="form-control" placeholder="Search by Code ,Printing,Gathering,Machine Binding,Cutting,Stitching,Pasting,Opening Stock Of Book,Packing" required>
+                                <button type="button" id="searchCodeButton" class="btn btn-primary" style="background-color: mediumaquamarine; height: 37px; margin-top: 10px;">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                  
+                <div class="card-body">
+                   
+                    <div class="table-responsive" >
+                      <table class="display table table-hover table-striped table-bordered" id="myTable">
+                        <thead>
+                          <tr style="text-align: center; background-color: lightcyan;">
+                            {% comment %} <th>Sr. No</th>
+                            <th>Heading</th>
+                            <th>Brand Code</th>
+                           
+                            <th>Brands Name</th>
+                            <th>Class Name</th>
+                            <th>Medium</th> 
+                            <th>Subject</th> 
+                            <th>Transfer From</th>
+                            <th>Transfer To</th>
+                            <th>Total</th>
+                            <th>Total Transferred</th>
+                            <th>Total Pending</th> {% endcomment %}
+                           
+                          </tr>
+                        
+                        </thead>
+                        <tbody>
+                            {% comment %} <tr class="text-center">
+                                <th colspan="9">Printing</th>
+                            </tr> {% endcomment %}
+                            <tr>
+                            {% for i in context.data1 %}
+                            <th>Sr No</th><td>{{ forloop.counter }}</td>
+                             <th>Heading</th><th>Printing</th>
+                             <th>Brand Code</th><td>{{ i.p_code }}</td>
+                                    
+                             <th>Brands Name</th> <td>{{ i.p_brand_name_1 }}</td>
+                             <th>Class Name</th><td>{{ i.p_class_name_1 }}</td>
+                             <th>Medium</th><td>{{ i.p_medium_1 }}</td>
+                             <th>Subject</th><td>{{ i.p_subject_1 }}</td>
+                             <th>Transfer From</th><td>{{ i.tra_from_1 }}</td>
+                             <th>Transfer To</th><td>{{ i.to_1 }}</td>
+                                    <!-- <td>{{ i.p_print_date }}</td> -->
+                                <th>Total</th><td>{{ i.total_received_forms }}</td>
+                                <th>Total Transferred</th><td>{{ i.transfer }}</td>
+                                <th>Total Pending</th><td>{{ i.transfer_pending }}</td>
+                                   
+                                    
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tbody>
+                          {% comment %} <tr class="text-center">
+                              <th colspan="9">Gathering</th>
+                          </tr>  {% endcomment %}
+                         
+                          <tr >
+                              
+                              
+                              <th>Sr No</th>{% for e in context.data3 %}
+                                  <td>{{ forloop.counter }}</td>
+                                  <th>Heading</th><th >Gathering</th>
+                                  <th>Brand Code</th><td>{{ e.code_g }}</td>
+                                  
+                                  <th>Brands Name</th><td>{{ e.brand_name }}</td>
+                                  <th>Class Name</th><td>{{ e.class_name }}</td>
+                                  <th>Medium</th><td>{{ e.medium }}</td>
+                                  <th>Subject</th><td>{{ e.subject }}</td>
+                                   <th>Transfer From</th><td>{{ e.tra_from_2 }}</td>
+                                   <th>Transfer To</th><td>{{ e.to_2}}</td>
+                                  <!-- <td>{{ e.date }}</td> -->
+                                  <!-- Add more td elements as needed -->
+                                  <th>Total</th><td>{{ e.total_gather }}</td>
+                                  <th>Total Transferred</th><td>{{ e.transfer }}</td>
+                                  <th>Total Pending</th><td>{{ e.transfer_pending }}</td>
+                                  {% comment %} <td>
+                                      <a  href="/reports-view/{{e.id}}/"><i class="bi bi-eye"></i></a>
+                                  </td> {% endcomment %}
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                        <tbody>
+                            {% comment %} <tr class="text-center">
+                                <th colspan="9">Machine Binding</th>
+                            </tr> {% endcomment %}
+                            <tr>
+                                {% for j in context.data2 %}
+                                    <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                    <th>Heading</th><th>Machine Binding</th>
+                                    <th>Brand Code</th><td>{{ j.b_code }}</td>
+                                    {% comment %} <td>{{ j.b_v1_name }}</td> {% endcomment %}
+                                    <th>Class Name</th><td>{{ j.b_brand_name }}</td>
+                                    <th>Medium</th><td>{{ j.b_class_name }}</td>
+                                    <th>Subject</th><td>{{ j.b_medium }}</td>
+                                    <td>{{ j.b_subject }}</td>
+                                     <th>Transfer From</th><td>{{ j.tra_from_b }}</td>
+                                     <th>Transfer To</th> <td>{{ j.to_b }}</td>
+                                    <!-- <td>{{ j.b_date }}</td> -->
+                                    <th>Total</th><td>{{ j.total_binding }}</td>
+                                    <th>Total Transferred</th><td>{{ j.transfer }}</td>
+                                    <th>Total Pending</th> <td>{{ j.transfer_pending }}</td>
+                                    <!-- Add more td elements as needed -->
+                                    {% comment %} <td>
+                                        <a  href="/reports-view/{{j.id}}/"><i class="bi bi-eye"></i></a>
+                                    </td> {% endcomment %}
+                               
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        
+                        <tbody>
+                            {% comment %} <tr class="text-center">
+                                <th colspan="9">Matchine Cutting</th>
+                            </tr> {% endcomment %}
+                           
+                            <tr>
+                                {% for f in context.data4 %}
+                                    <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                    <th>Heading</th><th >Cutting</th>
+                                    <th>Brand Code</th><td>{{ f.c_code }}</td>
+                                    {% comment %} <td>{{ f.c_v1_name }}</td> {% endcomment %}
+                                    <th>Brands Name</th><td>{{ f.c_brand_name }}</td>
+                                    <th>Class Name</th><td>{{ f.c_class_name }}</td>
+                                    <th>Medium</th><td>{{ f.c_medium }}</td>
+                                    <th>Subject</th><td>{{ f.c_subject }}</td>
+                                     <th>Transfer From</th><td>{{ f.tra_from_c }}</td>
+                                     <th>Transfer To</th><td>{{ f.to_c }}</td>
+                                    <!-- <td>{{ f.c_date }}</td> -->
+                                    <th>Total</th><td>{{ f.c_quantity_5 }}</td>
+                                    <th>Total Transferred</th><td>{{ f.transfer }}</td>
+                                    <th>Total Pending</th><td>{{ f.transfer_pending }}</td>
+                                    <!-- Add more td elements as needed -->
+                                    {% comment %} <td>
+                                        <a  href="/reports-view/{{f.id}}/"><i class="bi bi-eye"></i></a>
+                                    </td> {% endcomment %}
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                        <tbody>
+                          {% comment %} <tr class="text-center">
+                              <th colspan="9">Stitching</th>
+                          </tr> {% endcomment %}
+                          <tr>
+                              {% for h in context.data6 %}
+                                  
+                                  <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                  <th>Heading</th><th >Stitching</th>
+                                  <th>Brand Code</th><td>{{ h.m_code }}</td>
+                                  {% comment %} <td>{{ h.b_vender_name }}</td> {% endcomment %}
+                                  <th>Brands Name</th><td>{{ h.m_brand_name1 }}</td>
+                                  <th>Class Name</th><td>{{ h.m_class_name1 }}</td>
+                                  <th>Medium</th><td>{{ h.m_medium1 }}</td>
+                                  <th>Subject</th><td>{{ h.m_subject1 }}</td>
+                                   <th>Transfer From</th><td>{{ h.tra_from_m }}</td>
+                                   <th>Transfer To</th><td>{{ h.to_m }}</td>
+                                  <!-- <td>{{ h.b_print_date }}</td> -->
+                                  <th>Total</th><td>{{ h.m_striching1 }}</td>
+                                  <th>Total Transferred</th><td>{{ h.transfer }}</td>
+                                  <th>Total Pending</th><td>{{ h.transfer_pending }}</td>
+                                  {% comment %} <td>
+                                      <a  href="/reports-view/{{h.id}}/"><i class="bi bi-eye"></i></a>
+                                  </td> {% endcomment %}
+
+                                  <!-- Add more td elements as needed -->
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                        <tbody>
+                            {% comment %} <tr class="text-center">
+                                <th colspan="9">Pasting</th>
+                            </tr> {% endcomment %}
+                            <tr>
+                                
+                                {% for g in context.data5 %}
+                                    <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                    <th>Heading</th><th>Pasting</th>
+                                    <th>Brand Code</th><td>{{ g.pasting_code }}</td>
+                                    {% comment %} <td>{{ g.pasting_vender_name }}</td> {% endcomment %}
+                                    <th>Brands Name</th><td>{{ g.pasting_brand_name1 }}</td>
+                                    <th>Class Name</th><td>{{ g.pasting_class_name1 }}</td>
+                                    <th>Medium</th><td>{{ g.pasting_medium1 }}</td>
+                                    <th>Subject</th><td>{{ g.pasting_subject1 }}</td>
+                                    <!-- <td>{{ g.pasting_print_date }}</td> -->
+                                     <th>Transfer From</th><td>{{ g.tra_from_pasting }}</td>
+                                     <th>Transfer To</th><td>{{ g.to_pasting }}</td>
+                                     <th>Total</th><td>{{ g.pasting_pasting1 }}</td>
+                                    <th>Total Transferred</th><td>{{ g.transfer }}</td>
+                                    <th>Total Pending</th><td>{{ g.transfer_pending }}</td>
+                                    <!-- Add more td elements as needed -->
+                                    {% comment %} <td>
+                                        <a  href="/reports-view/{{g.id}}/"><i class="bi bi-eye"></i></a>
+                                    </td> {% endcomment %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tbody>
+                          
+                          <tr>
+                              
+                              {% for a in context.data8 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th >Shrink Packing</th>
+                                <th>Brand Code</th><td >
+                                  {{ a.p_book_code }}
+                                </td>
+                               
+                                <th>Brands Name</th><td >
+                                    {{ a.p_brand_name }}
+                                </td>
+                                <th>Class Name</th><td >
+                                  {{ a.p_standard }}
+                                </td>
+                                <th>Medium</th><td >
+                                    {{ a.p_medium }}
+                                </td>
+                                
+                                <th>Subject</th><td >
+                                    {{ a.p_subject }}
+                                </td>
+                                 <th>Transfer From</th><td>
+                                   {{ a.tra_from_shrink }}
+                                </td>
+                                <th>Transfer To</th><td>
+                                  {{ a.to_shrink }}
+                                </td>
+                                {% comment %} <td >
+                                    {{ a.bundle_size }}
+                                </td>
+                                <td>
+                                    {{ a.p_quantity }}
+                                </td>
+                                <td >
+                                    {{ a.packing_size }}
+                                </td> {% endcomment %}
+<!--                                 <td>
+                                  {{ a.p_date }}
+                                </td> -->
+                                <th>Quantity</th><td>{{ a.p_quantity }}</td>
+                                  <!-- Add more td elements as needed -->
+                                  {% comment %} <td>
+                                      <a  href="/reports-view/{{a.id}}/"><i class="bi bi-eye"></i></a>
+                                  </td> {% endcomment %}
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                        
+                        <tbody>
+                            
+                            <tr >
+                                {% for k in context.data7 %}
+                                    <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                    <th>Heading</th><th>Bitti Packing</th>
+                                    <th>Brand Code</th><td>{{ k.bitti_book_code }}</td>
+                                    
+                                   <th>Brands Name</th> <td>{{ k.bitti_brand_name }}</td>
+                                    <th>Class Name</th><td>{{ k.bitti_standard }}</td>
+                                   <th>Medium</th> <td>{{ k.bitti_medium }}</td>
+                                    <th>Subject</th><td>{{ k.bitti_subject }}</td>
+                                    <!-- <td>{{ k.cutting_print_date }}</td> -->
+                                    <th>Total</th><td>{{ k.bitti_quantity }}</td>
+                                    <!-- <td>{{ k.transfer }}</td>
+                                    <td>{{ k.transfer_pending }}</td> -->
+                                    
+                                </tr>
+                            {% endfor %}
+                        </tbody> 
+                        
+                        <tbody>
+                          {% comment %} <tr class="text-center">
+                              <th colspan="9">Manual Cutting</th>
+                          </tr> {% endcomment %}
+                          <tr >
+                              {% for b in context.books_data %}
+                                  <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                  <th>Heading</th><th>Opening Stock of Book</th>
+                                  <th>Brand Code</th><td>{{ b.code}}</td>
+                                 
+                                  <th>Brands Name</th><td>{{ b.books_name}}</td>
+                                  <th>Class Name</th><td>{{ b.books_class}}</td>
+                                  <th>Medium</th><td>{{ b.medium }}</td>
+                                  <th>Subject</th><td>{{ b.subject }}</td>
+                                  <th>Total</th><td>{{ b.stock }}</td>
+                                  
+                                  {% comment %} <td>
+                                      <a  href="/reports-view/{{k.id}}/"><i class="bi bi-eye"></i></a>
+                                  </td> {% endcomment %}
+                                  <!-- Add more td elements as needed -->
+                              </tr>
+                          {% endfor %}
+                      </tbody>
+                      <tbody>
+                        {% comment %} <tr class="text-center">
+                            <th colspan="9">Manual Cutting</th>
+                        </tr> {% endcomment %}
+                        <tr >
+                            {% for c in context.order_book %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Order Book</th>
+                                <th>Brand Code</th><td>{{ c.code_1}}</td>
+                               
+                                <th>Brands Name</th><td>{{ c.brand_name_1}}</td>
+                                <th>Class Name</th><td>{{ c.class_name_1}}</td>
+                                <th>Medium</th><td>{{ c.medium_1 }}</td>
+                                <th>Subject</th><td>{{ c.subject_1 }}</td>
+                                <!-- <td>{{ c.purchase_date }}</td> -->
+                                <th>Total</th><td>{{ c.total_quantity }}</td>
+                                
+                                {% comment %} <td>
+                                    <a  href="/reports-view/{{k.id}}/"><i class="bi bi-eye"></i></a>
+                                </td> {% endcomment %}
+                                <!-- Add more td elements as needed -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tbody>
+                        {% comment %} <tr class="text-center">
+                            <th colspan="9">Manual Cutting</th>
+                        </tr> {% endcomment %}
+                        <tr >
+                            {% for x in context.data9 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Cover Lamination</th>
+                                <th>Plate No:</th><td>{{ x.plate_lamination}}</td>
+                               
+                                
+                                <th>Cover Vendor:</th><td>{{ x.vender_lamination}}</td>
+                                {% comment %} <td>{{ x.medium_1 }}</td>
+                                <td>{{ x.subject_1 }}</td> {% endcomment %}
+                               
+                                <th>Quantity:</th><td>{{ x.quantity_lamination }}</td>
+                                
+                                {% comment %} <td>
+                                    <a  href="/reports-view/{{k.id}}/"><i class="bi bi-eye"></i></a>
+                                </td> {% endcomment %}
+                                <!-- Add more td elements as needed -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tbody>
+                        {% comment %} <tr class="text-center">
+                            <th colspan="9">Manual Cutting</th>
+                        </tr> {% endcomment %}
+                        <tr >
+                            {% for y in context.data10 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Cover Texture</th>    
+                                <th>Plate No:</th><td>{{ y.plate_texture}}</td>  
+                            
+                               
+                                
+                                
+                               
+                                
+                                <th>Cover Vendor:</th><td>{{ y.vender_texture}}</td>
+                                {% comment %} <td>{{ x.medium_1 }}</td>
+                                <td>{{ x.subject_1 }}</td> {% endcomment %}
+                               
+                                <th>Quantity:</th><td>{{ y.quantity_texture }}</td>
+                                
+                                {% comment %} <td>
+                                    <a  href="/reports-view/{{k.id}}/"><i class="bi bi-eye"></i></a>
+                                </td> {% endcomment %}
+                                <!-- Add more td elements as needed -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tbody>
+                        
+                        <tr >
+                            {% for z in context.data16 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Printing Vendor</th>    
+                                <th>GSTIN No:</th><td>{{ z.vender_gstin_no}}</td>  
+                            
+                               
+                                
+                                
+                               
+                                
+                                <th>Organization Name:</th><td>{{ z.organization_name}}</td>
+                                <th>Mobile No :</th><td>{{ z.vender_contact }}</td>
+                                <th>Email:</th><td>{{ z.vender_email }}</td>
+                                <th>Vendor Group:</th><td>{{ z.vender_group }}</td> 
+                               
+                                <th>Address:</th><td>{{ z.vender_address }}</td>
+                               
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+
+                       <tbody>
+                        
+                        <tr >
+                            {% for u in context.data15 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Cutting Vendor</th>    
+                                <th>GSTIN No:</th><td>{{ u.c_vender_gstin_no}}</td>  
+                            
+                               
+                                
+                                
+                               
+                                
+                                <th>Organization Name:</th><td>{{ u.c_organization_name}}</td>
+                                <th>Mobile No :</th><td>{{ u.c_vender_contact }}</td>
+                                <th>Email:</th><td>{{ u.c_vender_email }}</td>
+                                <th>Vendor Group:</th><td>{{ u.c_vender_group }}</td> 
+                               
+                                <th>Address:</th><td>{{ u.c_vender_address }}</td>
+                               
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+
+                       <tbody>
+                        
+                        <tr >
+                            {% for v in context.data14 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Gather Vendor</th>    
+                                <th>GSTIN No:</th><td>{{ v.gvender_gstin_no1}}</td>  
+                            
+                               
+                                
+                                
+                               
+                                
+                                <th>Organization Name:</th><td>{{ v.gorganization_name1}}</td>
+                                <th>Mobile No :</th><td>{{ v.gvender_contact1 }}</td>
+                                <th>Email:</th><td>{{ v.gvender_email1 }}</td>
+                                <th>Vendor Group:</th><td>{{ v.gvender_group1 }}</td> 
+                               
+                                <th>Address:</th><td>{{ v.gvender_address1 }}</td>
+                               
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+
+                       <tbody>
+                        
+                        <tr >
+                            {% for w in context.data13 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Packing Vendor</th>    
+                                <th>GSTIN No:</th><td>{{ w.pvender_gstin_no1}}</td>  
+                                <th>Organization Name:</th><td>{{ w.porganization_name1}}</td>
+                                <th>Mobile No :</th><td>{{ w.pvender_contact1 }}</td>
+                                <th>Email:</th><td>{{ w.pvender_email1 }}</td>
+                                <th>Vendor Group:</th><td>{{ w.pvender_group1 }}</td> 
+                               
+                                <th>Address:</th><td>{{ w.pvender_address1 }}</td>
+                               
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+
+                       <tbody>
+                        
+                        <tr >
+                            {% for m in context.data12 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Cover Vendor</th>    
+                                <th>GSTIN No:</th><td>{{ m.cvender_gstin_no1}}</td>  
+                                <th>Organization Name:</th><td>{{ m.corganization_name1}}</td>
+                                <th>Mobile No :</th><td>{{ m.cvender_contact1 }}</td>
+                                <th>Email:</th><td>{{ m.cvender_email1 }}</td>
+                                <th>Vendor Group:</th><td>{{ m.cvender_group1 }}</td> 
+                               
+                                <th>Address:</th><td>{{ m.cvender_address1 }}</td>
+                               
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+                        
+                       <tbody>
+                        
+                        <tr >
+                            {% for m in context.data11 %}
+                                <th>Sr No</th><td>{{ forloop.counter }}</td>
+                                <th>Heading</th><th>Binding Vendor</th>    
+                                <th>GSTIN No:</th><td>{{ m.vender_gstin_no1}}</td>  
+                                <th>Organization Name:</th><td>{{ m.organization_name1}}</td>
+                                <th>Mobile No :</th><td>{{ m.vender_contact1 }}</td>
+                                <th>Email:</th><td>{{ m.vender_email1 }}</td>
+                                <th>Vendor Group:</th><td>{{ m.vender_group1 }}</td> 
+                               
+                                <th>Address:</th><td>{{ m.vender_address1 }}</td>
+                               
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+                      </table>
+                   </div>
+                   {% comment %} <nav class="float-end mt-3">
+                    <ul class="pagination">
+                      <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                      <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                  </nav> {% endcomment %}
+                </div>
+              </div>
+
+          </main>
+       <!--end page main-->
+
+
+       <!--start overlay-->
+        <div class="overlay nav-toggle-icon"></div>
+       <!--end overlay-->
+
+        <!--Start Back To Top Button-->
+        <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+        <!--End Back To Top Button-->
+        
+        <!--start switcher-->
+       <div class="switcher-body">
+        <button class="btn btn-primary btn-switcher shadow-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="bi bi-paint-bucket me-0"></i></button>
+        <div class="offcanvas offcanvas-end shadow border-start-0 p-2" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling">
+          <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Theme Customizer</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+          </div>
+          <div class="offcanvas-body">
+            <h6 class="mb-0">Theme Variation</h6>
+            <hr>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="LightTheme" value="option1" checked>
+              <label class="form-check-label" for="LightTheme">Light</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="DarkTheme" value="option2">
+              <label class="form-check-label" for="DarkTheme">Dark</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="SemiDarkTheme" value="option3">
+              <label class="form-check-label" for="SemiDarkTheme">Semi Dark</label>
+            </div>
+            <hr>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="MinimalTheme" value="option3">
+              <label class="form-check-label" for="MinimalTheme">Minimal Theme</label>
+            </div>
+            <hr/>
+            <h6 class="mb-0">Header Colors</h6>
+            <hr/>
+            <div class="header-colors-indigators">
+              <div class="row row-cols-auto g-3">
+                <div class="col">
+                  <div class="indigator headercolor1" id="headercolor1"></div>
+                </div>
+                <div class="col">
+                  <div class="indigator headercolor2" id="headercolor2"></div>
+                </div>
+                <div class="col">
+                  <div class="indigator headercolor3" id="headercolor3"></div>
+                </div>
+                <div class="col">
+                  <div class="indigator headercolor4" id="headercolor4"></div>
+                </div>
+                <div class="col">
+                  <div class="indigator headercolor5" id="headercolor5"></div>
+                </div>
+                <div class="col">
+                  <div class="indigator headercolor6" id="headercolor6"></div>
+                </div>
+                <div class="col">
+                  <div class="indigator headercolor7" id="headercolor7"></div>
+                </div>
+                <div class="col">
+                  <div class="indigator headercolor8" id="headercolor8"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       </div>
+       <!--end switcher-->
+
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        var $table = $("#myTable");
+        $table.hide(); // Hide the table by default
+
+        function performSearch() {
+            var searchText = $("#searchCodeInput").val().toLowerCase();
+            $("tbody tr").each(function () {
+                var rowText = $(this).text().toLowerCase();
+                if (rowText.includes(searchText)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // Show the table after performing a search
+            $table.show();
+        }
+
+        // Handle form submission
+        $("#searchForm").submit(function (e) {
+            e.preventDefault(); // Prevent default form submission
+            performSearch();
+        });
+
+        // Handle Enter key press
+        $("#searchCodeInput").on("keyup", function (e) {
+            if (e.key === "Enter") {
+                performSearch();
+            }
+        });
+
+        // Handle "Search" button click
+        $("#searchCodeButton").click(performSearch);
+    });
+</script>
+    
+    
+
+  {% comment %} <script>
+    // Get the input element and button
+    var input = document.getElementById("searchCodeInput");
+    var button = document.getElementById("searchCodeButton");
+
+    // Get the table
+    var table = document.getElementById("myTable");
+
+    // Initially hide the table
+    table.style.display = "none";
+
+    // Add an event listener to the button
+    button.addEventListener("click", function () {
+        var filter = input.value.toLowerCase(); // Convert input to lowercase
+        var rows = table.getElementsByTagName("tr"); // Get all rows in the table
+
+        // Loop through rows and hide those that don't match the search input
+        for (var i = 0; i < rows.length; i++) { // Start from 0 to include the header row
+            var row = rows[i];
+
+            // Skip the header row
+            if (i === 0) {
+                continue;
+            }
+
+            var cells = row.getElementsByTagName("td"); // Get all cells in the row
+            var found = false; // Flag to check if the row matches the search
+
+            // Loop through cells and check if any cell contains the search input
+            for (var j = 0; j < cells.length; j++) {
+                var cell = cells[j];
+                if (cell.innerHTML.toLowerCase().indexOf(filter) > -1) {
+                    found = true;
+                    break; // Stop searching once a match is found
+                }
+            }
+
+            // Hide or show the row based on the search result
+            if (found) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+
+            // Check if the current row contains a colspan heading
+            if (row.querySelector("th[colspan='9']")) {
+                var headingRow = row;
+                var dataRow = rows[i + 1];
+                if (dataRow) {
+                    // Copy the data from the heading row to the data row
+                    var headingCells = headingRow.getElementsByTagName("th");
+                    var dataCells = dataRow.getElementsByTagName("td");
+                    for (var k = 0; k < headingCells.length; k++) {
+                        var headingCell = headingCells[k];
+                        var dataCell = dataCells[k];
+                        if (dataCell) {
+                            dataCell.innerHTML = headingCell.innerHTML;
+                        }
+                    }
+                    dataRow.style.display = row.style.display;
+                    headingRow.style.display = "none"; // Hide the heading row
+                }
+            }
+        }
+
+        // Show the table after searching
+        table.style.display = "table";
+    });
+</script> {% endcomment %}
+
+  <!--end wrapper-->
+  <!--chalu code-->
+ {% comment %} <script>
+    // Get the input element and button
+    var input = document.getElementById("searchCodeInput");
+    var button = document.getElementById("searchCodeButton");
+
+    // Get the table
+    var table = document.getElementById("myTable");
+
+    // Initially hide the table
+    table.style.display = "none";
+
+    // Add an event listener to the button
+    button.addEventListener("click", function () {
+        var filter = input.value.toLowerCase(); // Convert input to lowercase
+        var rows = table.getElementsByTagName("tr"); // Get all rows in the table
+
+        // Loop through rows and hide those that don't match the search input
+        for (var i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+            var row = rows[i];
+            var cells = row.getElementsByTagName("td"); // Get all cells in the row
+            var found = false; // Flag to check if the row matches the search
+
+            // Loop through cells and check if any cell contains the search input
+            for (var j = 0; j < cells.length; j++) {
+                var cell = cells[j];
+                if (cell.innerHTML.toLowerCase().indexOf(filter) > -1) {
+                    found = true;
+                    break; // Stop searching once a match is found
+                }
+            }
+
+            // Hide or show the row based on the search result
+            if (found) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+
+            // Check if the current row contains a colspan heading
+            if (row.querySelector("th[colspan='9']")) {
+                var headingRow = row;
+                var dataRow = rows[i + 1];
+                if (dataRow) {
+                    // Copy the data from the heading row to the data row
+                    var headingCells = headingRow.getElementsByTagName("th");
+                    var dataCells = dataRow.getElementsByTagName("td");
+                    for (var k = 0; k < headingCells.length; k++) {
+                        var headingCell = headingCells[k];
+                        var dataCell = dataCells[k];
+                        if (dataCell) {
+                            dataCell.innerHTML = headingCell.innerHTML;
+                        }
+                    }
+                    dataRow.style.display = row.style.display;
+                    headingRow.style.display = "none"; // Hide the heading row
+                }
+            }
+        }
+
+        // Show the table after searching
+        table.style.display = "table";
+    });
+</script>  {% endcomment %}
+
+ 
+
+  <!-- Bootstrap bundle JS -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <!--plugins-->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
+  <script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
+  <script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+  <script src="assets/js/pace.min.js"></script>
+  <!--app-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  
+
+<!--ye script main printing gathering word search karne ke liye lagai hai--!>
+{% comment %} <script>
+
+// Get the input element and button
+var input = document.getElementById("searchCodeInput");
+var button = document.getElementById("searchCodeButton");
+
+// Get all table rows
+var rows = document.querySelectorAll("#myTable tbody tr");
+
+// Add an event listener to the button
+button.addEventListener("click", function () {
+    var filter = input.value.toLowerCase(); // Convert input to lowercase
+
+    // Loop through rows and show those that match the search input
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var cells = row.getElementsByTagName("td");
+
+        // Check if the current row contains a colspan heading or data
+        if (row.querySelector("th[colspan='9']") || row.textContent.toLowerCase().indexOf(filter) > -1) {
+            row.style.display = ""; // Show the row
+        } else {
+            // Loop through cells and check if any cell contains the search input
+            var matchFound = false;
+            for (var j = 0; j < cells.length; j++) {
+                var cell = cells[j];
+                if (cell.innerHTML.toLowerCase().indexOf(filter) > -1) {
+                    matchFound = true;
+                    break; // Stop searching once a match is found
+                }
+            }
+            if (matchFound) {
+                row.style.display = ""; // Show the row if match found in any cell
+            } else {
+                row.style.display = "none"; // Hide the row if no match found
+            }
+        }
+    }
+});
+
+</script> {% endcomment %}
+
+
+  
+
+</body>
+
+</html>
+
+{% endblock %}

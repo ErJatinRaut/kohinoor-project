@@ -1,0 +1,584 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Bitting Packing Info</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color: mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Bitti Packing Report</button>
+                    <a href="/shrink_transfer_to/">
+                        <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color:mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Shrink Transfer</button>
+                    </a>
+                    {% comment %} <a href="/cutting_machine_transfer_packing/">
+                        <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color:mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Cutting Machine Transfer</button>
+                    </a>  {% endcomment %}
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content" style="background-color:lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span>   -->
+
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Packing Report Form</h4></div>
+                                <hr style="color:black">
+                                <form method="POST"  id="profile-form">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="left">
+                                        <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                        <div class="row" style="text-align: right;">
+                                            <div class="col-md-8"></div>
+                                            <div class="col-md-4">
+                                                <div class="form-group" >
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control mobile" name="bitti_date" id="bitti_date" value="{% now 'Y-m-d' %}" disabled max="{% now 'Y-m-d' %}" />                                                </div>
+                                                </div>
+                                            </div>
+                                        </div> <br>
+                                        <div class="form-group">
+                                        <div class="row">
+                                            <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="name" class="control-label"><b>Name<span style="color:red;">*</span></b></label>
+                                            
+                                                <select class="form-control" name="p_vender_name" id="vender_name" style="width:100%;" required>
+                                                    <option disabled selected value>Select Vendor</option>
+                                                    {% for i in data96 %}
+                                                        <option value="{{i.organization_name1}}">{{i.organization_name1}}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                            </div>                                    
+                                        </div>
+                                   
+                                      
+                                                
+                                              <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                        <label style="color:black ;">Book Code<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="bitti_book_code" minlength="" class="form-control" id="code_g" placeholder="Enter Book code" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Brand Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="bitti_brand_name" minlength="" class="form-control" id="brand_name_1" placeholder="Enter Brand Name" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Standard<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="bitti_standard" minlength="" class="form-control" id="class_name_1" placeholder="Enter Standard" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Medium<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="bitti_medium" minlength="" class="form-control" id="medium_1" placeholder="Enter Medium" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Subject<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="bitti_subject" minlength="" class="form-control" id="subject_1" placeholder="Enter Subject" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Bitti Pack Size<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="bitti_pack_size" minlength="" class="form-control" id="bitti_pack_size" placeholder="bitti pack size" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Bundle Size<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="bitti_bundle_size" minlength="" class="form-control" id="bundle_size" placeholder="Enter Bundle Size" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Quantity<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Quantity"
+                                                                name="bitti_quantity" id="" class="form-control" maxlength="" value=""
+                                                                required="">
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                
+                                                <div class="col-md-8 text-center"></div>
+                                                    <div class="col-md-12" style="text-align: center;">
+                                                      <button class="btn btn-primary" style="background-color:mediumaquamarine ; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                                      <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;"  value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                <!-- <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Packing<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Packing Size"
+                                                                name="packing_size" id="pages_per_form" class="form-control" maxlength="" value=""
+                                                                required="">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Course Duration<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4" >
+                                                            <select name="cource_duration" class="select-style" style="width:200px;padding:8px;" required="">
+                                                                  <option value="">Select</option>
+                                                                  <option  value="1 Month">1 Month</option>
+                                                                  <option  value="2 Month">2 Month</option>
+                                                                  <option  value="3 Month">3 Month</option>
+                                                                  <option  value="4 Month">4 Month</option>
+                                                                  <option  value="5 Month">5 Month</option>
+                                                                  <option  value="6 Month">6 Month</option>
+                                                                  <option  value="7 Month">7 Month</option>
+                                                                  <option  value="8 Month">8 Month</option>
+                                                                  <option  value="9 Month">9 Month</option>
+                                                                  <option  value="10 Month">10 Month</option>
+                                                                  <option  value="11 Month">11 Month</option>
+                                                                  <option  value="12 Month">12 Month</option>
+
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Course Description<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="textarea" min="0" 
+                                                                name="" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                <!-- <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Batch start date<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="Date" min="0" 
+                                                                name="batch_start_date" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <!-- <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Discount<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color:black ;" width="50" type="text" min="0" 
+                                                                name="discount" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                
+                                                {% comment %} <div class="col-md-8 text-center"></div>
+                                                    <div class="col-md-12" style="text-align: center;">
+                                                      <button class="btn btn-primary" style="background-color:mediumaquamarine ; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                                      <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;"  value="Save">
+                                                    </div>
+                                                </div> {% endcomment %}
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;">
+                                            <th align="center">Sr.No</th>
+                                            <th align="center">Book code</th>
+                                            <th align="center">Brand</th>
+                                            <th align="center">Standard</th>
+                                            <th align="center">Medium</th>
+                                            <th align="center">Subject</th>
+                                            <th align="center">Bundle Size</th>
+                                            <th align="center">Quantity</th>
+                                            <th align="center">Packing</th>
+                                            <th align="center">Action</th>
+                                            <!-- <th align="center">Brands Added On</th> -->
+                                            <!-- <th align="center">Action</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter}}
+                                            </td>
+                                            <td >
+                                                {{ i.bitti_book_code }}
+                                            </td>
+                                            <td >
+                                                {{ i.bitti_brand_name }}
+                                            </td>
+                                            
+                                            <td >
+                                                {{ i.bitti_standard }}
+                                            </td>
+                                            <td >
+                                                {{ i.bitti_medium }}
+                                            </td>
+                                            <td >
+                                                {{ i.bitti_subject }}
+                                            </td>
+                                            <td >
+                                                {{ i.bitti_bundle_size }}
+                                            </td>
+                                            <td>
+                                                {{ i.bitti_quantity }}
+                                            </td>
+                                            <td >
+                                                {{ i.bitti_packing_size }}
+                                            </td>
+                                            <!-- <td >
+                                                {{ i.brands_added_on }}
+                                            </td>                                                                                       -->
+                                             <td>
+                                                <div>
+                                                     <!-- <a  href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a> -->
+                                                    <div id="popup1 {{i.id}}" class="overlay">
+                                                        <div class="popup">
+                                                            <h4 style="background-color :#6e95fc;padding : 10px; color:white;">View Details</h4>
+                                                            <a class="close" href="#">&times;</a>
+                                                            <br><br>
+                                                            <div style = "color: black; font-size: 15px;" class="content">
+<!-- 
+                                                               <span><b>Brand Name</b> = {{i.brand_name}}</span> <br><br>
+                                                               <span><b>Pages Per Form</b> = {{i.pages_per_form}}</span> <br><br> -->
+                        
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <a  href="/edit-bitti/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    <a  href="/delete-bitti/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    
+                                                </div>
+                                            <!-- </td> -->
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code to handle dropdown and input box dependencies
+    
+        // Get references to the dropdown elements
+        const codeDropdown = document.getElementById('code_g');
+        const brandDropdown = document.getElementById('brand_name_1');
+        const classDropdown = document.getElementById('class_name_1');
+        const mediumDropdown = document.getElementById('medium_1');
+        const subjectDropdown = document.getElementById('subject_1');
+        const bittiPackSizeDropdown = document.getElementById('bitti_pack_size'); // Corrected variable name
+        const pagesDropdown = document.getElementById('pages_1');
+        const singleDropdown = document.getElementById('single_1');
+        const doubleDropdown = document.getElementById('double_1');
+        const fourDropdown = document.getElementById('four_1');
+    
+        // Create a dictionary to store the book data
+        const bookData = {
+            // Populate this object with book data from your backend
+            {% for i in book %}
+            "{{ i.code }}": {
+                brand: "{{ i.books_name }}",
+                class: "{{ i.books_class }}",
+                medium: "{{ i.medium }}",
+                subject: "{{ i.subject }}",
+                bitti_pack_size: "{{ i.bitti_pack_size }}",
+                pages: "{{ i.no_of_pages }}",
+                single: "{{ i.onec_rate }}",
+                double: "{{ i.twoc_rate }}",
+                four: "{{ i.fourc_rate }}",
+            },
+            {% endfor %}
+        };
+    
+        // Function to update input boxes based on "code_g" value
+        function updateFieldsBasedOnCode() {
+            const selectedCode = codeDropdown.value;
+    
+            // Check if the selectedCode exists in the bookData dictionary
+            if (bookData[selectedCode]) {
+                const data = bookData[selectedCode];
+    
+                // Populate other dropdowns and fields with data
+                brandDropdown.value = data.brand;
+                classDropdown.value = data.class;
+                mediumDropdown.value = data.medium;
+                subjectDropdown.value = data.subject;
+                bittiPackSizeDropdown.value = data.bitti_pack_size; // Corrected variable name
+                pagesDropdown.value = data.pages;
+                singleDropdown.value = data.single;
+                doubleDropdown.value = data.double;
+                fourDropdown.value = data.four;
+    
+                // For debugging: Log the data being populated
+                console.log("Data populated:", data);
+            } else {
+                // If the selectedCode is not found in the bookData, clear all fields
+                brandDropdown.value = '';
+                classDropdown.value = '';
+                mediumDropdown.value = '';
+                subjectDropdown.value = '';
+                bittiPackSizeDropdown.value = ''; // Corrected variable name
+                pagesDropdown.value = '';
+                singleDropdown.value = '';
+                doubleDropdown.value = '';
+                fourDropdown.value = '';
+    
+                // For debugging: Log that data was not found
+                console.log("Data not found for code:", selectedCode);
+            }
+        }
+    
+        // Add event listeners to "code_g" and "subject_1" fields
+        codeDropdown.addEventListener('change', updateFieldsBasedOnCode);
+        subjectDropdown.addEventListener('change', () => {
+            // When the subject changes, update shrink_pack_size if code_g is selected
+            if (codeDropdown.value) {
+                updateFieldsBasedOnCode();
+            }
+        });
+    
+        // Trigger the initial call to updateFieldsBasedOnCode
+        updateFieldsBasedOnCode();
+    </script>
+    
+      
+
+
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
+    <script>
+      function submitForm() {
+        // Submit the form using AJAX
+        $.ajax({
+          url: $('#profile-form').attr('action'),
+          type: 'POST',
+          data: $('#profile-form').serialize(),
+          success: function(response) {
+            // Show a success message using SweetAlert
+            swal({
+              title: "Success!",
+              text: "Brands added successfully",
+              icon: "success",
+              button: "OK",
+            });
+            .then(function() {
+              location.reload();
+          });
+          },
+          error: function(response) {
+            // Show an error message using SweetAlert
+            swal({
+              title: "Error!",
+              text: response.responseText,
+              icon: "error",
+              button: "OK",
+            });
+            .then(function() {
+              location.reload();
+          });
+          }
+        });
+      }
+    </script>
+
+
+</body>  
+
+{% endblock %}

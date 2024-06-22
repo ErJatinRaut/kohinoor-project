@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+    /* Add your CSS styles here */
+
+    .container {
+        max-width: 705px;
+        margin: 0 auto;
+        box-shadow: 1 0 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+    }
+
+    .form-control {
+        width: 70%;
+    }
+
+    .text-center
+    {
+        text-align: center;
+    }
+    .page-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        /* Adjust the max-width as needed */
+        margin-top: 55px auto;
+        
+    }
+    .btn-no-underline {
+    text-decoration: none !important;
+   }
+</style>
+<body>
+    <div class="container">
+        <div class="page-wrapper">
+            <div class="page-content">
+                <!--breadcrumb-->
+                <div class="page-breadcrumb mb-6" style="background-color: lightcyan;">
+                    <div class="breadcrumb-title pe-3" style="font-weight: bold;">Update Data</div>
+                    <hr>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-body" style="background-color: lightcyan;">
+                                <div class="">
+                                    <div class="mb-3">
+                                        <label class="form-label">Class Name</label>
+                                        <select type="text" class="form-control radius-10" name="class_name" value="{{data.class_name}}" maxlength="30" required="">
+                                            <option value="">Select Class</option>
+                                            <option value="5 std" {% if data.class_name == '5 std' %}selected{% endif %}>5 std</option>
+                                            <option value="6 std" {% if data.class_name == '6 std' %}selected{% endif %}>6 std</option>
+                                            <option value="7 std" {% if data.class_name == '7 std' %}selected{% endif %}>7 std</option>
+                                            <option value="8 std" {% if data.class_name == '8 std' %}selected{% endif %}>8 std</option>
+                                            <option value="9 std" {% if data.class_name == '9 std' %}selected{% endif %}>9 std</option>
+                                            <option value="10 std" {% if data.class_name == '10 std' %}selected{% endif %}>10 std</option>
+                                            <option value="11 std" {% if data.class_name == '11 std' %}selected{% endif %}>11 std</option>
+                                            <option value="12 std" {% if data.class_name == '12 std' %}selected{% endif %}>12 std</option>
+                                        </select>
+                                        
+                                    </div>
+                                    <div class="col-md-12" style="text-align: center;">
+                                        
+                                        <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'setting-classes' %}" style="color:white;" class="btn-no-underline">Back</a></button>
+
+
+                                        <button type="submit" class="btn btn-primary" style="background-color: mediumaquamarine; color: white;">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    {% endblock %}

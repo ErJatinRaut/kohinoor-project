@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    * {
+        font-family: Georgia;
+    }
+</style>
+<style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+    
+            #print-container, #print-container * {
+                visibility: visible;
+            }
+    
+            #print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+    
+            /* Hide buttons during printing */
+            button {
+                display: none !important;
+            }
+            
+        }
+    </style>
+
+<body>
+    <div class="container-fluid container1" id="print-container">
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb mb-3 p-5" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Edit Cover Transfer</div>
+                <hr>
+                <form method="POST" id="transferForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">from</label>
+                                <select type="text" class="form-control mobile" name="vender_transfer_from" id="vender_transfer_from">
+                                    {% if data %}
+                                        <option value="{{ data.vender_transfer_from }}" selected>{{ data.vender_transfer_from }}</option>
+                                    {% else %}
+                                        <option disabled selected value>Select Vender</option>
+                                    {% endif %}
+                                    {% for i in data1 %}
+                                        <option value="{{ i.organization_name }}">{{ i.organization_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">To</label>
+                                <select type="text" class="form-control mobile" name="vender_transfer_to" id="vender_transfer_to">
+                                    {% if data %}
+                                        <option value="{{ data.vender_transfer_to }}" selected>{{ data.vender_transfer_to }}</option>
+                                    {% else %}
+                                        <option disabled selected value>Select Vendor</option>
+                                    {% endif %}
+                                    {% for i in data2 %}
+                                        <option value="{{ i.gorganization_name1 }}">{{ i.gorganization_name1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>   
+                        
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Voucher No</label>
+                                <input type="tel" name="topi_transfer_voucher_no" minlength="" class="form-control" value="{{data.topi_transfer_voucher_no}}"
+                                    id="" placeholder="" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Subject 1</label>
+                                <select type="text" class="form-control mobile" name="topi_transfer_subject1" id="topi_transfer_subject1">
+                                    {% if data %}
+                                        <option value="{{ data.topi_transfer_subject1 }}" selected>{{ data.topi_transfer_subject1 }}</option>
+                                    {% else %}
+                                        <option disabled selected value>Select Subject</option>
+                                    {% endif %}
+                                    {% for i in data26 %}
+                                        <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Qty 1</label>
+                                <input type="tel" name="topi_transfer_qty1" minlength="" class="form-control"
+                                    value="{{data.topi_transfer_qty1}}" id="" placeholder="" maxlength="" >
+                            </div>
+
+                            <div class="col-md-12" style="text-align: center;">
+                                <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                        href="{% url 'database' %}" style="color:white;">Back</a></button>
+    
+                                <button type="submit" class="btn btn-primary"
+                                    style="background-color:mediumaquamarine; color:white;">Save</button>
+                            </div>
+                        </div>
+    
+                    </form>
+                    
+                </div>
+                <button id="print-button" class="btn btn-primary col-md-1 mt-3" style="background-color: mediumaquamarine; color: white;">Print</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script>
+        document.getElementById('print-button').addEventListener('click', function() {
+            printForm();
+        });
+    
+        function printForm() {
+            var form = document.getElementById('transferForm');
+            if (form) {
+                form.style.backgroundColor = 'white'; // Optional: Set background color to white before printing
+                window.print();
+                form.style.backgroundColor = 'lightcyan'; // Optional: Restore original background color after printing
+            } else {
+                alert('Form not found.');
+            }
+        }
+    </script>
+    
+    
+    
+    
+    
+    {% endblock %}

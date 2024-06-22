@@ -1,0 +1,1249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>orders</title>
+  <style>
+
+
+  *{
+    font-family: Georgia;
+    margin:0;
+    padding:0;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 50px;
+  border: 1px solid #888;
+  width: 100%; 
+  max-width: 1500px;
+}
+
+
+.select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+    padding-left:10%;
+  }
+  .title h3{
+  
+  border-bottom: 2px solid blueviolet ;
+  display: inline-block;
+   color: #000;
+  font-weight: bold;
+}
+.title h5{
+
+  display: inline-block;
+   
+}
+.div1 {
+    width: 800px;
+    height: 453px;
+    border: 1px solid black;
+    border-radius: 15px 50px;
+    box-shadow: 10px 11px 5px lightgreen inset;
+    /* border-radius: 15px 50px; */
+    background-color: lightcyan;
+}
+
+</style>
+
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Order Info</div>
+            <hr>
+            <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color: mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Create Orders</button>
+            </div>
+            <br>
+            <div id="myModal" class="modal">
+
+                <div class="modal-content" style="background-color:lightcyan;">    
+                  <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span>                 -->
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;">
+                            <h4 style="color:white ;">Order Now</h4>
+                        </div>
+                        <hr style="color:black">
+                        <form method="POST" onsubmit="return myfun()">
+                            {% csrf_token %}
+                            <div class="panel-body" >
+                                <div class="" >
+                                    <div class="title">
+                                       <div class="">
+                                        <div class="row" style="text-align: right;">
+                                            <div class="col-md-8"></div>
+                                            <div class="col-md-4">
+                                                <div class="" >
+                                                    <div class="">
+                                                        <input type="date" class="form-control mobile" name="
+                                                        date" id="date" placeholder="{% now 'Y-m-d' %}" disabled value="" required max="{% now 'Y-m-d' %}" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <div class="row mt-5">  
+
+                                            <div class="col-md-4" style=" padding:0;">
+                                    
+                                
+                                                <label>Material Center<span style="color:red;">*</span></label>
+                                                <select class="form-control" name="material_center" id="material_center"
+                                                    style="width:100%; border-radius: 0px;"  >
+                                                    <option disabled selected value>Select</option>
+                                                    {% for i in data3 %}
+                                                    <option>{{i.centre_name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                            <div class="mb-5">
+                                           
+                                                    <label for="name" class="control-label"><b>Company Name<span style="color:red;">*</span></b></label>
+                                                
+                                                    <select class="form-control" name="company_name1" id="vender_name" style="width:100%; border-radius: 0px;" required>
+                                                        <option disabled selected value>Select Comapany</option>
+                                                        {% for i in book1 %}
+                                                            <option value="{{i.company_name}}">{{i.company_name}}</option>
+                                                        {% endfor %}
+                                                        </select>
+                                               
+                                                </div>
+                                            </div>
+                                                <div class="col-md-4">
+                                                    <div class="mb-5">
+                                                   
+                                                      <label for="name" class="control-label"><b>Vendor Name<span style="color:red;">*</span></b></label>
+                                                
+                                                    <select class="form-control" name="vender_name" id="vender_name" style="width:100%; border-radius: 0px;" required>
+                                                        <option disabled selected value>Select Vendor</option>
+                                                        {% for i in vend %}
+                                                            <option value="{{i.id}}">{{i.organization_name}}</option>
+                                                        {% endfor %}
+                                                        </select>
+                                                
+                                                                                  
+                                            </div>
+                                            </div>
+
+                                            <div class="row d-flex">
+
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+                                                    
+                                                        <label style="font-size: 12px;">Code<span style="color:red;">*</span></label>
+                                                         <input style="border-radius: 0px;" class="form-control" id="code_1" name="code_1" required >
+                                                   
+                                                </div>
+                                                </div>
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+                                                    
+                                                        <label style="font-size: 12px;">Brand<span style="color:red;">*</span></label>
+                                                        <input style="border-radius: 0px;"  class="form-control" id="brand_name_1"  name="brand_name_1" required >
+                                                    
+                                                </div>
+                                                </div>
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+                                                   
+                                                        <label style="font-size: 12px;">Class<span style="color:red;">*</span></label>
+                                                         <input style="border-radius: 0px;"  class="form-control" id="class_name_1" name="class_name_1" required>
+                                                    
+                                                </div>
+                                                </div>
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+                                                    
+                                                        <label style="font-size: 12px;">Medium<span style="color:red;">*</span></label>
+                                                        <input style="border-radius: 0px;"  class="form-control" id="medium_1" name="medium_1" required>
+                                                   
+                                                </div>
+                                                </div>
+                                                <div class="col px-0">
+                                                    <div class="mb-3">
+                                                   
+                                                        <label style="font-size: 12px;">Subject<span style="color:red;">*</span></label>
+                                                        <input  style="border-radius: 0px;"  class="form-control" id="subject_1" name="subject_1" required>
+                                                   
+                                                </div>
+                                                </div>
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+                                                   
+                                                        <label style="font-size: 12px;">Pages<span style="color:red;">*</span></label>
+                                                        <input style="border-radius: 0px;"  class="form-control" id="pages_1"  name="pages_1" required>
+                                                   
+                                                </div>
+                                                </div>
+                                                
+                                                <div class="col px-0"id="single_label_div" style="display: none">
+                                                     <div class="">
+                                                    <label style="font-size: 12px;">Printing Rate<span style="color:red;">*</span></label>
+                                                    <input style="border-radius: 0px;"  class="form-control" id="single_1" name="single_1"  data-depends-on-brand="" data-depends-on-class="" data-depends-on-medium="" data-depends-on-subject="" data-depends-on-pages="">
+                                                </div>
+                                                </div>
+                                                <div class="col px-0" id="double_label_div" style="display: none">
+                                                    <div class="">
+                                                    <label style="font-size: 12px;">Printing Rate<span style="color:red;">*</span></label>
+                                                    <input style="border-radius: 0px;"  class="form-control" id="double_1" name="double_1"  data-depends-on-brand="" data-depends-on-class="" data-depends-on-medium="" data-depends-on-subject="" data-depends-on-pages="">
+                                                </div>
+                                                </div>
+                                                <div class="col px-0" id="four_label_div" style="display: none">
+                                                     <div class="">
+                                                    <label style="font-size: 12px;">Printing Rate<span style="color:red;">*</span></label>
+                                                     <input style="border-radius: 0px;"  class="form-control" id="four_1" name="four_1"  data-depends-on-brand="" data-depends-on-class="" data-depends-on-medium="" data-depends-on-subject="" data-depends-on-pages="">
+                                                 </div>
+                                                </div>
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+                                                     
+                                                         <label style="font-size: 12px;">Printing Size<span style="color:red;">*</span></label>
+                                                         <input style="border-radius: 0px;"  class="form-control" id="rate1" name="rate1" required data-depends-on-brand="" data-depends-on-class="" data-depends-on-medium="" data-depends-on-subject="" data-depends-on-pages="">
+                                                     
+                                                    </div>
+                                               </div>
+                                               
+                                               <div class="col px-0">
+                                                <div class="mb-0">
+                                                   
+                                                        <label style="font-size: 12px;">Quantity<span style="color:red;">*</span></label>
+                                                    
+                                                    <input style="border-radius: 0px;"  type="number" class="form-control mobile" name="quantity_1" id="quantity_1" maxlength="10" placeholder="Quantity" min="1" step="1" value=""  required oninput="updateInputBoxes()" />
+                                                </div>
+                                                </div>
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+                                                     
+                                                         <label style="font-size: 12px;">Rim<span style="color:red;">*</span></label>
+                                                         <input style="border-radius: 0px;"  class="form-control" id="rim_1" name="rim_1" required >
+                                                     
+                                                    </div>
+                                                   </div>
+                                                
+                                                <div class="col px-0">
+                                                    <div class="mb-0">
+    
+                                                 <label style="font-size: 12px;">Forms<span style="color:red;">*</span></label>
+                                                    <input style="border-radius: 0px;"  type="number" class="form-control mobile" name="pform_1" id="forms-per-set" maxlength="10" placeholder="forms-per-set" min="1" step="1" value=""  readonly /> 
+                                                </div>
+                                            </div>
+                                            <div class="col px-0">
+                                                <div class="mb-0">
+    
+                                             <label style="font-size: 12px;">Amount<span style="color:red;">*</span></label>
+                                                <input style="border-radius: 0px;"  type="number" class="form-control mobile" name="amount_1" id="amount_1" maxlength="10" placeholder="amount" min="1" step="1" value=""  readonly /> 
+                                            </div>
+                                            </div>
+
+                                            <div class="col" style = "padding:0;">
+                                                <!-- <a href="#" style="margin-left:10px; color: transparent; cursor-pointer:none; text-align:right;">Remove</a> -->
+                                                    </div>
+                                            
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+                                        </div> 
+                                      
+                                    </div>
+                                   
+                                    
+                                    
+                                    <div class="col-md-12" style="padding: 0;">
+                                       <div class="col-md-12" style="padding: 0;">
+                                            <div class="input_fields_container">
+
+                                                </div>
+                                                
+                                        
+                                          <div class="col-md-12" style="text-align: center;">
+                                          <button class="btn btn-primary btn-sm " id="add_more_button" style="background-color:mediumaquamarine;">Add New Items</button>
+                                          </div>
+                                      </div>
+
+                                      <div class="input_fields_container2">
+                                        <!-- Newly added items will be appended here -->
+                                    </div>
+
+                                      <div class="col-md-12 mt-3" style="text-align: center;">
+                                        <a href="#" style="background-color: mediumaquamarine;padding: 8px;border-radius: 5px;font-size: 14px;text-decoration: none;color: white" id="add_sundries_link">Add bill sundries</a>
+                                    </div>
+                    
+
+                                        
+                                      <!--   <div class="col-md-12" >
+                                            <div class="">
+                                                <label style="padding-right:100%;">Note</label>
+                                                <input type="text" class="form-control mobile" name="term_and_condition1" maxlength="60" id="term_and_condition1" placeholder="1. Terms and Conditions" value="{{first_condition}}" style="border-bottom: 1px solid rgb(214, 213, 213);
+                                                border-left:none ; border-top: none; border-right: none; margin-bottom: 13px;"/>
+                                            </div>
+                                        </div> -->
+                                        <!-- <div class="col-md-8 text-center"></div> -->
+                                        <div class="col-md-12">
+                                          <div class="text-center mt-3 mb-3">
+                                              <button type="submit" class="btn btn-primary" name="create_form_btn" value="save_cashmemo_btn" style="background-color: mediumaquamarine;">Create</button>
+                                              <button class="btn btn-primary" style="background-color :mediumaquamarine ; "><a href="{{ form.get_cancel_link }}" style="color:white; text-decoration: none;"  >Back</a></button>
+                                              
+                                          </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" >
+                <div class="row" style="text-align: center;" >
+                    <div class="col-md-12" >
+                        <div class="table-responsive">
+                            <table  class="display table table-hover table-striped table-bordered" >
+                                <thead>
+                                    <tr style="text-align: center; background-color: lightcyan;">
+                                        <th style="text-align=center; background-color:lightcyan;">Sr.No</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Material Center</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Book Code</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Order Id</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Vendor</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Company Name</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Total Quantity</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Total Rim</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Order Date</th>
+                                        <th style="text-align=center; background-color:lightcyan;">Total Form </th>
+                                        <th style="text-align=center; background-color:lightcyan;">Total Amount</th>
+                                        <!-- <th style="text-align=center; background-color:lightcyan;">double</th>
+                                        <th style="text-align=center; background-color:lightcyan;">four</th> -->
+                                        <th style="text-align=center; background-color:lightcyan;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in data8 %}
+                                    <tr >
+                                        <td >{{ forloop.counter }}</td> 
+                                        <td>{{i.material_center}}</td>
+                                        <td>{{i.code_1}}</td>
+                                        <td >{{i.order_id}}</td>
+                                        <td>{{ i.vender_name }}</td>
+                                        <td>{{ i.company_name1 }}</td>
+                                        <td>{{ i.total_quantity }}</td>
+                                        <td>{{ i.total_rim }}</td>
+                                        <td >{{ i.purchase_date }}</td> 
+                                        <td >{{ i.total_form }}</td>
+                                        <td >{{ i.total_amount }}</td>
+                                         <!-- <td >{{ i.double_rate }}</td>
+                                        <td >{{ i.four_rate }}</td> -->                                                                                    
+                                        <td>
+                                        <div>
+                                            <a  href="{{i.order_id}}"><i class="bi bi-eye"></i></a>
+                                            {% if i.order_approved %}
+                                            
+                                            <h4 type="submit" class="btn btn-success btn-round ml-auto" data-toggle="modal" >Order Approved</h4>
+                                            {% else %}
+                                            <a  href="/delete-orders/{{i.id}}/"><i class="bi bi-archive"></i></a></i></a>&nbsp;&nbsp;
+                                            <button type="button" class="btn btn-primary btn-round ml-auto" id="colorButton" onclick="showConfirmation('{{ i.id }}')" style="background-color: mediumaquamarine;">Approve</button>
+                                           
+                                            {% endif %}
+                                            
+                                            <div id="popup1 {{i.id}}" class="overlay">
+                                            </div>
+                                        </div>  
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        
+<!-- For 1st order -->
+<!-- Your HTML code -->
+<!-- ... (previous HTML remains unchanged) -->
+
+<!-- JavaScript -->
+<script>
+    const codeDropdown = document.getElementById('code_1');
+    const brandDropdown = document.getElementById('brand_name_1');
+    const classDropdown = document.getElementById('class_name_1');
+    const mediumDropdown = document.getElementById('medium_1');
+    const subjectDropdown = document.getElementById('subject_1');
+    const pagesDropdown = document.getElementById('pages_1');
+    const singleDropdown = document.getElementById('single_1');
+    const doubleDropdown = document.getElementById('double_1');
+    const fourDropdown = document.getElementById('four_1');
+    const rateDropdown = document.getElementById('rate1');
+    const singleLabelDiv = document.getElementById('single_label_div');
+    const doubleLabelDiv = document.getElementById('double_label_div');
+    const fourLabelDiv = document.getElementById('four_label_div');
+
+    const bookData = {
+        {% for i in book %}
+        "{{ i.code }}": {
+            brand: "{{ i.books_name }}",
+            class: "{{ i.books_class }}",
+            medium: "{{ i.medium }}",
+            subject: "{{ i.subject }}",
+            pages: "{{ i.no_of_pages }}",
+            single: "{{ i.onec_rate }}",
+            double: "{{ i.twoc_rate }}",
+            four: "{{ i.fourc_rate }}",
+            rate1: "{{ i.subbrand_printing_form_size }}"
+        },
+        {% endfor %}
+    };
+
+    function updateInputBoxes() {
+        const selectedCode = codeDropdown.value;
+        console.log('Selected Code:', selectedCode);
+
+        if (selectedCode in bookData) {
+            console.log('Code found in bookData');
+
+            brandDropdown.value = bookData[selectedCode].brand;
+            classDropdown.value = bookData[selectedCode].class;
+            mediumDropdown.value = bookData[selectedCode].medium;
+            subjectDropdown.value = bookData[selectedCode].subject;
+            pagesDropdown.value = bookData[selectedCode].pages;
+
+            if (bookData[selectedCode].single) {
+                singleLabelDiv.style.display = 'block';
+                singleDropdown.style.display = 'block';
+                singleDropdown.value = bookData[selectedCode].single;
+            } else {
+                singleLabelDiv.style.display = 'none';
+                singleDropdown.style.display = 'none';
+            }
+
+            if (bookData[selectedCode].double) {
+                doubleLabelDiv.style.display = 'block';
+                doubleDropdown.style.display = 'block';
+                doubleDropdown.value = bookData[selectedCode].double;
+            } else {
+                doubleLabelDiv.style.display = 'none';
+                doubleDropdown.style.display = 'none';
+            }
+
+            if (bookData[selectedCode].four) {
+                fourLabelDiv.style.display = 'block';
+                fourDropdown.style.display = 'block';
+                fourDropdown.value = bookData[selectedCode].four;
+            } else {
+                fourLabelDiv.style.display = 'none';
+                fourDropdown.style.display = 'none';
+            }
+
+            rateDropdown.value = bookData[selectedCode].rate1;
+            console.log('rate1 field value:', rateDropdown.value);
+            console.log('Is rate1 field disabled?', rateDropdown.disabled); 
+            rateDropdown.value = bookData[selectedCode].rate1;
+            console.log('rate1 field value:', rateDropdown.value);
+            console.log('Is rate1 field disabled?', rateDropdown.disabled); 
+    
+            // Calculate rim_1 based on pages_1, rate1, and quantity
+            const pagesValue = parseFloat(pagesDropdown.value) || 0;
+            const rateValue = parseFloat(rateDropdown.value) || 0;
+            const singleValue = parseFloat(singleDropdown.value) || 0;
+            const doubleValue = parseFloat(doubleDropdown.value) || 0;
+            const fourValue = parseFloat(fourDropdown.value) || 0;
+            
+            const quantityValue = parseFloat(document.getElementById('quantity_1').value) || 0;
+    
+            const rimValue = (pagesValue / rateValue * quantityValue) / 500;
+            const formValue = (pagesValue / rateValue * quantityValue)
+            const totalAmount = rimValue * (singleValue + doubleValue + fourValue);
+            document.getElementById('rim_1').value = rimValue;
+            document.getElementById('forms-per-set').value = formValue;
+            document.getElementById('amount_1').value = totalAmount.toFixed(2);
+            console.log('rim_1 field value:', rimValue);
+        } else {
+            console.log('Code not found in bookData');
+
+            brandDropdown.value = '';
+            classDropdown.value = '';
+            mediumDropdown.value = '';
+            subjectDropdown.value = '';
+            pagesDropdown.value = '';
+
+            singleLabelDiv.style.display = 'none';
+            doubleLabelDiv.style.display = 'none';
+            fourLabelDiv.style.display = 'none';
+
+            singleDropdown.style.display = 'none';
+            doubleDropdown.style.display = 'none';
+            fourDropdown.style.display = 'none';
+
+            rateDropdown.value = '';
+            console.log('rate1 field value1:', rateDropdown.value);
+            console.log('Is rate1 field disabled1?', rateDropdown.disabled); 
+        }
+    }
+
+    codeDropdown.addEventListener('input', function () {
+        updateInputBoxes();
+    });
+</script>
+
+<!-- End first order -->
+
+<!-- For 50 order -->
+ <script>
+    $(document).ready(function() {
+        var max_fields_limit = 51;
+        var x = 1;
+
+        $('#add_more_button').click(function(e) {
+            e.preventDefault();
+            if (x < max_fields_limit) {
+                x++;
+                $('.input_fields_container').append(
+                    '<div class=" row form-group" style = "padding:0;"> ' +
+                    
+
+
+
+                    '<div class="col" style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label"><b>Code</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile" placeholder="enter book code"  name="code_' + x.toString() + '" id="code_' + x.toString() + '" required>' +
+                    
+                    '</div>' +
+
+
+
+
+                    '<div class="col  " style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Brand</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile"  placeholder="brand name" name="brand_name_' + x.toString() + '" id="brand_name_' + x.toString() + '" required>' +
+                    
+                    '</div>' +
+
+
+
+
+
+                    '<div class="col " style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Class</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile"  placeholder="class name" name="class_name_' + x.toString() + '" id="class_name_' + x.toString() + '" required>' +
+                    
+                    '</div>' +
+
+
+
+
+                    '<div class="col  " style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Medium</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile"  placeholder="medium" name="medium_' + x.toString() + '" id="medium_' + x.toString() + '" required>' +
+                    
+                    '</div>' +
+
+
+
+
+                    '<div class="col  " style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Subject</label>'+
+                    '<input style = "border-radius: 0; width:100px" class="form-control mobile"  placeholder="subject" name="subject_' + x.toString() + '" id="subject_' + x.toString() + '" required>' +
+                    
+                    '</div>' +
+
+
+
+
+
+                    '<div class="col" style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Pages</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile"  placeholder="pages" name="pages_' + x.toString() + '" id="pages_' + x.toString() + '" required>' +
+                   
+                    '</div>' +
+
+
+
+
+
+                    '<div class="col" id="single_label_div_' + x.toString() + '"style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Printing Rate</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile" placeholder="single" name="single_' + x.toString() + '" id="single_' + x.toString() + '" >' +
+                    
+                    '</div>' +
+
+
+
+
+
+
+                    '<div class="col" id="double_label_div_' + x.toString() + '"style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Printing Rate</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile"  placeholder="double" name="double_'  + x.toString() + '" id="double_' + x.toString() + '" >' +
+                   
+                    '</div>' +
+
+
+
+
+
+                    '<div class="col" id="four_label_div_' + x.toString() + '"style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Printing Rate</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile" placeholder="four"  name="four_' + x.toString() + '" id="four_' + x.toString() + '" >' +
+                    
+                    '</div>' +
+
+
+
+
+                    '<div class="col" style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Printing Size</label>'+
+                    '<input style = "border-radius: 0; width:100%" class="form-control mobile" placeholder="printing rate"  name="rate' + x.toString() + '" id="rate' + x.toString() + '" required>' +
+                    
+                    '</div>' +
+
+
+
+
+
+                    '<div class="col  quantity" style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Quantity</label>'+
+                    '<input style = "border-radius: 0; width:100%" type="number" pattern="[0-9\s]+" class="form-control mobile" name="quantity_' + x.toString() + '" id="quantity_' + x.toString() + '" placeholder="Quantity" value="" required maxlength="30"/>' +
+                    '</div>' +
+
+
+
+
+                    '<div class="col" style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Rim</label>'+
+                    '<input class="form-control mobile" placeholder="Rim"  name="rim_' + x.toString() + '" id="rim_' + x.toString() + '" required>' +
+                        
+                    '</div>' +
+
+
+
+
+                    '<div class="col  quantity" style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Forms</label>'+
+                    '<input style = "border-radius: 0; width:100%" type="number" class="form-control mobile" name="pform_' + x.toString() + '" id="pform_' + x.toString() + '" maxlength="10" placeholder="forms-per-set" min="1" step="1" value=""  readonly />' +
+                    '</div>' +
+
+
+
+
+                    '<div class="col quantity" style = "padding:0;">' +
+                    '<label style ="font-size:12px; font-weight:100" for="name" class="control-label">Amount</label>'+
+                    '<input type="number" class="form-control mobile" name="amount_' + x.toString() + '" id="amount_' + x.toString() + '" maxlength="10" placeholder="amount" min="1" step="1" value=""  readonly />' +
+                    '</div>' +
+
+
+
+                    
+                    '<div class="col">'+
+                    '<a href="#" class="remove_field" style="margin-left:10px; text-align:right;">Remove</a>' +
+                    '</div>'+                    
+
+                   
+                    '</div>'
+                );
+                updateDropdowns(x);
+            }
+        });
+
+        $('.input_fields_container').on("click", ".remove_field", function(e) {
+            e.preventDefault();
+            $(this).closest('.form-group').remove();
+            x--;
+        });
+
+         function calculateFormsPerSet(x) {
+            const quantityInput = document.getElementById('quantity_' + x.toString());
+            const pagesInput = document.getElementById('pages_' + x.toString());
+            const rateInput = document.getElementById('rate' + x.toString());
+            const rimInput = document.getElementById('rim_' + x.toString());
+            const pformInput = document.getElementById('pform_' + x.toString());
+            const amountInput = document.getElementById('amount_' + x.toString());
+            const singleInput = document.getElementById('single_' + x.toString());
+            const doubleInput = document.getElementById('double_' + x.toString());
+            const fourInput = document.getElementById('four_' + x.toString());
+        
+
+           quantityInput.addEventListener('input', function () {
+            const singleValue = parseFloat(singleInput.value) || 0;
+            const doubleValue = parseFloat(doubleInput.value) || 0;
+            const fourValue = parseFloat(fourInput.value) || 0;
+    
+            const quantity = parseInt(quantityInput.value) || 0;
+            const pages = parseInt(pagesInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+    
+            if (!isNaN(quantity) && !isNaN(pages) && !isNaN(rate)) {
+                const formsPerSet = (pages / rate) * quantity;
+                const calculationResult = formsPerSet / 500;
+                const totalAmount =calculationResult *(singleValue + doubleValue + fourValue);
+    
+                rimInput.value = isNaN(calculationResult) ? '' : calculationResult.toFixed(2);
+                pformInput.value = isNaN(formsPerSet) ? '' : Math.round(formsPerSet);
+                amountInput.value = isNaN(totalAmount) ? '' : totalAmount.toFixed(2);
+            } else {
+                rimInput.value = '';
+                pformInput.value = '';
+                amountInput.value = '';
+            }
+        });
+       }
+
+
+
+        function updateDropdowns(x) {
+            const codeDropdown = document.getElementById('code_' + x.toString());
+            const brandDropdown = document.getElementById('brand_name_' + x.toString());
+            const classDropdown = document.getElementById('class_name_' + x.toString());
+            const mediumDropdown = document.getElementById('medium_' + x.toString());
+            const subjectDropdown = document.getElementById('subject_' + x.toString());
+            const pagesDropdown = document.getElementById('pages_' + x.toString());
+            const singleDropdown = document.getElementById('single_' + x.toString());
+            const doubleDropdown = document.getElementById('double_' + x.toString());
+            const fourDropdown = document.getElementById('four_' + x.toString());
+            const rateDropdown = document.getElementById('rate' + x.toString());
+            const singleLabelDiv = document.getElementById('single_label_div_' + x.toString());
+            const doubleLabelDiv = document.getElementById('double_label_div_' + x.toString());
+            const fourLabelDiv = document.getElementById('four_label_div_' + x.toString());
+
+            // Add a change event listener to the "code" dropdown
+            codeDropdown.addEventListener('change', function () {
+                const selectedCode = this.value;
+                // Populate other dropdowns with data based on the selected "code"
+                brandDropdown.value = bookData[selectedCode].brand;
+                classDropdown.value = bookData[selectedCode].class;
+                mediumDropdown.value = bookData[selectedCode].medium;
+                subjectDropdown.value = bookData[selectedCode].subject;
+                pagesDropdown.value = bookData[selectedCode].pages;
+                singleDropdown.value = bookData[selectedCode].single;
+                doubleDropdown.value = bookData[selectedCode].double;
+                fourDropdown.value = bookData[selectedCode].four;
+                rateDropdown.value = bookData[selectedCode].rate;
+
+                // Show/hide fields based on the presence of values
+                singleLabelDiv.style.display = bookData[selectedCode].single ? 'block' : 'none';
+                doubleLabelDiv.style.display = bookData[selectedCode].double ? 'block' : 'none';
+                fourLabelDiv.style.display = bookData[selectedCode].four ? 'block' : 'none';
+
+                // You might also need to trigger the "calculateFormsPerSet()" function here
+                calculateFormsPerSet(x);
+            });
+
+            // Add an event listener to handle "pages" value changes
+            const quantityInput = document.getElementById('quantity_' + x.toString());
+            quantityInput.addEventListener('input', function () {
+                calculateFormsPerSet(x);
+            });
+
+            // Trigger the initial calls
+            codeDropdown.dispatchEvent(new Event('change'));
+            calculateFormsPerSet(x); // Initial call
+        }
+
+        // Create a dictionary to store the book data
+        const bookData = {
+            // Populate this object with book data from your backend
+            {% for i in book %}
+            "{{ i.code }}": {
+                brand: "{{ i.books_name }}",
+                class: "{{ i.books_class }}",
+                medium: "{{ i.medium }}",
+                subject: "{{ i.subject }}",
+                pages: "{{ i.no_of_pages }}",
+                single: "{{ i.onec_rate }}",
+                double: "{{ i.twoc_rate }}",
+                four: "{{ i.fourc_rate }}",
+                rate: "{{ i.subbrand_printing_form_size }}"
+            },
+            {% endfor %}
+        };
+
+        // Initial setup for the first set
+        updateDropdowns(1);
+    });
+      // Add an event listener for the code fields to update other fields
+      $('.input_fields_container').on("change", "input[name^='code_']", function() {
+        const inputName = $(this).attr('name');
+        const index = inputName.split('_')[1];
+        updateDropdowns(index);
+    });
+
+    // Add an event listener for quantity fields to update forms-per-set
+    $('.input_fields_container').on("input", "input[name^='quantity_']", function() {
+        const inputName = $(this).attr('name');
+        const index = inputName.split('_')[1];
+        calculateFormsPerSet(index);
+    });
+</script>
+<!-- End 50  -->
+  
+           
+
+
+
+
+
+
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+      modal.style.display = "none";
+      }
+  }
+
+  </script>
+
+
+
+
+
+  {% comment %} <script>
+    document.getElementById("from_date").onchange = function () {
+    var input = document.getElementById("to_date");
+    input.setAttribute("min", this.value);
+  }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+    <script type="text/javascript">
+  var rad = document.cash_memo_add.stamp_type;
+  var prev = null;
+  for (var i = 0; i < rad.length; i++) {
+      rad[i].addEventListener('change', function() {
+          (prev) ? console.log(prev.value): null;
+          if (this !== prev) {
+              prev = this;
+          }
+          if(this.value == 'merchant_stamp')
+          {
+              document.getElementById('default_stmaps').style.display = 'block';
+              document.getElementById('own_stamps').style.display = 'none';
+          }
+          else if(this.value == 'own_stamp')
+          {
+              // document.getElementById('messageError').innerHTML = "";
+              document.getElementById('default_stmaps').style.display = 'none';
+              document.getElementById('own_stamps').style.display = 'block';
+          }
+      });
+  }
+</script> {% endcomment %}
+ <script type="text/javascript">
+  jQuery.validator.addMethod("greaterStart", function (value, element, params) {
+      return this.optional(element) || new Date(value) >= new Date($(params).val());
+  },'Must be greater than from date.');
+  
+  $("#add_merchant_form").validate({
+      rules: {
+          chk: {
+              required: true,
+          },
+      },
+
+  });
+  $("#stamp_image_form").validate({
+      rules: {
+          chkcashmeo: {
+              required: true,
+          },
+      },
+
+  });
+  $("#bill_info_filter_form").validate({
+      rules: {
+          from_date: {
+              required: true,
+          },
+          to_date: {
+              required: true,
+              greaterStart: "#from_date",
+          },
+      },
+
+  });
+  $(document).ready(function() {
+// $('input[name=to_date]').change(function() {
+//         var to_date = $('#to_date').val();
+//         document.getElementById('from_date').setAttribute("max", to_date);
+// })
+
+// $('input[name=from_date]').change(function() {
+//   var from_date = $('#from_date').val();
+//     document.getElementById('to_date').setAttribute("min", from_date);
+// })
+})
+</script>
+<script>
+  $(document).ready(function() {
+    $('#add-row').DataTable({
+        dom: 'lBfrtip',
+        "ordering": false,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        buttons: [
+           'excel', 'pdf', 'print'
+        ],
+        initComplete: function () {
+        this.api().columns([2,3]).every( function () {
+            var column = this;
+            var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+            
+            .appendTo( $("#type_filter_" + column[0][0]).empty())
+                
+            .on( 'change', function () {
+
+            var val = $(':selected', select).map(function(index, element) {
+            return $.fn.dataTable.util.escapeRegex($(this).val());
+            }).toArray().join('|');
+                  
+            column
+                .search( val ? '^'+val+'$' : '', true, false )
+                .draw();
+            } );
+
+            column.data().unique().sort().each( function ( d, j ) {
+                select.append( '<option value="'+d+'">'+d+'</option>' )
+            });
+        });        
+      }
+    });
+
+    $("#column_id_2").select2({
+      placeholder:" Select Date",
+      closeOnSelect: true,
+      width: '90%',
+    })
+
+    $("#column_id_3").select2({
+      placeholder:" Select Number",
+      closeOnSelect: true,
+      width: '80%',
+    })
+
+  });
+</script>
+
+
+<script >
+var today = new Date();
+
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    // today = yyyy + '/' + mm + '/' + dd;
+     today = yyyy + '-' + mm + '-' + dd;
+
+    console.log(today);
+    document.getElementById('date').value = today;
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_venderlist").on('change', function()
+        {
+
+            var state = $("#id_venderlist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Orderlist/"+state,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'organization_name': state
+                },
+                success: function(result){
+                  
+                    $("#id_courselist").empty();
+                    var empty = ""
+                    $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Address *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_courselist").on('change', function()
+        {
+
+            var state = $("#id_courselist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Addresslist/"+maha,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'medium': maha
+                },
+                success: function(result){
+                  
+                    $("#id_offervalue").empty();
+                    var empty = ""
+                    $('#id_offervalue').append("<option value='" + empty + "' disabled selected value>" + "Select special offer*" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_offervalue').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_brand").on('change', function()
+        {
+
+            var state = $("#id_brand").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Brandlist/"+city,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'books_name': city
+                },
+                success: function(result){
+                  
+                    $("#id_classname").empty();
+                    var empty = ""
+                    $('#id_classname').append("<option value='" + empty + "' disabled selected value>" + "Select classname *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_classname').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        var sundriesCount = 1; // Initial count for sundries fields
+        var maxSundries = 5;  // Maximum number of sundries fields
+
+        // Function to add bill sundries fields
+        $("#add_sundries_link").click(function () {
+            if (sundriesCount <= maxSundries) {
+                var cloneFields = `
+                    <div class="sundries_fields">
+                        <div class="row d-flex">
+                            <div  class="col-md-2" style="padding:0">
+                                <label for="bill_sundries_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Bill Sundries<span style="color:red;">*</span></b></label>
+                                <select class="form-select" id="bill_sundries_${sundriesCount}" name="bill_sundries_${sundriesCount}" style="border-radius: 0px;">
+                                    <option value="additive">Additive</option>
+                                    <option value="subtractive">Subtractive</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-2" style="padding:0">
+                                <label for="narration_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Narration<span style="color:red;">*</span></b></label>
+                                <input class="form-control" id="narration_${sundriesCount}" name="narration_${sundriesCount}" style="border-radius: 0px;">
+                            </div>
+
+                            <div class="col-md-2" style="padding:0">
+                                <label for="percent_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Percentage<span style="color:red;">*</span></b></label>
+                                <input class="form-control percent-field" id="percent_${sundriesCount}" name="percent_${sundriesCount}" style="border-radius: 0px;" oninput="calculateTotalAmount()">
+                            </div>
+
+                            <div class="col-md-2" style="padding:0">
+                                <label for="bill_amount_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Amount<span style="color:red;">*</span></b></label>
+                                <input class="form-control" id="bill_amount_${sundriesCount}" name="bill_amount_${sundriesCount}" style="border-radius: 0px;">
+                            </div>
+
+                            <a href="#" class="remove_field col-md-2" style="width:120px; padding:20px; text-align:center">Remove</a>
+                        </div>
+                    </div>
+                `;
+
+                $(".input_fields_container2").append(cloneFields);
+                sundriesCount++;
+
+                // Disable button if maximum fields reached
+                if (sundriesCount > maxSundries) {
+                    $("#add_sundries_link").prop("disabled", true);
+                }
+            } else {
+                alert("You can't add more than 5 bill sundries.");
+            }
+        });
+
+        // Event listener for removing fields
+        $('.input_fields_container2').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            sundriesCount--;
+
+            // Enable "Add Sundries" button when removing a field
+            $("#add_sundries_link").prop("disabled", false);
+        });
+
+        // Event listener for calculating total amount dynamically
+        $('.input_fields_container2').on("input", "input[name^='bill_amount_'], select[name^='bill_sundries_'], input[name^='percent_']", function () {
+            calculateTotalAmount();
+        });
+
+        function calculateTotalAmount() {
+            var totalAmount = 0;
+
+            // Iterate through all the "bill_amount_" fields and add up their values
+            $('input[name^="bill_amount_"]').each(function () {
+                var amountValue = parseFloat($(this).val()) || 0;
+                totalAmount += amountValue;
+            });
+
+            // Display the total amount in the specified input field
+            $('#totalAmountInput').val(totalAmount.toFixed(2));
+
+            $('input[name^="percent_"]').each(function () {
+                var sundriesCount = $(this).attr('name').split('_')[1];
+                var percentValue = parseFloat($(this).val()) || 0;
+
+                // Calculate the corresponding amount field based on the percentage
+                var calculatedAmount = (totalAmount * percentValue) / 100;
+
+                // Update the amount field
+                $('#bill_amount_' + sundriesCount).val(calculatedAmount.toFixed(2));
+            });
+        }
+    });
+</script>
+
+
+
+
+{% comment %}
+
+
+    <script>
+        
+        const pagesInput = document.getElementById('pages_1');
+        const quantityInput = document.getElementById('quantity_1');
+        const brandSelect = document.getElementById('brand_name_1');
+        const formsPerSetInput = document.getElementById('forms-per-set');
+        
+        
+
+        
+        function calculateFormsPerSet() {
+          const pages = parseInt(pagesInput.value);
+          const quantity = parseInt(quantityInput.value);
+          const brand = brandSelect.value;
+          let pagesPerForm = 0;
+          if (brand === 'Kohinoor') {
+            pagesPerForm = 64;
+          } else if (brand === 'Spark') {
+            pagesPerForm = 128;
+          } else if (brand === 'Vidya Mitra') {
+            pagesPerForm = 32;
+          } else if (brand === 'Abhiyashika') {
+            pagesPerForm = 16;
+          }
+          const forms = pages / pagesPerForm ;
+          const totalSet = Math.ceil(forms * quantity);
+          const formsPerSet = Math.ceil(totalSet / 500);
+          formsPerSetInput.value = formsPerSet;
+        }
+        
+        pagesInput.addEventListener('input', calculateFormsPerSet);
+        quantityInput.addEventListener('input', calculateFormsPerSet);
+        brandSelect.addEventListener('change', calculateFormsPerSet);
+        
+        
+</script>        
+      {% endcomment %}
+
+
+    
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
+<script>
+    function showConfirmation(id)
+ {
+        if (confirm("Are you sure you want to approve this order ?")) {
+            window.location.href = "/approve_order/" + id;
+        }
+    }
+  </script>
+{% endblock %}

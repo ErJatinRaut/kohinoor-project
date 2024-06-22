@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+   <style type="text/css">
+    *
+    {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    } 
+
+
+      table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 90%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  /*background-color: #dddddd;*/
+}
+.div1
+{
+   
+  width: 800px;
+  height: 453px;
+  border: 1px solid black;
+   border-radius: 15px 50px;
+  box-shadow: 10px 11px 5px  lightgreen inset;
+   /*border-radius: 15px 50px;
+*/
+}
+
+.div2 {
+  width: 800px;
+  height: 900px;  
+  padding: 0px;
+  padding-right: 0%;
+  
+}
+ 
+   </style>
+
+</head>
+<body>
+<center>
+   <div class="div1">
+   <h1 style="padding-left: 5%;">WINWINGS PUBLICATIONS</h1>
+   <img src="images/logo2 kohinoor.png"style="width: 5%;height: 5%;"><span style="padding-right: 3%;color: purple; font-size:400%;">KOHINOOR</span>
+  <h4>776, GULGULWAR NIWAS, GOLIBAR CHOWK, NAGPUR</h4>
+  
+  <h4>GOLIBAR CHOWK, NAGPUR</h4>
+  <h4>GST NO.: 27AAYPA2006L2ZL</h4>
+  <!-- <h4 style="padding-left: 70%;">DATE: {{data.date}}</h4> -->
+   <h4> PARTY:SHARPINDUSTRIES, NAGPUR</h4>
+   <h4>LOT</h4>
+   <!-- <span style="padding-left: 15%;">Binding Order No.</span>{{data.border_id}} -->
+
+   <div style="float:left; margin-left: 12px; display: flex; justify-content: space-evenly; font-weight: bold;">
+      <span>Cover Order:</span><span>{{data.id}}</span>
+      <h4 style="margin-left: 365px;">DATE: {{data.ord_date}}</h4>
+   </div>
+
+
+<div class="div2">
+   <table >
+   <tr>
+      <th style='text-align:center;'>SR. </th>
+      <!-- <th style='text-align:center;'>BRAND </th>
+      <th style='text-align:center;'>STD. </th>
+      <th style='text-align:center;'>MEDIUM. </th> -->
+      
+      <th style='text-align:center;'>PARTICULAR</th>
+      <th style='text-align:center;'>OPENING STOCK OF COVER</th>
+      <th style='text-align:center;'>COVER RECIEVED AFTER CUTTING</th>
+      <th style='text-align:center;'>COVER ISSUED FOR PASTING</th>
+      <th style='text-align:center;'>COVER RETURNED BY PASTER </th>
+      <th style='text-align:center;'>COVER BALANCE </th>
+      {% comment %} <th style='text-align:center;'>QUANTITY</th>
+      <th style='text-align:center;'>BINDING RATE</th> {% endcomment %}
+      <!-- <th style='text-align:center;'>RIM</th> -->
+   </tr>
+   {% if data.opening_stock_of_cover_1 %} 
+   <tr>
+      <td style='text-align:center;'>1.</td>
+      <td style='text-align:center;'>{{data.particular_1}}</td>
+      
+      <td style='text-align:center;'>{{data.opening_stock_of_cover_1}}</td>
+      <td style='text-align:center;'>{{data.cover_recived_after_cutting_1}}</td>
+      <td style='text-align:center;'>{{data.cover_issued_for_pasting_1}}</td>
+      <td style='text-align:center;'>{{data.cover_returned_by_paster_1}}</td>
+      <td style='text-align:center;'>{{data.cover_balance_1}}</td>
+   {% endif %} 
+   </tr>
+  
+</tr>
+{% if data.opening_stock_of_cover_2 %} 
+<tr>
+   <td style='text-align:center;'>2.</td>
+   <td style='text-align:center;'>{{data.particular_2}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_2}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_2}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_2}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_2}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_2}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_3 %} 
+<tr>
+   <td style='text-align:center;'>3.</td>
+   <td style='text-align:center;'>{{data.particular_3}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_3}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_3}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_3}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_3}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_3}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_4 %} 
+<tr>
+   <td style='text-align:center;'>4.</td>
+   <td style='text-align:center;'>{{data.particular_4}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_4}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_4}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_4}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_4}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_4}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_5 %} 
+<tr>
+   <td style='text-align:center;'>5.</td>
+   <td style='text-align:center;'>{{data.particular_5}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_5}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_5}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_5}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_5}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_5}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_6 %} 
+<tr>
+   <td style='text-align:center;'>6.</td>
+   <td style='text-align:center;'>{{data.particular_6}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_6}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_6}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_6}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_6}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_6}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_7 %} 
+<tr>
+   <td style='text-align:center;'>7.</td>
+   <td style='text-align:center;'>{{data.particular_7}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_7}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_7}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_7}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_7}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_7}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_8 %} 
+<tr>
+   <td style='text-align:center;'>8.</td>
+   <td style='text-align:center;'>{{data.particular_8}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_8}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_8}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_8}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_8}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_8}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_9 %} 
+<tr>
+   <td style='text-align:center;'>9.</td>
+   <td style='text-align:center;'>{{data.particular_9}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_9}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_9}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_9}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_9}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_9}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.opening_stock_of_cover_10 %} 
+<tr>
+   <td style='text-align:center;'>10.</td>
+   <td style='text-align:center;'>{{data.particular_10}}</td>
+   
+   <td style='text-align:center;'>{{data.opening_stock_of_cover_10}}</td>
+   <td style='text-align:center;'>{{data.cover_recived_after_cutting_10}}</td>
+   <td style='text-align:center;'>{{data.cover_issued_for_pasting_10}}</td>
+   <td style='text-align:center;'>{{data.cover_returned_by_paster_10}}</td>
+   <td style='text-align:center;'>{{data.cover_balance_10}}</td>
+{% endif %} 
+</tr>
+
+<tr>
+   <td style='text-align:center;'></td>
+   <th style='text-align:center;'>TOTAL</th>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'>{{data.binding_order_total}}</td> 
+  
+   <!-- <td style='text-align:center;'>{{data.total_rim}}</td>   -->
+</tr> 
+   
+   </table>
+</div>
+</center>
+</body>
+</html>
+
+

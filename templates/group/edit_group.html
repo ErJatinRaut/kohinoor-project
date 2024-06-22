@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+    .btn-no-underline {
+    text-decoration: none !important;
+}
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 col-sm-6 mx-auto">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                        <div class="mb-3">
+                            <label  class="form-label">Group Type</label>
+                            <input type="text" class="form-control radius-10" id="" name = "group_type" value = "{{data.group_type}}" maxlength="30" required="">
+                        </div>
+                         <div class="mb-3">
+                            <label  class="form-label">Main Disscount</label>
+                            <input type="text" class="form-control radius-10" id="" name ="main_discount" value="{{data.main_discount}}" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Extra Disscount </label>
+                            <input type="tel" name="extra_discount" minlength="" class="form-control" value="{{data.extra_discount}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                         
+                    
+                    <div class="col-md-12" style="text-align: center;">
+                                            
+                                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'group' %}" style="color:white;" class="btn-no-underline">Back</a></button>
+
+                                          <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine; color:white;">Save</button>
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

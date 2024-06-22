@@ -1,0 +1,1109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>orders</title>
+    <style>
+        * {
+            font-family: Georgia;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 50px;
+            border: 1px solid #888;
+            width: 100%;
+            
+        }
+
+
+        .select-style {
+            border-radius: 0.25rem;
+            border-color: black;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+            border-color: black;
+            padding-left: 10%;
+        }
+
+        .title h3 {
+
+            border-bottom: 2px solid blueviolet;
+            display: inline-block;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .title h5 {
+
+            display: inline-block;
+
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Binding Order Info</div>
+                <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn" type="button"
+                        style="background-color: mediumaquamarine;"><i class="fa fa-plus"></i>&nbsp;Create
+                        Order</button>
+                </div>
+                
+                <div id="myModal" class="modal">
+                    <div class="modal-content" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading"
+                                style="color:black; background-color:mediumaquamarine;text-align:center;">
+                                <h4 style="color:white;">Order Now</h4>
+                            </div>
+                            <hr style="color:black">
+                            <form method="POST" onsubmit="return myfun()">
+                                {% csrf_token %}
+                                <div class="panel-body">
+                                    <div class="">
+                                        <div class="title">
+                                            
+                                            <div class="row" style="text-align: right;">
+                                                <div class="col-md-8"></div>
+                                                <div class="col-md-4">
+                                                    
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control mobile" name="date"
+                                                                id="date" placeholder="{% now 'Y-m-d' %}" value="" required
+                                                                max="{% now 'Y-m-d' %}" readonly />
+                                                        </div>
+                                                    
+                                                     </div>
+                                                     </div>
+                                            </div>
+                                            
+                                            <div class="row mt-5">
+
+                                                <div class="col-md-4" style=" padding:0;">
+                                    
+                                
+                                                    <label><b style="font-size: 75%;">Material Center<span style="color:red;"></span></b></label>
+                                                    <select class="form-control" name="material_center" id="material_center"
+                                                        style="width:100%; border-radius: 0px;"  >
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in data3 %}
+                                                        <option>{{i.centre_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class = "col-md-4">
+                                                <div class="col-md-12">
+                                                    <div class="mb-0">
+                                                   
+                                                    <label for="name" class="control-label"><b>Company Name<span
+                                                                style="color:red;">*</span></b></label>
+                                               
+                                               
+
+                                                    <select class="form-control" name="company_binding" id=""
+                                                        style="width:100%;" required>
+                                                        <option disabled selected value>Select Company</option>
+                                                        {% for i in comp %}
+                                                        <option>{{i.company_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                               
+
+                                                  </div>
+                                                </div>
+
+                                                </div>
+
+                                                <div class ="col-md-4 mb-5">
+                                                <div class="col-md-12">
+                                                    <div class="mb-0">
+                                                          <label for="name" class="control-label"><b>Vendor Name<span
+                                                                style="color:red;">*</span></b></label>
+                                                     <select class="form-control" name="vender_name" id="vender_name"
+                                                        style="width:100%;" required>
+                                                        <option disabled selected value>Select Vendor</option>
+                                                        {% for i in vend %}
+                                                        <option>{{i.organization_name1}}</option>
+                                                        {% endfor %}
+                                                     </select>
+                                               
+                                                  </div>
+                                                </div>
+
+                                                </div>
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        <label style ="font-size:12px"><b>Code<span style="color:red; ;">*</span></b></label>
+                                                        <input style="width:100%; border-radius:0;" class="form-control" id="code_1" name="code_bind"
+                                                            required onselect="calculateFormsPerSet()">
+                                                    </div>
+                                                </div>
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                      <label style ="font-size:12px" for="name" class="control-label"><b>Brand<span
+                                                                style="color:red; ">*</span></b></label>
+                                                      <input style="width:100%; border-radius:0;" class="form-control" id="brand_name_1" name="brand_bind"
+                                                        required onselect="calculateFormsPerSet()">
+                                                </div>
+                                                </div>
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+
+                                                    <label style ="font-size:12px" for="name" class="control-label"><b>Medium<span
+                                                                style="color:red;">*</span></b></label>
+                                                    <input style="width:100%; border-radius:0;" class="form-control" id="medium_1" name="midium_bind"
+                                                        required onselect="calculateFormsPerSet()">
+                                                    
+                                                </div>
+                                                </div>
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+
+                                                    <label style ="font-size:12px" for="name" class="control-label"><b>Class<span
+                                                                style="color:red;">*</span></b></label>
+                                                    <input style="width:100%; border-radius:0;" class="form-control" id="class_name_1" name="class_bind"
+                                                        required onselect="calculateFormsPerSet()">
+
+                                                </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                    <label style ="font-size:12px" for="name" class="control-label"><b>Subject<span
+                                                                style="color:red;">*</span></b></label>
+                                                    <input style="width:100%; border-radius:0;" class="form-control" id="subject_1" name="subject" required
+                                                        onselect="calculateFormsPerSet()">
+                                                </div>
+                                                </div>
+                                                
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                    <label style ="font-size:12px" for="name" class="control-label"><b>Binding Rate<span
+                                                                style="color:red;">*</span></b></label>
+                                                    <input style="width:100%; border-radius:0;" class="form-control" id="pages_1" name="rate_binding" oninput="calculateAmount(1)"
+                                                    required >
+                                                </div>
+                                                </div>
+                                                
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                    <label style ="font-size:12px" for="name" class="control-label"><b>Quantity<span style="color:red;">*</span></b></label>
+                                                    <input style="width:100%; border-radius:0;" type="number" class="form-control mobile" name="quantity" id="quantity" oninput="calculateAmount(1)" />
+                                                </div>
+                                                </div>
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                    <label style ="font-size:12px" for="name" class="control-label"><b>Amount<span style="color:red;">*</span></b></label>
+                                                    <input style="width:100%; border-radius:0;" type="number" class="form-control mobile" name="b_amount" id="b_amount"  readonly/>
+                                                </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0; width:145px; margin-left:23px">
+                                                    <!-- <a href="#" style=" text-align:right; color:transparent; ">Remove</a> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="input_fields_container mb-3">
+                                            <!-- Newly added items will be appended here -->
+                                        </div>
+                                        <div class="col-md-12 mb-2" style="text-align: center;">
+                                            <button class="btn btn-primary btn-sm " id="add_more_button"
+                                                style="background-color:mediumaquamarine;">Add New Items</button>
+                                        </div>
+
+                                        <div class="input_fields_container2">
+                                        <!-- Newly added items will be appended here -->
+                                        </div>
+
+                                      <div class="col-md-12 mt-3" style="text-align: center;">
+                                        <a href="#" style="background-color: mediumaquamarine;padding: 8px;border-radius: 5px;font-size: 14px;text-decoration: none;color: white" id="add_sundries_link">Add bill sundries</a>
+                                      </div>
+
+                                        <!-- <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-primary" onclick="addNewField()">Add New Item</button>
+                                        </div> 
+                                    </div> -->
+
+                                        {% comment %} <div id="additionalFieldsContainer"></div> {% endcomment %}
+
+                                        <div class="col-md-12">
+                                            <div class="text-center mt-3 mb-3">
+                                                <button type="submit" class="btn btn-primary" name="create_form_btn"
+                                                    value="save_cashmemo_btn"
+                                                    style="background-color:mediumaquamarine;">Create</button>
+                                                <button class="btn btn-primary"
+                                                    style="background-color: mediumaquamarine;">
+                                                    <a href="{{ form.get_cancel_link }}"
+                                                        style="color:white; text-decoration: none; ">Back</a>
+                                                </button>
+                                                <!-- <button type="button" class="btn btn-primary close" data-dismiss="modal" style="background-color:mediumaquamarine;">Close</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <!-- uper vali new add kiya hai  -->
+            <div class="card-body">
+                <div class="row" style="text-align: center;">
+                    <div class="col-md-11">
+                        <div class="table-responsive">
+                            <table class="display table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr style="text-align: center; background-color: lightcyan;">
+                                        <th align="center">Sr.No</th>
+                                        <th align="center">Material Center</th>
+                                        <th align="center">Binding Order ID</th>
+                                        <th align="center">Date</th>
+                                        <th align="center">Vendor Name</th>
+
+                                        <!-- <th align="center">Subject</th> -->
+                                        <!-- <th align="center">Quantity</th> -->
+                                        <!-- <th align="center">Binding Rate</th> -->
+                                        {% comment %} <th align="center">Total Form </th> {% endcomment %}
+                                        <th align="center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in data %}
+
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{i.material_center}}</td>
+                                        <td>{{i.border_id}}</td>
+                                        <td>{{i.date}}</td>
+                                        <td>{{i.vender_name}}</td>
+
+                                        <!-- <td>{{ i.subject }}</td> -->
+                                        <!-- <td>{{ i.quantity }}</td>  -->
+                                        {% comment %} <td>
+                                            <input type="number" value="{{ i.quantity }}" min="0" step="1"
+                                                name="quantity">
+                                        </td> {% endcomment %}
+                                        <!-- <td >{{ i.rate_binding }}</td>  -->
+                                        {% comment %} <td>{{ i.total_form }}</td> {% endcomment %}
+                                        <td>
+                                            <div>
+                                                <a href="{{i.border_id}}"><i class="bi bi-eye"></i></a>
+                                                <a href="/delete_binding/{{i.id}}/"><i
+                                                        class="bi bi-archive"></i></a></i></a>
+                                                <!-- <div id="popup1 {{i.id}}" class="overlay">
+                                            </div> -->
+                                                <!-- <a  href="/edit_binding/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a> -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+
+
+
+           
+
+ <script>
+    // Get references to the dropdown elements
+    const codeDropdown = document.getElementById('code_1');
+    const brandDropdown = document.getElementById('brand_name_1');
+    const classDropdown = document.getElementById('class_name_1');
+    const mediumDropdown = document.getElementById('medium_1');
+    const subjectDropdown = document.getElementById('subject_1');
+    const pagesDropdown = document.getElementById('pages_1');
+
+    // Get the dynamic input boxes container
+
+    // Create a dictionary to store the book data
+    const bookData = {
+        // Populate this object with book data from your backend
+        {% for i in book %}
+        "{{ i.code }}": {
+            brand: "{{ i.books_name }}",
+            class: "{{ i.books_class }}",
+            medium: "{{ i.medium }}",
+            subject: "{{ i.subject }}",
+            pages: "{{ i.binding_rate }}",
+        },
+        {% endfor %}
+    };
+
+    // Function to update input boxes based on "pages_1" value
+
+    function calculateAmount(index) {
+        var rate = parseFloat(document.getElementsByName('rate_binding')[0].value) || 0;
+        var quantity = parseInt(document.getElementsByName('quantity')[0].value) || 0;
+        var amount = rate * quantity;
+
+        document.getElementById('b_amount').value = amount.toFixed(2);
+    }
+
+    function calculateFormsPerSet() {
+        // Add any additional calculation logic if needed
+    }
+
+    // Add a change event listener to the "code" dropdown
+    codeDropdown.addEventListener('change', function () {
+        const selectedCode = this.value;
+        // Populate other dropdowns with data based on the selected "code"
+        brandDropdown.value = bookData[selectedCode].brand;
+        classDropdown.value = bookData[selectedCode].class;
+        mediumDropdown.value = bookData[selectedCode].medium;
+        subjectDropdown.value = bookData[selectedCode].subject;
+        pagesDropdown.value = bookData[selectedCode].pages;
+
+        // You might also need to trigger the "calculateFormsPerSet()" function here
+        calculateFormsPerSet();
+    });
+
+    // Add an event listener to handle "pages_1" value changes
+    document.getElementById('rate_binding').addEventListener('input', function () {
+        calculateAmount(1);
+    });
+
+    document.getElementById('quantity').addEventListener('input', function () {
+        calculateAmount(1);
+    });
+
+    // Trigger the initial calls
+    codeDropdown.dispatchEvent(new Event('change'));
+    updateInputBoxes(); // Initial call
+</script>
+
+
+
+            <!--script of dependency and add new item button ,remove button with correct position of buttons  -->
+
+            {% comment %} <script>
+
+                // Get references to the dropdown elements
+                const codeDropdown = document.getElementById('code_1');
+                const brandDropdown = document.getElementById('brand_name_1');
+                const classDropdown = document.getElementById('class_name_1');
+                const mediumDropdown = document.getElementById('medium_1');
+                const subjectDropdown = document.getElementById('subject_1');
+                const pagesDropdown = document.getElementById('pages_1');
+
+                // Get the dynamic input boxes container
+
+                // Create a dictionary to store the book data
+                const bookData = {
+                    // Populate this object with book data from your backend
+                    {% for i in book %}
+                "{{ i.code }}": {
+                    brand: "{{ i.books_name }}",
+                        class: "{{ i.books_class }}",
+                            medium: "{{ i.medium }}",
+                                subject: "{{ i.subject }}",
+                                    pages: "{{ i.binding_rate }}",
+                        
+                    },
+                {% endfor %}
+                };
+
+                // Function to update input boxes based on "pages_1" value
+
+
+                // Add a change event listener to the "code" dropdown
+                codeDropdown.addEventListener('change', function () {
+                    const selectedCode = this.value;
+                    // Populate other dropdowns with data based on the selected "code"
+                    brandDropdown.value = bookData[selectedCode].brand;
+                    classDropdown.value = bookData[selectedCode].class;
+                    mediumDropdown.value = bookData[selectedCode].medium;
+                    subjectDropdown.value = bookData[selectedCode].subject;
+                    pagesDropdown.value = bookData[selectedCode].pages;
+
+
+                    // You might also need to trigger the "calculateFormsPerSet()" function here
+                    calculateFormsPerSet();
+                });
+
+                // Add an event listener to handle "pages_1" value changes
+
+
+                // Trigger the initial calls
+                codeDropdown.dispatchEvent(new Event('change'));
+                updateInputBoxes(); // Initial call
+            </script> {% endcomment %}
+ <!--script of dependency and add new item button ,remove button with correct position of buttons  -->
+
+
+            {% comment %}
+            <script>
+                var counter = 1;
+
+                function addNewField() {
+                    if (counter < 51) {
+                        var container = document.getElementById("additionalFieldsContainer");
+                        var fieldHTML = `
+            <div id="field_${counter}">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Subject<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <select type="text" class="form-control mobile" name="bsubject_${counter}" id="subject_${counter}" onchange="updateBindingRate(${counter})">
+                            <option disabled selected value>Select Subject</option>
+                            {% for i in book %}
+                            <option value="{{ i.subject }}">{{i.subject}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Quantity<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control mobile" name="bquantity_${counter}" id="quantity_${counter}" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Binding Rate<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <select type="number" class="form-control mobile" name="brate_binding_${counter}" id="rate_binding_${counter}">
+                            <option disabled selected value>Select Rate</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger" onclick="removeField(${counter})">Remove</button>
+                    </div>
+                </div>
+            </div>
+            `;
+                        container.insertAdjacentHTML("beforeend", fieldHTML);
+                        counter++;
+                    }
+                }
+
+                function removeField(fieldId) {
+                    var fieldToRemove = document.getElementById("field_" + fieldId);
+                    fieldToRemove.remove();
+                }
+
+                function updateBindingRate(fieldId) {
+                    var subjectField = document.getElementById("subject_" + fieldId);
+                    var rateBindingField = document.getElementById("rate_binding_" + fieldId);
+
+                    // Clear previous options
+                    rateBindingField.innerHTML = '<option disabled selected value>Select Rate</option>';
+
+                    // Get the selected subject
+                    var selectedSubject = subjectField.value;
+
+                    // Add options based on the selected subject
+                    {% for i in book %}
+                    if ("{{i.subject}}" === selectedSubject) {
+                        var option = document.createElement("option");
+                        option.text = "{{i.binding_rate}}";
+                        rateBindingField.add(option);
+                    }
+                    {% endfor %}
+                }
+            </script> {% endcomment %}
+            {% comment %} <script> chal rhi condition
+                $(document).ready(function () {
+                    var max_fields_limit = 51;
+                    var x = 1;
+
+                    $('#add_more_button').click(function (e) {
+                        e.preventDefault();
+                        if (x < max_fields_limit) {
+                            x++;
+                            $('.input_fields_container').append(
+                                '<div class="form-group row" >' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group description">' +
+                                    '<lable>enter book code<lable>'+
+                                '<input class="form-control mobile" placeholder="enter book code"  name="code_' + x.toString() + '" id="code_' + x.toString() + '" required>' +
+
+                                '</div>' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group description">' +
+                                    '<lable>brand name<lable>'+
+                                '<input class="form-control mobile"  placeholder="brand name" name="brand_' + x.toString() + '" id="brand_name_' + x.toString() + '" required>' +
+
+                                '</div>' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group">' +
+                                '<input class="form-control mobile"  placeholder="class name" name="class_' + x.toString() + '" id="class_name_' + x.toString() + '" required>' +
+
+                                '</div>' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group description">' +
+                                '<input class="form-control mobile"  placeholder="medium" name="midium_' + x.toString() + '" id="medium_' + x.toString() + '" required>' +
+
+                                '</div>' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group description">' +
+                                '<input class="form-control mobile"  placeholder="subject" name="bsubject_' + x.toString() + '" id="subject_' + x.toString() + '" required>' +
+
+                                '</div>' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group description">' +
+                                '<input class="form-control mobile"  placeholder="binding rate" name="brate_binding_' + x.toString() + '" id="pages_' + x.toString() + '" required>' +
+
+                                '</div>' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group quantity">' +
+                                '<input type="number" pattern="[0-9\s]+" class="form-control mobile" name="bquantity_' + x.toString() + '" id="quantity_' + x.toString() + '" placeholder="Quantity" value="" required maxlength="30"/>' +
+                                '</div>' +
+                                '<div class="d-grid gap-2 col-sm-6 form-group quantity">' +
+                                '<input type="number" pattern="[0-9\s]+" class="form-control mobile" name="b_amount' + x.toString() + '" id="b_amount_' + x.toString() + '" placeholder="Amount" value="" required maxlength="30"/>' +
+                                '</div>' +
+
+                                // '<div class="text-end">' +
+                                '<a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a>' +
+                                // '</div>'+
+                                '</div>'
+                            );
+                            updateDropdowns(x);
+                        }
+                    });
+
+                    $('.input_fields_container').on("click", ".remove_field", function (e) {
+                        e.preventDefault();
+                        $(this).parent('div').remove();
+                        x--;
+                    });
+                    function calculateAmount(index) {
+                        var rate = parseFloat($('input[name="brate_binding_' + index + '"]').val()) || 0;
+                        var quantity = parseInt($('input[name="bquantity_' + index + '"]').val()) || 0;
+                        var amount = rate * quantity;
+    
+                        $('input[name="b_amount' + index + '"]').val(amount.toFixed(2));
+                    }
+
+                    function calculateFormsPerSet(x) {
+                        const quantityInput = document.getElementById('quantity_' + x.toString());
+                        const formsPerSetInput = document.getElementById('forms_per_set' + x.toString());
+                        const quantity = parseInt(quantityInput.value);
+                        const formsPerSet = Math.ceil(quantity / 500);
+                        formsPerSetInput.value = formsPerSet;
+                    }
+
+                    function updateDropdowns(x) {
+                        const codeDropdown = document.getElementById('code_' + x.toString());
+                        const brandDropdown = document.getElementById('brand_name_' + x.toString());
+                        const classDropdown = document.getElementById('class_name_' + x.toString());
+                        const mediumDropdown = document.getElementById('medium_' + x.toString());
+                        const subjectDropdown = document.getElementById('subject_' + x.toString());
+                        const pagesDropdown = document.getElementById('pages_' + x.toString());
+
+
+                        // Add a change event listener to the "code" dropdown
+                        codeDropdown.addEventListener('change', function () {
+                            const selectedCode = this.value;
+                            // Populate other dropdowns with data based on the selected "code"
+                            brandDropdown.value = bookData[selectedCode].brand;
+                            classDropdown.value = bookData[selectedCode].class;
+                            mediumDropdown.value = bookData[selectedCode].medium;
+                            subjectDropdown.value = bookData[selectedCode].subject;
+                            pagesDropdown.value = bookData[selectedCode].pages;
+
+
+                            // You might also need to trigger the "calculateFormsPerSet()" function here
+                            calculateFormsPerSet(x);
+                        });
+
+                        // Add an event listener to handle "pages" value changes
+                        const quantityInput = document.getElementById('quantity_' + x.toString());
+                        quantityInput.addEventListener('input', function () {
+                            calculateFormsPerSet(x);
+                        });
+
+                        // Trigger the initial calls
+                        codeDropdown.dispatchEvent(new Event('change'));
+                        calculateFormsPerSet(x); // Initial call
+                    }
+
+                    // Create a dictionary to store the book data
+                    const bookData = {
+            // Populate this object with book data from your backend
+            {% for i in book %}
+                    "{{ i.code }}": {
+                        brand: "{{ i.books_name }}",
+                            class: "{{ i.books_class }}",
+                                medium: "{{ i.medium }}",
+                                    subject: "{{ i.subject }}",
+                                        pages: "{{ i.binding_rate }}",
+               
+            },
+                    {% endfor %}
+                };
+
+                // Initial setup for the first set
+                updateDropdowns(1);
+    });
+                // Add an event listener for the code fields to update other fields
+                $('.input_fields_container').on("change", "input[name^='code_']", function () {
+                    const inputName = $(this).attr('name');
+                    const index = inputName.split('_')[1];
+                    updateDropdowns(index);
+                });
+
+                // Add an event listener for quantity fields to update forms-per-set
+                $('.input_fields_container').on("input", "input[name^='quantity_']", function () {
+                    const inputName = $(this).attr('name');
+                    const index = inputName.split('_')[1];
+                    calculateFormsPerSet(index);
+                });
+
+
+            </script> {% endcomment %}
+
+
+
+            <script>
+                $(document).ready(function () {
+                    var max_fields_limit = 51;
+                    var x = 1;
+            
+                    $('#add_more_button').click(function (e) {
+                        e.preventDefault();
+                        if (x < max_fields_limit) {
+                            x++;
+                            $('.input_fields_container').append(
+                                '<div class=" row" >' +
+                                '<div class="col " style = "padding:0;">' +
+                                    
+                                '<input style="border-radius:0;" class="form-control mobile" placeholder="enter book code"  name="code_' + x.toString() + '" id="code_' + x.toString() + '" required>' +
+                                '</div>' +
+                                '<div class="col description" style = "padding:0;">' +
+                                    
+                                '<input style="border-radius:0;" class="form-control mobile"  placeholder="brand name" name="brand_' + x.toString() + '" id="brand_name_' + x.toString() + '" required>' +
+                                '</div>' +
+                                
+                                '<div class="col description" style = "padding:0;">' +
+                                    
+                                '<input style="border-radius:0;" class="form-control mobile"  placeholder="medium" name="midium_' + x.toString() + '" id="medium_' + x.toString() + '" required>' +
+                                '</div>' +
+                                '<div class="col description" style = "padding:0;">' + 
+                                '<input style="border-radius:0;" class="form-control mobile"  placeholder="class name" name="class_' + x.toString() + '" id="class_name_' + x.toString() + '" required>' +
+                                '</div>' +
+                                
+                                '<div class="col description" style = "padding:0;">' +
+                                    
+                                '<input style="border-radius:0;" class="form-control mobile"  placeholder="subject" name="bsubject_' + x.toString() + '" id="subject_' + x.toString() + '" required>' +
+                                '</div>' +
+                                '<div class="col  description" style = "padding:0;">' +
+                                    
+                                '<input style="border-radius:0;" class="form-control mobile"  placeholder="binding rate" name="brate_binding_' + x.toString() + '" id="pages_' + x.toString() + '" required oninput="calculateAmount(' + x + ')">' +
+                                '</div>' +
+                                '<div class="col" style = "padding:0;">' +
+                                    
+                                '<input style="border-radius:0;" type="number" pattern="[0-9\s]+" class="form-control mobile" name="bquantity_' + x.toString() + '" id="quantity_' + x.toString() + '" placeholder="Quantity"   oninput="calculateAmount(' + x + ')" required />' +
+                                '</div>' +
+                                '<div class="col description" style = "padding:0;">' +
+                                    
+                                '<input style="border-radius:0;" type="number" pattern="[0-9\s]+" class="form-control mobile" name="b_amount' + x.toString() + '" id="b_amount' + x.toString() + '" placeholder="Amount" value="" required maxlength="30" readonly/>' +
+                                '</div>' +
+                                {% comment %} '<div class="col" style = "padding:0;">'+ {% endcomment %}
+                                '<a href="#" class="remove_field col" style=" text-align:right;">Remove</a>' +
+                                {% comment %} '</div>'+ {% endcomment %}
+                                '</div>'+
+                                '</div>'
+                            );
+                            updateDropdowns(x);
+                        }
+                    });
+            
+                    $('.input_fields_container').on("click", ".remove_field", function (e) {
+                        e.preventDefault();
+                        $(this).parent('div').remove();
+                        x--;
+                    });
+            
+                    function calculateAmount(index) {
+                        var rate = parseFloat($('input[name="brate_binding_' + index + '"]').val()) || 0;
+                        var quantity = parseInt($('input[name="bquantity_' + index + '"]').val()) || 0;
+                        var amount = rate * quantity;
+    
+                        $('input[name="b_amount' + index + '"]').val(amount.toFixed(2));
+                    }
+                    function updateDropdowns(x) {
+                        const codeDropdown = $('#code_' + x);
+                        const brandDropdown = $('#brand_name_' + x);
+                        const classDropdown = $('#class_name_' + x);
+                        const mediumDropdown = $('#medium_' + x);
+                        const subjectDropdown = $('#subject_' + x);
+                        const pagesDropdown = $('#pages_' + x);
+            
+                        // Add a change event listener to the "code" dropdown
+                        codeDropdown.on('change', function () {
+                            const selectedCode = $(this).val();
+                            // Populate other dropdowns with data based on the selected "code"
+                            brandDropdown.val(bookData[selectedCode].brand);
+                            classDropdown.val(bookData[selectedCode].class);
+                            mediumDropdown.val(bookData[selectedCode].medium);
+                            subjectDropdown.val(bookData[selectedCode].subject);
+                            pagesDropdown.val(bookData[selectedCode].pages);
+            
+                            // You might also need to trigger the "calculateFormsPerSet()" function here
+                            calculateFormsPerSet(x);
+                        });
+            
+                        // Add an event listener to handle "pages" value changes
+                        $('#quantity_' + x).on('input', function () {
+                            calculateFormsPerSet(x);
+                            calculateAmount(x);
+                        });
+                        $('#brate_binding_' + x).on('input', function () {
+                            calculateAmount(x);
+                        });
+            
+                        // Trigger the initial calls
+                        codeDropdown.trigger('change');
+                        calculateFormsPerSet(x); // Initial call
+                    }
+            
+                    // Create a dictionary to store the book data
+                    const bookData = {
+                        // Populate this object with book data from your backend
+                        {% for i in book %}
+                        "{{ i.code }}": {
+                            brand: "{{ i.books_name }}",
+                            class: "{{ i.books_class }}",
+                            medium: "{{ i.medium }}",
+                            subject: "{{ i.subject }}",
+                            pages: "{{ i.binding_rate }}",
+                        },
+                        {% endfor %}
+                    };
+            
+                    // Initial setup for the first set
+                    updateDropdowns(1);
+            
+                    // Add an event listener for the code fields to update other fields
+                    $('.input_fields_container').on("change", "input[name^='code_']", function () {
+                        const inputName = $(this).attr('name');
+                        const index = inputName.split('_')[1];
+                        updateDropdowns(index);
+                    });
+            
+                    // Add an event listener for quantity fields to update forms-per-set
+                    $('.input_fields_container').on("input", "input[name^='quantity_']", function () {
+                        const inputName = $(this).attr('name');
+                        const index = inputName.split('_')[1];
+                        calculateFormsPerSet(index);
+                        calculateAmount(index); // Call calculateAmount when quantity changes
+                    });
+            
+                    // Add an event listener for binding rate fields to update b_amount
+                    $('.input_fields_container').on("input", "input[name^='brate_binding_']", function () {
+                        const inputName = $(this).attr('name');
+                        const index = inputName.split('_')[2];
+                        calculateAmount(index);
+                    });
+                });
+            </script>
+            
+
+
+
+
+
+
+
+
+
+            <!-- script without proper position but it is working all conditions  -->
+            <!-- 
+
+<script>
+    var counter = 0;
+
+    function addNewField() {
+        if (counter < 51) {
+            var container = document.getElementById("additionalFieldsContainer");
+            var fieldHTML = `
+            <div id="field_${counter}">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Subject<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-4">
+                        <select type="text" class="form-control mobile" name="subject_${counter}" id="subject_${counter}" onchange="updateBindingRate(${counter})">
+                            <option disabled selected value>Select Subject</option>
+                            {% for i in book %}
+                            <option value="{{ i.subject }}">{{i.subject}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Quantity<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control mobile" name="quantity_${counter}" id="quantity_${counter}" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Binding Rate<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-4">
+                        <select type="number" class="form-control mobile" name="rate_binding_${counter}" id="rate_binding_${counter}">
+                            <option disabled selected value>Select Rate</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger" onclick="removeField(${counter})">Remove</button>
+                    </div>
+                </div>
+            </div>
+            `;
+            container.insertAdjacentHTML("beforeend", fieldHTML);
+            counter++;
+        }
+    }
+
+    function removeField(fieldId) {
+        var fieldToRemove = document.getElementById("field_" + fieldId);
+        fieldToRemove.remove();
+    }
+
+    function updateBindingRate(fieldId) {
+        var subjectField = document.getElementById("subject_" + fieldId);
+        var rateBindingField = document.getElementById("rate_binding_" + fieldId);
+
+        // Clear previous options
+        rateBindingField.innerHTML = '<option disabled selected value>Select Rate</option>';
+
+        // Get the selected subject
+        var selectedSubject = subjectField.value;
+
+        // Add options based on the selected subject
+        {% for i in book %}
+        if ("{{i.subject}}" === selectedSubject) {
+            var option = document.createElement("option");
+            option.text = "{{i.binding_rate}}";
+            rateBindingField.add(option);
+        }
+        {% endfor %}
+    }
+</script>
+ -->
+
+
+
+
+
+
+            <!-- script working for 1 item dependency  -->
+
+            <script>
+                $(document).ready(function () {
+                    // When the subject is changed
+                    $('#subject').change(function () {
+                        var selectedSubject = $(this).val();
+
+                        // Clear existing options in the binding rate dropdown
+                        $('#rate_binding').empty();
+
+                        // Add default option
+                        $('#rate_binding').append('<option disabled selected value>Select Rate</option>');
+
+                        // Filter and add options based on the selected subject
+                        {% for i in book %}
+                        if ("{{ i.subject }}" === selectedSubject) {
+                            $('#rate_binding').append('<option value="{{ i.binding_rate }}">{{ i.binding_rate }}</option>');
+                        }
+                        {% endfor %}
+                    });
+                });
+            </script>
+
+            <script>
+                    $(document).ready(function () {
+                        var sundriesCount = 1; // Initial count for sundries fields
+                        var maxSundries = 5;  // Maximum number of sundries fields
+                
+                        // Function to add bill sundries fields
+                        $("#add_sundries_link").click(function () {
+                            if (sundriesCount <= maxSundries) {
+                                var cloneFields = `
+                                    <div class="sundries_fields">
+                                        <div class="row d-flex">
+                                            <div  class="col-md-2" style="padding:0">
+                                                <label for="bill_sundries_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Bill Sundries<span style="color:red;">*</span></b></label>
+                                                <select class="form-select" id="bill_sundries_${sundriesCount}" name="bill_sundries_${sundriesCount}" style="border-radius: 0px;">
+                                                <option value="additive">Additive</option>
+                                                <option value="subtractive">Subtractive</option>
+                                                </select>
+                                            </div>
+                
+                                            <div class="col-md-2" style="padding:0">
+                                                <label for="narration_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Narration<span style="color:red;">*</span></b></label>
+                                                <input class="form-control" id="narration_${sundriesCount}" name="narration_${sundriesCount}" style="border-radius: 0px;">
+                                            </div>
+            
+            
+                                            <div class="col-md-2" style="padding:0">
+                                                <label for="percent_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Percentage<span style="color:red;">*</span></b></label>
+                                                <input class="form-control percent-field" id="percent_${sundriesCount}" name="percent_${sundriesCount}" style="border-radius: 0px;" oninput="calculateTotalAmount()">
+                                            </div>
+                
+                                            <div class="col-md-2" style="padding:0">
+                                                <label for="amount_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Amount<span style="color:red;">*</span></b></label>
+                                                <input class="form-control" id="amount_${sundriesCount}" name="amount_${sundriesCount}" style="border-radius: 0px;">
+                                            </div>
+            
+            
+                
+                                        <a href="#" class="remove_field col-md-2" style="width:120px; padding:20px; text-align:center">Remove</a>
+                                    </div>
+                                    </div>
+                                `;
+                
+                                $(".input_fields_container2").append(cloneFields);
+                            sundriesCount++;
+            
+                            // Disable button if maximum fields reached
+                            if (sundriesCount > maxSundries) {
+                                $("#add_sundries_link").prop("disabled", true);
+                            }
+                        } else {
+                            alert("You can't add more than 5 bill sundries.");
+                        }
+                    });
+            
+                    // Event listener for removing fields
+                    $('.input_fields_container2').on("click", ".remove_field", function (e) {
+                        e.preventDefault();
+                        $(this).parent('div').remove();
+                        sundriesCount--;
+            
+                        // Enable "Add Sundries" button when removing a field
+                        $("#add_sundries_link").prop("disabled", false);
+                    });
+            
+                    // Event listener for calculating total amount dynamically
+                    $('.input_fields_container2').on("input", "input[name^='amount_'], select[name^='bill_sundries_'], input[name^='percent_']", function () {
+                        calculateTotalAmount();
+                    });
+                    function calculateTotalAmount() {
+                        var totalAmount = 0;
+            
+                        // Iterate through all the "sale_amount" fields and add up their values
+                        $('input[name^="sale_amount"]').each(function () {
+                            var amountValue = parseFloat($(this).val()) || 0;
+                            console.log("11111111111",amountValue)
+                            totalSaleAmount += amountValue;
+                        });
+            
+                        // Display the total amount in the specified input field
+                        $('#totalAmountInput').val(totalAmount.toFixed(2));
+                        console.log("11111111111",totalAmount)
+                    
+                    
+                        $('input[name^="percent_"]').each(function () {
+                            var sundriesCount = $(this).attr('name').split('_')[1];
+                            var percentValue = parseFloat($(this).val()) || 0;
+            
+                            // Calculate the corresponding amount field based on the percentage
+                            var totalAmount = parseFloat($('#totalAmountInput').val()) || 0;
+                            var calculatedAmount = (totalAmount * percentValue) / 100;
+            
+                            // Update the amount field
+                            $('#amount_' + sundriesCount).val(calculatedAmount.toFixed(2));
+                            console.log("2222222222",calculatedAmount)
+                        });
+                    }
+            
+                    // Function to calculate total amount
+                   
+                    // Function to round total amount based on the selected operation
+                    function roundTotalAmount(totalAmount, selectedSundries) {
+                        if (selectedSundries === 'additive') {
+                            return Math.ceil(totalAmount);
+                        } else if (selectedSundries === 'subtractive') {
+                            return Math.floor(totalAmount);
+                        }
+                        return totalAmount;
+                        console.log("Total :", totalAmount);
+                    }
+            
+                    // Function to apply percentage adjustment to the total amount
+                    
+                });
+            </script>
+
+           
+
+
+
+
+
+            <script>
+                // Get the modal
+                var modal = document.getElementById("myModal");
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("myBtn");
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks the button, open the modal 
+                btn.onclick = function () {
+                    modal.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+            </script>
+
+
+
+
+           
+
+
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
+
+{% endblock %}

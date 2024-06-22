@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+   <style type="text/css">
+    *
+    {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    } 
+
+
+      table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 90%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  /*background-color: #dddddd;*/
+}
+.div1
+{
+   
+  width: 800px;
+  height: 453px;
+  border: 1px solid black;
+   border-radius: 15px 50px;
+  box-shadow: 10px 11px 5px  lightgreen inset;
+   /*border-radius: 15px 50px;
+*/
+}
+
+.div2 {
+  width: 800px;
+  height: 900px;  
+  padding: 0px;
+  padding-right: 0%;
+  
+}
+ 
+   </style>
+
+</head>
+<body>
+<center>
+   <div class="div1">
+   <h1 style="padding-left: 5%;">WINWINGS PUBLICATIONS</h1>
+   <img src="images/logo2 kohinoor.png"style="width: 5%;height: 5%;"><span style="padding-right: 3%;color: purple; font-size:400%;">KOHINOOR</span>
+  <h4>776, GULGULWAR NIWAS, GOLIBAR CHOWK, NAGPUR</h4>
+  
+  <h4>GOLIBAR CHOWK, NAGPUR</h4>
+  <h4>GST NO.: 27AAYPA2006L2ZL</h4>
+   <h4 > {{data.self_company}}</h4> 
+   <h4> PARTY:{{data.vendor_order}}</h4>
+   <h4>LOT</h4>
+   <!-- <span style="padding-left: 15%;">Binding Order No.</span>{{data.border_id}} -->
+
+   <div style="float:left; margin-left: 12px; display: flex; justify-content: space-evenly; font-weight: bold;">
+      <span>Cover Order:</span><span>{{data.id}}</span>
+      <h4 style="margin-left: 365px;">DATE: {{data.date_order}}</h4>
+   </div>
+
+
+<div class="div2">
+   <table >
+   <tr>
+      <th style='text-align:center;'>SR. </th>
+      <!-- <th style='text-align:center;'>BRAND </th>
+      <th style='text-align:center;'>STD. </th>
+      <th style='text-align:center;'>MEDIUM. </th> -->
+      
+      
+      <th style='text-align:center;'>PLATE NO</th>
+      <th style='text-align:center;'>PRINTING RATE PER SHEET</th>
+      <th style='text-align:center;'>PLATE RATE</th>
+      <th style='text-align:center;'>lAMINATION PER SHEET</th> 
+      <th style='text-align:center;'>TEXTURE PER  SHEET</th> 
+      <th style='text-align:center;'>QUANTITY</th>
+      
+      <th style='text-align:center;'>AMOUNT </th>
+      {% comment %} <th style='text-align:center;'>QUANTITY</th>
+      <th style='text-align:center;'>BINDING RATE</th> {% endcomment %}
+      <!-- <th style='text-align:center;'>RIM</th> -->
+   </tr>
+   {% if data.palte_order %} 
+   <tr>
+      <td style='text-align:center;'>1.</td>
+      
+      
+      <td style='text-align:center;'>{{data.palte_order}}</td>
+      <td style='text-align:center;'>{{data.rate_order}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet}}</td>
+      
+      
+      <td style='text-align:center;'>{{data.quantity_order}}</td>
+     
+      <td style='text-align:center;'>{{data.amount}}</td>
+   </tr>
+   {% endif %} 
+
+   {% if data.plate_order1 %} 
+   <tr>
+      <td style='text-align:center;'>2.</td>
+      <td style='text-align:center;'>{{data.plate_order1}}</td>
+      <td style='text-align:center;'>{{data.rate_order1}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet1}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet1}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet1}}</td>
+      
+      <td style='text-align:center;'>{{data.quantity_order1}}</td>
+      
+      <td style='text-align:center;'>{{data.amount1}}</td>
+   </tr>
+   {% endif %} 
+
+   {% if data.plate_order2 %} 
+   <tr>
+      <td style='text-align:center;'>3.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order2}}</td>
+      <td style='text-align:center;'>{{data.rate_order2}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet2}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet2}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet2}}</td>
+      <td style='text-align:center;'>{{data.quantity_order2}}</td>
+     
+      <td style='text-align:center;'>{{data.amount2}}</td>
+   </tr>
+   {% endif %} 
+
+   {% if data.plate_order3 %} 
+   <tr>
+      <td style='text-align:center;'>4.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order3}}</td>
+      <td style='text-align:center;'>{{data.rate_order3}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet3}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet3}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet3}}</td>
+      <td style='text-align:center;'>{{data.quantity_order3}}</td>
+     
+      <td style='text-align:center;'>{{data.amount3}}</td>
+   </tr>
+   {% endif %} 
+   {% if data.plate_order4 %} 
+   <tr>
+      <td style='text-align:center;'>5.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order4}}</td>
+      <td style='text-align:center;'>{{data.rate_order4}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet4}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet4}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet4}}</td>
+      <td style='text-align:center;'>{{data.quantity_order4}}</td>
+      <td style='text-align:center;'>{{data.rate_order4}}</td>
+      <td style='text-align:center;'>{{data.amount4}}</td>
+   </tr>
+   {% endif %} 
+
+   {% if data.plate_order5 %} 
+   <tr>
+      <td style='text-align:center;'>6.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order5}}</td>
+      <td style='text-align:center;'>{{data.rate_order5}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet5}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet5}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet5}}</td>
+      <td style='text-align:center;'>{{data.quantity_order5}}</td>
+     
+      <td style='text-align:center;'>{{data.amount5}}</td>
+   </tr>
+   {% endif %} 
+
+   {% if data.plate_order6 %} 
+   <tr>
+      <td style='text-align:center;'>7.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order6}}</td>
+      <td style='text-align:center;'>{{data.rate_order6}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet6}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet6}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet6}}</td>
+      <td style='text-align:center;'>{{data.quantity_order6}}</td>
+      
+      <td style='text-align:center;'>{{data.amount6}}</td>
+   </tr>
+   {% endif %} 
+
+   {% if data.plate_order7 %} 
+   <tr>
+      <td style='text-align:center;'>8.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order7}}</td>
+      <td style='text-align:center;'>{{data.rate_order7}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet7}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet7}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet7}}</td>
+      <td style='text-align:center;'>{{data.quantity_order7}}</td>
+     
+      <td style='text-align:center;'>{{data.amount7}}</td>
+   </tr>
+   {% endif %} 
+
+   {% if data.plate_order8 %} 
+   <tr>
+      <td style='text-align:center;'>9.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order8}}</td>
+      <td style='text-align:center;'>{{data.rate_order8}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet8}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet8}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet8}}</td>
+      <td style='text-align:center;'>{{data.quantity_order8}}</td>
+      
+      <td style='text-align:center;'>{{data.amount8}}</td>
+   </tr>
+   {% endif %} 
+   {% if data.plate_order9 %} 
+   <tr>
+      <td style='text-align:center;'>10.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order9}}</td>
+      <td style='text-align:center;'>{{data.rate_order9}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet9}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet9}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet9}}</td>
+      <td style='text-align:center;'>{{data.quantity_order9}}</td>
+      
+      <td style='text-align:center;'>{{data.amount9}}</td>
+   </tr>
+   {% endif %}
+   {% if data.plate_order10 %} 
+   <tr>
+      <td style='text-align:center;'>11.</td>
+      
+      <td style='text-align:center;'>{{data.plate_order10}}</td>
+      <td style='text-align:center;'>{{data.rate_order10}}</td>
+      <td style='text-align:center;'>{{data.printing_sheet10}}</td>
+      <td style='text-align:center;'>{{data.lamination_sheet10}}</td>
+      <td style='text-align:center;'>{{data.texture_sheet10}}</td>
+      <td style='text-align:center;'>{{data.quantity_order10}}</td>
+      
+      <td style='text-align:center;'>{{data.amount10}}</td>
+   </tr>
+   {% endif %}  
+
+<tr>
+   <td style='text-align:center;'></td>
+   <th style='text-align:center;'>TOTAL</th>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   
+   
+   
+   <td style='text-align:center;'>{{data.binding_order_total}}</td> 
+  
+   <!-- <td style='text-align:center;'>{{data.total_rim}}</td>   -->
+</tr> 
+   
+   </table>
+</div>
+</center>
+</body>
+</html>
+
+

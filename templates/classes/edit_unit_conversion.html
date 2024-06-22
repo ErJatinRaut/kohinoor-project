@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Medium{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+
+    .container {
+        max-width: 705px;
+        margin: 0 auto;
+        box-shadow: 1px 0 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+    }
+
+    .form-control {
+        width: 70%;
+    }
+
+    .text-center {
+        text-align: left;
+    }
+
+    .page-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 446px;
+        margin-top: 80px;
+        margin-left: 292px;
+    }
+
+    /* Add your other styles here */
+
+    .form-label {
+        color: #000;
+        /* Change the color as needed */
+    }
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 col-sm-6">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                        <div class="mb-3">
+                            <label  class="form-label">Main Unit</label>
+                            <input type="text" class="form-control radius-10" id="main_unit" name = "main_unit" value = "{{data.main_unit}}" maxlength="30" >
+                        </div>
+                        <div class="mb-3">
+                            <label  class="form-label">Sub unit</label>
+                            <input type="text" class="form-control radius-10" id="sub_unit" name ="sub_unit" value="{{data.sub_unit}}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Con. factor </label>
+                            <input type="tel" name="Con_factor" minlength="" id="Con_factor" class="form-control" value="{{data.Con_factor}}" id="" placeholder="" maxlength="" >
+                        </div>
+                         
+                    
+                    <div class="col-md-14" style="text-align: left;">
+                        <button class="btn btn-primary" style="background-color: mediumaquamarine;color:white;" ></a>Back</button>
+                                          <button type="submit" class="btn btn-primary" style="background-color: mediumaquamarine; color:white;">Save</button>
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Add an event listener to trigger the calculation when values in Main Unit or Sub Unit change
+    document.getElementById('main_unit').addEventListener('input', calculateConFactor);
+    document.getElementById('sub_unit').addEventListener('input', calculateConFactor);
+
+    function calculateConFactor() {
+        // Get values from Main Unit and Sub Unit fields
+        var mainUnitValue = document.getElementById('main_unit').value.toLowerCase();
+        var subUnitValue = document.getElementById('sub_unit').value.toLowerCase();
+
+        // Check the condition for "1g" and "1s"
+        if ((mainUnitValue === '1g' && subUnitValue === '1s') ||(mainUnitValue === '1s' && subUnitValue === '1g')) {
+            // Perform the special calculation
+            var conFactorValue = 144 / parseFloat(mainUnitValue); // assuming 144 is the constant factor
+        } else if((mainUnitValue === '1k' && subUnitValue === '1r') ||(mainUnitValue === '1r' && subUnitValue === '1k')){
+            // Perform the default calculation
+            var conFactorValue = 15 / (parseFloat(subUnitValue) || 1); // default calculation
+        }
+        else {
+        // Perform the default calculation
+        var conFactorValue = 500 / (parseFloat(subUnitValue) || 1); // default calculation
+       }
+
+        // Update the Con. Factor field with the calculated value
+        document.getElementById('Con_factor').value = conFactorValue.toFixed(3);
+    }
+</script>
+
+    {% endblock %}

@@ -1,0 +1,44 @@
+<!-- 
+{%block body_block%}
+<div class="container" align = 'center' style="margin-left: 200px; margin-top:100px;">
+<h1 style="font-size:20px;">Login ID and Password successfully sent on your registered Email</h1><hr>
+<p>for login <a href="{% url 'login' %}" >click here</a>  </p>
+</div>
+
+{%endblock%}
+
+ -->
+
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Center Container</title>
+    <style>
+        .container {
+            width: 100%; /* Use the full width of the container */
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center; /* Center the content vertically */
+            height: 100vh; /* Make the container take the full viewport height */
+        }
+
+        .box {
+            width: 424px; /* Set a specific width for the box */
+            padding: 52px; /* Add padding to the box */
+            background-color: #fff; /* Set a background color for the box */
+            border: 1px solid #ccc; /* Add a border to the box */
+            text-align: center; /* Center the text inside the box */
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <h1 style="font-size: 20px;">Login ID and Password successfully sent on your registered Email</h1>
+            <hr>
+            <p>for login <a href="{% url 'login' %}" >click here</a>  </p>
+        </div>
+    </div>
+</body>
+</html>

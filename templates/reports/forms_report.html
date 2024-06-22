@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% comment %} {% extends 'base.html' %}
+{% load static %} {% endcomment %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms Report</title>
+</head>
+<body>
+    <h1>hello</h1>
+    <form action="" method = "POST">
+        {% csrf_token %}
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="sub_brand" class="drop-down w-100">
+                        <option value="" class="" > Select Brand </option>
+                        {% for i in data0 %}
+                        <option  class="dropdown-item" active>{{i.brand_name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="stand" class="drop-down w-100">
+                        <option value="" class="" > Select Standard </option>
+                        {% for i in data2 %}
+                        <option  class="dropdown-item" active>{{i.class_name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="med" class="drop-down w-100">
+                        <option value="" class="" > Select Medium </option>
+                        {% for i in data3 %}
+                        <option  class="dropdown-item" active>{{i.medium}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="subject" class="drop-down w-100">
+                        <option value="" class="" > Select Subject </option>
+                        {% for i in data5 %}
+                        <option  class="dropdown-item" active>{{i.subject_1}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <input type="submit" value='search'>
+    </form><br>
+    <pre><h3>[Form1: {{form1}}] [Form2: {{form2}}]  [Form3: {{form3}}] [Form4: {{form4}}] [Form5: {{form5}}] [Form6: {{form6}}] [Form7: {{form7}}] [Form8: {{form8}}] [Form9: {{form9}}] </h3> </pre>
+    <table border= '1'>
+        <thead>
+            <td>Order ID</td>
+            <td>Brand</td>
+            <td>Date / Time</td>
+            <td>Class</td>
+            <td>Medium</td>
+            <td>Subject</td>
+            <td>Page</td>
+            <td>Form 1</td>
+            <td>Form 2</td>
+            <td>Form 3</td>
+            <td>Form 4</td>
+            <td>Form 5</td>
+            <td>Form 6</td>
+            <td>Form 7</td>
+            <td>Form 8</td>
+            <td>Form 9</td>
+        </thead>
+        <tbody>
+            {% for i in e_list1 %}
+            <tr>  
+                <td>{{i.0}}</td>
+                <td>{{i.1}}</td>
+                <td>{{i.2}}</td>
+                <td>{{i.3}}</td>
+                <td>{{i.4}}</td>
+                <td>{{i.5}}</td>
+                <td>{{i.6}}</td>
+                <td>{{i.7}}</td>
+                <td>{{i.8}}</td>
+                <td>{{i.9}}</td>
+                <td>{{i.10}}</td>
+                <td>{{i.11}}</td>
+                <td>{{i.12}}</td>
+                <td>{{i.13}}</td>
+                <td>{{i.14}}</td>
+                <td>{{i.15}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>   
+    </table>
+</body>
+</html>

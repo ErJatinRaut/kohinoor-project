@@ -1,0 +1,1203 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Reports Info</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <!-- <button class="btn btn-primary me-md-2" id="myBtn"  type="button"><i class="fa fa-plus" ></i>&nbsp;Create Brand</button> -->
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content">
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:#6e95fc;text-align:center;"><h4 style="color:white ;">Create Course</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" onsubmit="return myfun()" id="profile-form">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                            <div class="row">
+                                                <!-- <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Agent ID<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input width="50" type="text" min="0" 
+                                                                name="ag_id" id="" class="form-control" maxlength="10" value="" required>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Course Type<span id="messages" style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                          <select name="courses_name" class="select-style"style="width:200px;padding:9px;" required="">
+                                                                  <option value="">Select</option>
+                                                                  <option  value="IT">IT</option>
+                                                                  <option  value="Digital Marketing">Digital Marketing</option>
+                                                          </select>
+                                                            <!-- <input style="color: black;" width="50" type="text" min="0" 
+                                                                name="courses_name" id="" class="form-control" maxlength="50" value=""  required> -->
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Brand Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="brand_name" minlength="" class="form-control" id="brand_name" placeholder="Enter Brand Name" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Brand Size<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Brand Size"
+                                                                name="brand_size" id="" class="form-control" maxlength="" value=""
+                                                                required="">
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Pages Per Form<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Brand Size"
+                                                                name="pages_per_form" id="pages_per_form" class="form-control" maxlength="" value=""
+                                                                required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Course Duration<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4" >
+                                                            <select name="cource_duration" class="select-style" style="width:200px;padding:8px;" required="">
+                                                                  <option value="">Select</option>
+                                                                  <option  value="1 Month">1 Month</option>
+                                                                  <option  value="2 Month">2 Month</option>
+                                                                  <option  value="3 Month">3 Month</option>
+                                                                  <option  value="4 Month">4 Month</option>
+                                                                  <option  value="5 Month">5 Month</option>
+                                                                  <option  value="6 Month">6 Month</option>
+                                                                  <option  value="7 Month">7 Month</option>
+                                                                  <option  value="8 Month">8 Month</option>
+                                                                  <option  value="9 Month">9 Month</option>
+                                                                  <option  value="10 Month">10 Month</option>
+                                                                  <option  value="11 Month">11 Month</option>
+                                                                  <option  value="12 Month">12 Month</option>
+
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Course Description<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="textarea" min="0" 
+                                                                name="" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                <!-- <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Batch start date<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="Date" min="0" 
+                                                                name="batch_start_date" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <!-- <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Discount<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color:black ;" width="50" type="text" min="0" 
+                                                                name="discount" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                
+                                                <div class="col-md-8 text-center"></div>
+                                                    <div class="col-md-4" style="padding-top:30px;">
+                                                      <button class="btn btn-success" style="background-color: #ff9122; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                                      <input type="submit" class="btn btn-success" style="background-color: #ff9122; color:white;" onclick="submitForm()" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover" >
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th align="center">Sr No</th>
+                                            <th align="center">Brands</th>
+                                            <th align="center">Class</th>
+                                            <th align="center">Medium</th>
+                                            <th align="center">Subject</th>
+                                            <th align="center">Quantity</th>
+                                            <th align="center">Rim</th>
+                                            <th align="center">Printing</th>
+                                            <th align="center">Binding</th>
+                                            <th align="center">Gathering</th>
+                                            <th align="center">Cutting</th>
+
+                                            <!-- <th align="center">Printing</th>
+                                            <th align="center">Binding</th>
+                                            <th align="center">Gathering</th>
+                                            <th align="center">Cutting</th> -->
+                                            <!-- <th align="center">Action</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      {% for i in data %}
+                                      {% if i.item1 != '' %}
+                                      <tr>
+                                          <td style='text-align:center;'>1.</td>
+                                          <td style='text-align:center;'>{{i.brand_name_1}}</td>
+                                          <td style='text-align:center;'>{{i.class_name_1}}</td>
+                                          <td style='text-align:center;'>{{i.medium_1}}</td>
+                                          <td style='text-align:center;'>{{i.subject_1}}</td>
+                                          <td style='text-align:center;'>{{i.quantity_1}}</td>
+                                          
+                                          <td style='text-align:center;'>{{i.rim_1}}</td>
+
+                                          <td style='text-align:center;'>{{i.printing_received_form_1}}</td>
+                                          <td style='text-align:center;'>{{i.total_gathering_1}}</td>
+                                          <td style='text-align:center;'>{{i.binding_received_1}}</td>
+                                          <td style='text-align:center;'>{{i.cutting_received_1}}</td>
+                                       {% endif %}
+                                       {% if i.item2 != '' %}
+                                       <tr>
+                                           <td style='text-align:center;'>2.</td>
+                                           <td style='text-align:center;'>{{i.brand_name_2}}</td>
+                                           <td style='text-align:center;'>{{i.class_name_2}}</td>
+                                           <td style='text-align:center;'>{{i.medium_2}}</td>
+                                           <td style='text-align:center;'>{{i.subject_2}}</td>
+                                        
+                                           <td style='text-align:center;'>{{i.quantity_2}}</td>
+                                           <td style='text-align:center;'>{{i.rim_2}}</td>
+                                           <td style='text-align:center;'>{{i.printing_received_form_2}}</td>
+                                           <td style='text-align:center;'>{{i.total_gathering_2}}</td>
+                                          <td style='text-align:center;'>{{i.binding_received_2}}</td>
+                                          <td style='text-align:center;'>{{i.cutting_received_2}}</td>
+                                        {% endif %}
+                                        {% if i.item3 != '' %}
+                                        <tr>
+                                            <td style='text-align:center;'>3.</td>
+                                            <td style='text-align:center;'>{{i.brand_name_3}}</td>
+                                            <td style='text-align:center;'>{{i.class_name_3}}</td>
+                                            <td style='text-align:center;'>{{i.medium_3}}</td>
+                                            <td style='text-align:center;'>{{i.subject_3}}</td>
+                                            <!-- <td style='text-align:center;'></td> -->
+                                            <td style='text-align:center;'>{{i.quantity_3}}</td>
+                                            <td style='text-align:center;'>{{i.rim_3}}</td>
+                                            <td style='text-align:center;'>{{i.printing_received_form_3}}</td>
+                                            <td style='text-align:center;'>{{i.total_gathering_3}}</td>
+                                            <td style='text-align:center;'>{{i.binding_received_3}}</td>
+                                            <td style='text-align:center;'>{{i.cutting_received_3}}</td>
+                                         {% endif %}
+                                         {% if i.item4 != '' %}
+                                         <tr>
+                                             <td style='text-align:center;'>4.</td>
+                                             <td style='text-align:center;'>{{i.brand_name_4}}</td>
+                                             <td style='text-align:center;'>{{i.class_name_4}}</td>
+                                             <td style='text-align:center;'>{{i.medium_4}}</td>
+                                             <td style='text-align:center;'>{{i.subject_4}}</td>
+                                             <!-- <td style='text-align:center;'></td> -->
+                                             <td style='text-align:center;'>{{i.quantity_4}}</td>
+                                             <td style='text-align:center;'>{{i.rim_4}}</td>
+                                             <td style='text-align:center;'>{{i.printing_received_form_4}}</td>
+                                             <td style='text-align:center;'>{{i.total_gathering_4}}</td>
+                                             <td style='text-align:center;'>{{i.binding_received_4}}</td>
+                                             <td style='text-align:center;'>{{i.cutting_received_4}}</td>
+                                          {% endif %}
+                                          {% if i.item5 != '' %}
+                                          <tr>
+                                              <td style='text-align:center;'>5.</td>
+                                              <td style='text-align:center;'>{{i.brand_name_5}}</td>
+                                              <td style='text-align:center;'>{{i.class_name_5}}</td>
+                                              <td style='text-align:center;'>{{i.medium_5}}</td>
+                                              <td style='text-align:center;'>{{i.subject_5}}</td>
+                                              <td style='text-align:center;'>{{i.quantity_5}}</td>
+                                              <td style='text-align:center;'>{{i.rim_5}}</td>
+                                              <td style='text-align:center;'>{{i.printing_received_form_5}}</td>
+                                              <td style='text-align:center;'>{{i.total_gathering_5}}</td>
+                                              <td style='text-align:center;'>{{i.binding_received_5}}</td>
+                                              <td style='text-align:center;'>{{i.cutting_received_5}}</td>
+                                           {% endif %}
+                                           {% if i.item6 != '' %}
+                                           <tr>
+                                               <td style='text-align:center;'>6.</td>
+                                               <td style='text-align:center;'>{{i.brand_name_6}}</td>
+                                               <td style='text-align:center;'>{{i.class_name_6}}</td>
+                                               <td style='text-align:center;'>{{i.medium_6}}</td>
+                                               <td style='text-align:center;'>{{i.subject_6}}</td>
+                                               <td style='text-align:center;'>{{i.quantity_6}}</td>
+                                               <td style='text-align:center;'>{{i.rim_6}}</td>
+                                               <td style='text-align:center;'>{{i.printing_received_form_6}}</td>
+                                               <td style='text-align:center;'>{{i.total_gathering_6}}</td>
+                                               <td style='text-align:center;'>{{i.binding_received_6}}</td>
+                                               <td style='text-align:center;'>{{i.total_cutting_6}}</td>
+                                            {% endif %}
+                                            {% if i.item7 != '' %}
+                                            <tr>
+                                                <td style='text-align:center;'>7.</td>
+                                                <td style='text-align:center;'>{{i.brand_name_7}}</td>
+                                                <td style='text-align:center;'>{{i.class_name_7}}</td>
+                                                <td style='text-align:center;'>{{i.medium_7}}</td>
+                                                <td style='text-align:center;'>{{i.subject_7}}</td>
+                                                <td style='text-align:center;'>{{i.quantity_7}}</td>
+                                                <td style='text-align:center;'>{{i.rim_7}}</td>
+                                                <td style='text-align:center;'>{{i.printing_received_form_7}}</td>
+                                                <td style='text-align:center;'>{{i.total_gathering_7}}</td>
+                                                <td style='text-align:center;'>{{i.binding_received_7}}</td>
+                                                <td style='text-align:center;'>{{i.total_cutting_7}}</td>
+                                             {% endif %}
+                                             {% if i.item8 != '' %}
+                                             <tr>
+                                                 <td style='text-align:center;'>8.</td>
+                                                 <td style='text-align:center;'>{{i.brand_name_8}}</td>
+                                                 <td style='text-align:center;'>{{i.class_name_8}}</td>
+                                                 <td style='text-align:center;'>{{i.medium_8}}</td>
+                                                 <td style='text-align:center;'>{{i.subject_8}}</td>
+                                                 <td style='text-align:center;'>{{i.quantity_8}}</td>
+                                                 <td style='text-align:center;'>{{i.rim_8}}</td>
+                                                 <td style='text-align:center;'>{{i.printing_received_form_8}}</td>
+                                                 <td style='text-align:center;'>{{i.total_gathering_8}}</td>
+                                                 <td style='text-align:center;'>{{i.binding_received_8}}</td>
+                                                 <td style='text-align:center;'>{{i.total_cutting_8}}</td>
+                                              {% endif %}
+                                              {% if i.item9 != '' %}
+                                              <tr>
+                                                  <td style='text-align:center;'>5.</td>
+                                                  <td style='text-align:center;'>{{i.brand_name_9}}</td>
+                                                  <td style='text-align:center;'>{{i.class_name_9}}</td>
+                                                  <td style='text-align:center;'>{{i.medium_9}}</td>
+                                                  <td style='text-align:center;'>{{i.subject_9}}</td>
+                                                  <td style='text-align:center;'>{{i.quantity_9}}</td>
+                                                  <td style='text-align:center;'>{{i.rim_9}}</td>
+                                                  <td style='text-align:center;'>{{i.printing_received_form_9}}</td>
+                                                  <td style='text-align:center;'>{{i.total_gathering_9}}</td>
+                                                  <td style='text-align:center;'>{{i.binding_received_9}}</td>
+                                                  <td style='text-align:center;'>{{i.total_cutting_9}}</td>
+                                               {% endif %}
+                                               {% if i.item10 != '' %}
+                                               <tr>
+                                                   <td style='text-align:center;'>10.</td>
+                                                   <td style='text-align:center;'>{{i.brand_name_10}}</td>
+                                                   <td style='text-align:center;'>{{i.class_name_10}}</td>
+                                                   <td style='text-align:center;'>{{i.medium_10}}</td>
+                                                   <td style='text-align:center;'>{{i.subject_10}}</td>
+                                                   <td style='text-align:center;'>{{i.quantity_10}}</td>
+                                                   <td style='text-align:center;'>{{i.rim_10}}</td>
+                                                   <td style='text-align:center;'>{{i.printing_received_form_10}}</td>
+                                                   <td style='text-align:center;'>{{i.total_gathering_10}}</td>
+                                                   <td style='text-align:center;'>{{i.binding_received_10}}</td>
+                                                   <td style='text-align:center;'>{{i.total_cutting_10}}</td>
+                                                {% endif %}
+                                                {% if i.item11 != '' %}
+                                                <tr>
+                                                    <td style='text-align:center;'>11.</td>
+                                                    <td style='text-align:center;'>{{i.brand_name_11}}</td>
+                                                    <td style='text-align:center;'>{{i.class_name_11}}</td>
+                                                    <td style='text-align:center;'>{{i.medium_11}}</td>
+                                                    <td style='text-align:center;'>{{i.subject_11}}</td>
+                                                    <td style='text-align:center;'>{{i.quantity_11}}</td>
+                                                    
+                                                    <td style='text-align:center;'>{{i.rim_11}}</td>
+                                                    <td style='text-align:center;'>{{i.printing_received_form_11}}</td>
+                                                    <td style='text-align:center;'>{{i.total_gathering_11}}</td>
+                                                    <td style='text-align:center;'>{{i.binding_received_11}}</td>
+                                                    <td style='text-align:center;'>{{i.total_cutting_11}}</td>
+                                                {% endif %}
+                                                {% if i.item12 != '' %}
+                                                <tr>
+                                                    <td style='text-align:center;'>12.</td>
+                                                    <td style='text-align:center;'>{{i.brand_name_12}}</td>
+                                                    <td style='text-align:center;'>{{i.class_name_12}}</td>
+                                                    <td style='text-align:center;'>{{i.medium_12}}</td>
+                                                    <td style='text-align:center;'>{{i.subject_12}}</td>
+                                                  
+                                                    <td style='text-align:center;'>{{i.quantity_12}}</td>
+                                                    <td style='text-align:center;'>{{i.rim_12}}</td>
+                                                    <td style='text-align:center;'>{{i.printing_received_form_12}}</td>
+                                                    <td style='text-align:center;'>{{i.total_gathering_12}}</td>
+                                                    <td style='text-align:center;'>{{i.binding_received_12}}</td>
+                                                    <td style='text-align:center;'>{{i.total_cutting_12}}</td>
+                                                  {% endif %}
+                                                  {% if i.item13 != '' %}
+                                                  <tr>
+                                                      <td style='text-align:center;'>13.</td>
+                                                      <td style='text-align:center;'>{{i.brand_name_13}}</td>
+                                                      <td style='text-align:center;'>{{i.class_name_13}}</td>
+                                                      <td style='text-align:center;'>{{i.medium_13}}</td>
+                                                      <td style='text-align:center;'>{{i.subject_13}}</td>
+                                                      <!-- <td style='text-align:center;'></td> -->
+                                                      <td style='text-align:center;'>{{i.quantity_13}}</td>
+                                                      <td style='text-align:center;'>{{i.rim_13}}</td>
+                                                      <td style='text-align:center;'>{{i.printing_received_form_13}}</td>
+                                                      <td style='text-align:center;'>{{i.total_gathering_13}}</td>
+                                                      <td style='text-align:center;'>{{i.binding_received_13}}</td>
+                                                      <td style='text-align:center;'>{{i.total_cutting_13}}</td>
+                                                  {% endif %}
+                                                  {% if i.item14 != '' %}
+                                                  <tr>
+                                                      <td style='text-align:center;'>14.</td>
+                                                      <td style='text-align:center;'>{{i.brand_name_14}}</td>
+                                                      <td style='text-align:center;'>{{i.class_name_4}}</td>
+                                                      <td style='text-align:center;'>{{i.medium_14}}</td>
+                                                      <td style='text-align:center;'>{{i.subject_14}}</td>
+                                                      <!-- <td style='text-align:center;'></td> -->
+                                                      <td style='text-align:center;'>{{i.quantity_14}}</td>
+                                                      <td style='text-align:center;'>{{i.rim_14}}</td>
+                                                      <td style='text-align:center;'>{{i.printing_received_form_14}}</td>
+                                                      <td style='text-align:center;'>{{i.total_gathering_14}}</td>
+                                                      <td style='text-align:center;'>{{i.binding_received_14}}</td>
+                                                      <td style='text-align:center;'>{{i.total_cutting_14}}</td>
+                                                    {% endif %}
+                                                    {% if i.item15 != '' %}
+                                                    <tr>
+                                                        <td style='text-align:center;'>15.</td>
+                                                        <td style='text-align:center;'>{{i.brand_name_15}}</td>
+                                                        <td style='text-align:center;'>{{i.class_name_15}}</td>
+                                                        <td style='text-align:center;'>{{i.medium_15}}</td>
+                                                        <td style='text-align:center;'>{{i.subject_15}}</td>
+                                                        <td style='text-align:center;'>{{i.quantity_15}}</td>
+                                                        <td style='text-align:center;'>{{i.rim_15}}</td>
+                                                        <td style='text-align:center;'>{{i.printing_received_form_15}}</td>
+                                                        <td style='text-align:center;'>{{i.total_gathering_15}}</td>
+                                                        <td style='text-align:center;'>{{i.binding_received_15}}</td>
+                                                        <td style='text-align:center;'>{{i.total_cutting_15}}</td>
+                                                    {% endif %}
+                                                    {% if i.item16 != '' %}
+                                                    <tr>
+                                                        <td style='text-align:center;'>16.</td>
+                                                        <td style='text-align:center;'>{{i.brand_name_16}}</td>
+                                                        <td style='text-align:center;'>{{i.class_name_16}}</td>
+                                                        <td style='text-align:center;'>{{i.medium_16}}</td>
+                                                        <td style='text-align:center;'>{{i.subject_16}}</td>
+                                                        <td style='text-align:center;'>{{i.quantity_16}}</td>
+                                                        <td style='text-align:center;'>{{i.rim_16}}</td>
+                                                        <td style='text-align:center;'>{{i.printing_received_form_16}}</td>
+                                                        <td style='text-align:center;'>{{i.total_gathering_16}}</td>
+                                                        <td style='text-align:center;'>{{i.binding_received_16}}</td>
+                                                        <td style='text-align:center;'>{{i.total_cutting_16}}</td>
+                                                      {% endif %}
+                                                      {% if i.item17 != '' %}
+                                                      <tr>
+                                                          <td style='text-align:center;'>17.</td>
+                                                          <td style='text-align:center;'>{{i.brand_name_17}}</td>
+                                                          <td style='text-align:center;'>{{i.class_name_17}}</td>
+                                                          <td style='text-align:center;'>{{i.medium_17}}</td>
+                                                          <td style='text-align:center;'>{{i.subject_17}}</td>
+                                                          <td style='text-align:center;'>{{i.quantity_17}}</td>
+                                                          <td style='text-align:center;'>{{i.rim_17}}</td>
+                                                          <td style='text-align:center;'>{{i.printing_received_form_17}}</td>
+                                                          <td style='text-align:center;'>{{i.total_gathering_17}}</td>
+                                                          <td style='text-align:center;'>{{i.binding_received_17}}</td>
+                                                          <td style='text-align:center;'>{{i.total_cutting_17}}</td>
+                                                          
+                                                      {% endif %}
+                                                      {% if i.item18 != '' %}
+                                                      <tr>
+                                                          <td style='text-align:center;'>18.</td>
+                                                          <td style='text-align:center;'>{{i.brand_name_18}}</td>
+                                                          <td style='text-align:center;'>{{i.class_name_18}}</td>
+                                                          <td style='text-align:center;'>{{i.medium_18}}</td>
+                                                          <td style='text-align:center;'>{{i.subject_18}}</td>
+                                                          <td style='text-align:center;'>{{i.quantity_18}}</td>
+                                                          <td style='text-align:center;'>{{i.rim_18}}</td>
+                                                          <td style='text-align:center;'>{{i.printing_received_form_18}}</td>
+                                                          <td style='text-align:center;'>{{i.total_gathering_18}}</td>
+                                                          <td style='text-align:center;'>{{i.binding_received_18}}</td>
+                                                          <td style='text-align:center;'>{{i.total_cutting_18}}</td> 
+                                                          
+                                                        {% endif %}
+                                                        {% if i.item19 != '' %}
+                                                        <tr>
+                                                            <td style='text-align:center;'>19.</td>
+                                                            <td style='text-align:center;'>{{i.brand_name_19}}</td>
+                                                            <td style='text-align:center;'>{{i.class_name_19}}</td>
+                                                            <td style='text-align:center;'>{{i.medium_19}}</td>
+                                                            <td style='text-align:center;'>{{i.subject_19}}</td>
+                                                            <td style='text-align:center;'>{{i.quantity_19}}</td>
+                                                            <td style='text-align:center;'>{{i.rim_19}}</td>
+                                                            <td style='text-align:center;'>{{i.printing_received_form_19}}</td>
+                                                            <td style='text-align:center;'>{{i.total_gathering_19}}</td>
+                                                            <td style='text-align:center;'>{{i.binding_received_19}}</td>
+                                                            <td style='text-align:center;'>{{i.total_cutting_19}}</td>
+                                                        {% endif %}
+                                                        {% if i.item20 != '' %}
+                                                        <tr>
+                                                            <td style='text-align:center;'>20.</td>
+                                                            <td style='text-align:center;'>{{i.brand_name_20}}</td>
+                                                            <td style='text-align:center;'>{{i.class_name_20}}</td>
+                                                            <td style='text-align:center;'>{{i.medium_20}}</td>
+                                                            <td style='text-align:center;'>{{i.subject_20}}</td>
+                                                            <td style='text-align:center;'>{{i.quantity_20}}</td>
+                                                            <td style='text-align:center;'>{{i.rim_20}}</td>
+                                                            <td style='text-align:center;'>{{i.printing_received_form_20}}</td>
+                                                            <td style='text-align:center;'>{{i.total_gathering_20}}</td>
+                                                            <td style='text-align:center;'>{{i.binding_received_20}}</td>
+                                                            <td style='text-align:center;'>{{i.total_cutting_20}}</td>
+                                                          {% endif %}
+                                                {% if i.item21 != '' %}
+                                      <tr>
+                                          <td style='text-align:center;'>21.</td>
+                                          <td style='text-align:center;'>{{i.brand_name_21}}</td>
+                                          <td style='text-align:center;'>{{i.class_name_21}}</td>
+                                          <td style='text-align:center;'>{{i.medium_21}}</td>
+                                          <td style='text-align:center;'>{{i.subject_21}}</td>
+                                          <td style='text-align:center;'>{{i.quantity_21}}</td>
+                                          
+                                          <td style='text-align:center;'>{{i.rim_21}}</td>
+                                          <td style='text-align:center;'>{{i.printing_received_form_21}}</td>
+                                          <td style='text-align:center;'>{{i.total_gathering_21}}</td>
+                                          <td style='text-align:center;'>{{i.binding_received_21}}</td>
+                                          <td style='text-align:center;'>{{i.total_cutting_21}}</td>
+                                       {% endif %}
+                                       {% if i.item22 != '' %}
+                                       <tr>
+                                           <td style='text-align:center;'>22.</td>
+                                           <td style='text-align:center;'>{{i.brand_name_22}}</td>
+                                           <td style='text-align:center;'>{{i.class_name_22}}</td>
+                                           <td style='text-align:center;'>{{i.medium_22}}</td>
+                                           <td style='text-align:center;'>{{i.subject_22}}</td>
+                                        
+                                           <td style='text-align:center;'>{{i.quantity_22}}</td>
+                                           <td style='text-align:center;'>{{i.rim_22}}</td>
+                                           <td style='text-align:center;'>{{i.printing_received_form_22}}</td>
+                                           <td style='text-align:center;'>{{i.total_gathering_22}}</td>
+                                           <td style='text-align:center;'>{{i.binding_received_22}}</td>
+                                           <td style='text-align:center;'>{{i.total_cutting_22}}</td>
+                                        {% endif %}
+                                        {% if i.item23 != '' %}
+                                        <tr>
+                                            <td style='text-align:center;'>23.</td>
+                                            <td style='text-align:center;'>{{i.brand_name_23}}</td>
+                                            <td style='text-align:center;'>{{i.class_name_23}}</td>
+                                            <td style='text-align:center;'>{{i.medium_23}}</td>
+                                            <td style='text-align:center;'>{{i.subject_23}}</td>
+                                            <!-- <td style='text-align:center;'></td> -->
+                                            <td style='text-align:center;'>{{i.quantity_23}}</td>
+                                            <td style='text-align:center;'>{{i.rim_23}}</td>
+                                            <td style='text-align:center;'>{{i.printing_received_form_23}}</td>
+                                            <td style='text-align:center;'>{{i.total_gathering_23}}</td>
+                                            <td style='text-align:center;'>{{i.binding_received_23}}</td>
+                                            <td style='text-align:center;'>{{i.total_cutting_23}}</td>
+                                         {% endif %}
+                                         {% if i.item24 != '' %}
+                                         <tr>
+                                             <td style='text-align:center;'>24.</td>
+                                             <td style='text-align:center;'>{{i.brand_name_24}}</td>
+                                             <td style='text-align:center;'>{{i.class_name_24}}</td>
+                                             <td style='text-align:center;'>{{i.medium_24}}</td>
+                                             <td style='text-align:center;'>{{i.subject_24}}</td>
+                                             <!-- <td style='text-align:center;'></td> -->
+                                             <td style='text-align:center;'>{{i.quantity_24}}</td>
+                                             <td style='text-align:center;'>{{i.rim_24}}</td>
+                                             <td style='text-align:center;'>{{i.printing_received_form_24}}</td>
+                                             <td style='text-align:center;'>{{i.total_gathering_24}}</td>
+                                             <td style='text-align:center;'>{{i.binding_received_24}}</td>
+                                             <td style='text-align:center;'>{{i.total_cutting_24}}</td>
+                                          {% endif %}
+                                          {% if i.item25 != '' %}
+                                          <tr>
+                                              <td style='text-align:center;'>25.</td>
+                                              <td style='text-align:center;'>{{i.brand_name_25}}</td>
+                                              <td style='text-align:center;'>{{i.class_name_25}}</td>
+                                              <td style='text-align:center;'>{{i.medium_25}}</td>
+                                              <td style='text-align:center;'>{{i.subject_25}}</td>
+                                              <td style='text-align:center;'>{{i.quantity_25}}</td>
+                                              <td style='text-align:center;'>{{i.rim_25}}</td>
+                                              <td style='text-align:center;'>{{i.printing_received_form_25}}</td>
+                                              <td style='text-align:center;'>{{i.total_gathering_25}}</td>
+                                              <td style='text-align:center;'>{{i.binding_received_25}}</td>
+                                              <td style='text-align:center;'>{{i.total_cutting_25}}</td>
+                                           {% endif %}
+                                           {% if i.item26 != '' %}
+                                           <tr>
+                                               <td style='text-align:center;'>26.</td>
+                                               <td style='text-align:center;'>{{i.brand_name_26}}</td>
+                                               <td style='text-align:center;'>{{i.class_name_26}}</td>
+                                               <td style='text-align:center;'>{{i.medium_26}}</td>
+                                               <td style='text-align:center;'>{{i.subject_26}}</td>
+                                               <td style='text-align:center;'>{{i.quantity_26}}</td>
+                                               <td style='text-align:center;'>{{i.rim_26}}</td>
+                                               <td style='text-align:center;'>{{i.printing_received_form_26}}</td>
+                                               <td style='text-align:center;'>{{i.total_gathering_26}}</td>
+                                               <td style='text-align:center;'>{{i.binding_received_26}}</td>
+                                               <td style='text-align:center;'>{{i.total_cutting_26}}</td>
+                                            {% endif %}
+                                            {% if i.item27 != '' %}
+                                            <tr>
+                                                <td style='text-align:center;'>27.</td>
+                                                <td style='text-align:center;'>{{i.brand_name_27}}</td>
+                                                <td style='text-align:center;'>{{i.class_name_27}}</td>
+                                                <td style='text-align:center;'>{{i.medium_27}}</td>
+                                                <td style='text-align:center;'>{{i.subject_27}}</td>
+                                                <td style='text-align:center;'>{{i.quantity_27}}</td>
+                                                <td style='text-align:center;'>{{i.rim_27}}</td>
+                                                <td style='text-align:center;'>{{i.printing_received_form_27}}</td>
+                                                <td style='text-align:center;'>{{i.total_gathering_27}}</td>
+                                                <td style='text-align:center;'>{{i.binding_received_27}}</td>
+                                                <td style='text-align:center;'>{{i.total_cutting_27}}</td>
+                                             {% endif %}
+                                             {% if i.item28 != '' %}
+                                             <tr>
+                                                 <td style='text-align:center;'>28.</td>
+                                                 <td style='text-align:center;'>{{i.brand_name_28}}</td>
+                                                 <td style='text-align:center;'>{{i.class_name_28}}</td>
+                                                 <td style='text-align:center;'>{{i.medium_28}}</td>
+                                                 <td style='text-align:center;'>{{i.subject_28}}</td>
+                                                 <td style='text-align:center;'>{{i.quantity_28}}</td>
+                                                 <td style='text-align:center;'>{{i.rim_28}}</td>
+                                                 <td style='text-align:center;'>{{i.printing_received_form_28}}</td>
+                                                 <td style='text-align:center;'>{{i.total_gathering_28}}</td>
+                                                 <td style='text-align:center;'>{{i.binding_received_28}}</td>
+                                                 <td style='text-align:center;'>{{i.total_cutting_28}}</td>
+                                              {% endif %}
+                                              {% if i.item29 != '' %}
+                                              <tr>
+                                                  <td style='text-align:center;'>29.</td>
+                                                  <td style='text-align:center;'>{{i.brand_name_29}}</td>
+                                                  <td style='text-align:center;'>{{i.class_name_29}}</td>
+                                                  <td style='text-align:center;'>{{i.medium_29}}</td>
+                                                  <td style='text-align:center;'>{{i.subject_29}}</td>
+                                                  <td style='text-align:center;'>{{i.quantity_29}}</td>
+                                                  <td style='text-align:center;'>{{i.rim_29}}</td>
+                                                  <td style='text-align:center;'>{{i.printing_received_form_29}}</td>
+                                                  <td style='text-align:center;'>{{i.total_gathering_29}}</td>
+                                                  <td style='text-align:center;'>{{i.binding_received_29}}</td>
+                                                  <td style='text-align:center;'>{{i.total_cutting_29}}</td>
+                                               {% endif %}
+                                               {% if i.item30 != '' %}
+                                               <tr>
+                                                   <td style='text-align:center;'>30.</td>
+                                                   <td style='text-align:center;'>{{i.brand_name_30}}</td>
+                                                   <td style='text-align:center;'>{{i.class_name_30}}</td>
+                                                   <td style='text-align:center;'>{{i.medium_30}}</td>
+                                                   <td style='text-align:center;'>{{i.subject_30}}</td>
+                                                   <td style='text-align:center;'>{{i.quantity_30}}</td>
+                                                   <td style='text-align:center;'>{{i.rim_30}}</td>
+                                                   <td style='text-align:center;'>{{i.printing_received_form_30}}</td>
+                                                   <td style='text-align:center;'>{{i.total_gathering_30}}</td>
+                                                   <td style='text-align:center;'>{{i.binding_received_30}}</td>
+                                                   <td style='text-align:center;'>{{i.total_cutting_30}}</td>
+                                                {% endif %}
+                                                {% if i.item31 != '' %}
+                                      <tr>
+                                          <td style='text-align:center;'>31.</td>
+                                          <td style='text-align:center;'>{{i.brand_name_31}}</td>
+                                          <td style='text-align:center;'>{{i.class_name_31}}</td>
+                                          <td style='text-align:center;'>{{i.medium_31}}</td>
+                                          <td style='text-align:center;'>{{i.subject_31}}</td>
+                                          <td style='text-align:center;'>{{i.quantity_31}}</td>
+                                          
+                                          <td style='text-align:center;'>{{i.rim_31}}</td>
+                                          <td style='text-align:center;'>{{i.printing_received_form_31}}</td>
+                                          <td style='text-align:center;'>{{i.total_gathering_31}}</td>
+                                          <td style='text-align:center;'>{{i.binding_received_31}}</td>
+                                          <td style='text-align:center;'>{{i.total_cutting_31}}</td>
+                                          
+                                       {% endif %}
+                                       {% if i.item32 != '' %}
+                                       <tr>
+                                           <td style='text-align:center;'>32.</td>
+                                           <td style='text-align:center;'>{{i.brand_name_32}}</td>
+                                           <td style='text-align:center;'>{{i.class_name_32}}</td>
+                                           <td style='text-align:center;'>{{i.medium_32}}</td>
+                                           <td style='text-align:center;'>{{i.subject_32}}</td>
+                                        
+                                           <td style='text-align:center;'>{{i.quantity_32}}</td>
+                                           <td style='text-align:center;'>{{i.rim_32}}</td>
+                                           <td style='text-align:center;'>{{i.printing_received_form_32}}</td>
+                                           <td style='text-align:center;'>{{i.total_gathering_32}}</td>
+                                           <td style='text-align:center;'>{{i.binding_received_32}}</td>
+                                           <td style='text-align:center;'>{{i.total_cutting_32}}</td>
+                                        {% endif %}
+                                        {% if i.item33 != '' %}
+                                        <tr>
+                                            <td style='text-align:center;'>33.</td>
+                                            <td style='text-align:center;'>{{i.brand_name_33}}</td>
+                                            <td style='text-align:center;'>{{i.class_name_33}}</td>
+                                            <td style='text-align:center;'>{{i.medium_33}}</td>
+                                            <td style='text-align:center;'>{{i.subject_33}}</td>
+                                            <!-- <td style='text-align:center;'></td> -->
+                                            <td style='text-align:center;'>{{i.quantity_33}}</td>
+                                            <td style='text-align:center;'>{{i.rim_33}}</td>
+                                            <td style='text-align:center;'>{{i.printing_received_form_33}}</td>
+                                            <td style='text-align:center;'>{{i.total_gathering_33}}</td>
+                                            <td style='text-align:center;'>{{i.binding_received_33}}</td>
+                                            <td style='text-align:center;'>{{i.total_cutting_33}}</td>
+                                         {% endif %}
+                                         {% if i.item34 != '' %}
+                                         <tr>
+                                             <td style='text-align:center;'>34.</td>
+                                             <td style='text-align:center;'>{{i.brand_name_34}}</td>
+                                             <td style='text-align:center;'>{{i.class_name_34}}</td>
+                                             <td style='text-align:center;'>{{i.medium_34}}</td>
+                                             <td style='text-align:center;'>{{i.subject_34}}</td>
+                                             <!-- <td style='text-align:center;'></td> -->
+                                             <td style='text-align:center;'>{{i.quantity_34}}</td>
+                                             <td style='text-align:center;'>{{i.rim_34}}</td>
+                                             <td style='text-align:center;'>{{i.printing_received_form_34}}</td>
+                                             <td style='text-align:center;'>{{i.total_gathering_34}}</td>
+                                             <td style='text-align:center;'>{{i.binding_received_34}}</td>
+                                             <td style='text-align:center;'>{{i.total_cutting_34}}</td>
+                                          {% endif %}
+                                          {% if i.item35 != '' %}
+                                          <tr>
+                                              <td style='text-align:center;'>35.</td>
+                                              <td style='text-align:center;'>{{i.brand_name_35}}</td>
+                                              <td style='text-align:center;'>{{i.class_name_35}}</td>
+                                              <td style='text-align:center;'>{{i.medium_35}}</td>
+                                              <td style='text-align:center;'>{{i.subject_35}}</td>
+                                              <td style='text-align:center;'>{{i.quantity_35}}</td>
+                                              <td style='text-align:center;'>{{i.rim_35}}</td>
+                                              <td style='text-align:center;'>{{i.printing_received_form_35}}</td>
+                                              <td style='text-align:center;'>{{i.total_gathering_35}}</td>
+                                              <td style='text-align:center;'>{{i.binding_received_35}}</td>
+                                              <td style='text-align:center;'>{{i.total_cutting_35}}</td>
+                                           {% endif %}
+                                           {% if i.item36 != '' %}
+                                           <tr>
+                                               <td style='text-align:center;'>36.</td>
+                                               <td style='text-align:center;'>{{i.brand_name_36}}</td>
+                                               <td style='text-align:center;'>{{i.class_name_36}}</td>
+                                               <td style='text-align:center;'>{{i.medium_36}}</td>
+                                               <td style='text-align:center;'>{{i.subject_36}}</td>
+                                               <td style='text-align:center;'>{{i.quantity_36}}</td>
+                                               <td style='text-align:center;'>{{i.rim_36}}</td>
+                                               <td style='text-align:center;'>{{i.printing_received_form_36}}</td>
+                                               <td style='text-align:center;'>{{i.total_gathering_36}}</td>
+                                               <td style='text-align:center;'>{{i.binding_received_36}}</td>
+                                               <td style='text-align:center;'>{{i.total_cutting_36}}</td>
+                                            {% endif %}
+                                            {% if i.item37 != '' %}
+                                            <tr>
+                                                <td style='text-align:center;'>37.</td>
+                                                <td style='text-align:center;'>{{i.brand_name_37}}</td>
+                                                <td style='text-align:center;'>{{i.class_name_37}}</td>
+                                                <td style='text-align:center;'>{{i.medium_37}}</td>
+                                                <td style='text-align:center;'>{{i.subject_37}}</td>
+                                                <td style='text-align:center;'>{{i.quantity_37}}</td>
+                                                <td style='text-align:center;'>{{i.rim_37}}</td>
+                                                <td style='text-align:center;'>{{i.printing_received_form_37}}</td>
+                                                <td style='text-align:center;'>{{i.total_gathering_37}}</td>
+                                                <td style='text-align:center;'>{{i.binding_received_37}}</td>
+                                                <td style='text-align:center;'>{{i.total_cutting_37}}</td>
+                                             {% endif %}
+                                             {% if i.item38 != '' %}
+                                             <tr>
+                                                 <td style='text-align:center;'>38.</td>
+                                                 <td style='text-align:center;'>{{i.brand_name_38}}</td>
+                                                 <td style='text-align:center;'>{{i.class_name_38}}</td>
+                                                 <td style='text-align:center;'>{{i.medium_38}}</td>
+                                                 <td style='text-align:center;'>{{i.subject_38}}</td>
+                                                 <td style='text-align:center;'>{{i.quantity_38}}</td>
+                                                 <td style='text-align:center;'>{{i.rim_38}}</td>
+                                                 <td style='text-align:center;'>{{i.printing_received_form_38}}</td>
+                                                 <td style='text-align:center;'>{{i.total_gathering_38}}</td>
+                                                 <td style='text-align:center;'>{{i.binding_received_38}}</td>
+                                                 <td style='text-align:center;'>{{i.total_cutting_38}}</td>
+                                              {% endif %}
+                                              {% if i.item39 != '' %}
+                                              <tr>
+                                                  <td style='text-align:center;'>39.</td>
+                                                  <td style='text-align:center;'>{{i.brand_name_39}}</td>
+                                                  <td style='text-align:center;'>{{i.class_name_39}}</td>
+                                                  <td style='text-align:center;'>{{i.medium_39}}</td>
+                                                  <td style='text-align:center;'>{{i.subject_39}}</td>
+                                                  <td style='text-align:center;'>{{i.quantity_39}}</td>
+                                                  <td style='text-align:center;'>{{i.rim_39}}</td>
+                                                  <td style='text-align:center;'>{{i.printing_received_form_39}}</td>
+                                                  <td style='text-align:center;'>{{i.total_gathering_39}}</td>
+                                                  <td style='text-align:center;'>{{i.binding_received_39}}</td>
+                                                  <td style='text-align:center;'>{{i.total_cutting_39}}</td>
+                                               {% endif %}
+                                               {% if i.item40 != '' %}
+                                               <tr>
+                                                   <td style='text-align:center;'>40.</td>
+                                                   <td style='text-align:center;'>{{i.brand_name_40}}</td>
+                                                   <td style='text-align:center;'>{{i.class_name_40}}</td>
+                                                   <td style='text-align:center;'>{{i.medium_40}}</td>
+                                                   <td style='text-align:center;'>{{i.subject_40}}</td>
+                                                   <td style='text-align:center;'>{{i.quantity_40}}</td>
+                                                   <td style='text-align:center;'>{{i.rim_40}}</td>
+                                                   <td style='text-align:center;'>{{i.printing_received_form_40}}</td>
+                                                   <td style='text-align:center;'>{{i.total_gathering_40}}</td>
+                                                   <td style='text-align:center;'>{{i.binding_received_40}}</td>
+                                                   <td style='text-align:center;'>{{i.total_cutting_40}}</td>
+                                                {% endif %}
+                                              
+                                      
+
+                                       {% if i.item41 != '' %}
+                                       <tr>
+                                           <td style='text-align:center;'>41.</td>
+                                           <td style='text-align:center;'>{{i.brand_name_41}}</td>
+                                           <td style='text-align:center;'>{{i.class_name_41}}</td>
+                                           <td style='text-align:center;'>{{i.medium_41}}</td>
+                                           <td style='text-align:center;'>{{i.subject_41}}</td>
+                                           <td style='text-align:center;'>{{i.quantity_41}}</td>
+                                           
+                                           <td style='text-align:center;'>{{i.rim_41}}</td>
+                                           <td style='text-align:center;'>{{i.printing_received_form_41}}</td>
+                                           <td style='text-align:center;'>{{i.total_gathering_41}}</td>
+                                           <td style='text-align:center;'>{{i.binding_received_41}}</td>
+                                           <td style='text-align:center;'>{{i.total_cutting_41}}</td>
+                                        {% endif %}
+                                        {% if i.item42 != '' %}
+                                        <tr>
+                                            <td style='text-align:center;'>42.</td>
+                                            <td style='text-align:center;'>{{i.brand_name_42}}</td>
+                                            <td style='text-align:center;'>{{i.class_name_42}}</td>
+                                            <td style='text-align:center;'>{{i.medium_42}}</td>
+                                            <td style='text-align:center;'>{{i.subject_42}}</td>
+                                         
+                                            <td style='text-align:center;'>{{i.quantity_42}}</td>
+                                            <td style='text-align:center;'>{{i.rim_42}}</td>
+                                            <td style='text-align:center;'>{{i.printing_received_form_42}}</td>
+                                            <td style='text-align:center;'>{{i.total_gathering_42}}</td>
+                                            <td style='text-align:center;'>{{i.binding_received_42}}</td>
+                                            <td style='text-align:center;'>{{i.total_cutting_42}}</td>
+                                         {% endif %}
+                                         {% if i.item43 != '' %}
+                                         <tr>
+                                             <td style='text-align:center;'>43.</td>
+                                             <td style='text-align:center;'>{{i.brand_name_43}}</td>
+                                             <td style='text-align:center;'>{{i.class_name_43}}</td>
+                                             <td style='text-align:center;'>{{i.medium_43}}</td>
+                                             <td style='text-align:center;'>{{i.subject_43}}</td>
+                                             <!-- <td style='text-align:center;'></td> -->
+                                             <td style='text-align:center;'>{{i.quantity_43}}</td>
+                                             <td style='text-align:center;'>{{i.rim_43}}</td>
+                                             <td style='text-align:center;'>{{i.printing_received_form_43}}</td>
+                                             <td style='text-align:center;'>{{i.total_gathering_43}}</td>
+                                             <td style='text-align:center;'>{{i.binding_received_43}}</td>
+                                             <td style='text-align:center;'>{{i.total_cutting_43}}</td>
+                                          {% endif %}
+                                          {% if i.item44 != '' %}
+                                          <tr>
+                                              <td style='text-align:center;'>44.</td>
+                                              <td style='text-align:center;'>{{i.brand_name_44}}</td>
+                                              <td style='text-align:center;'>{{i.class_name_44}}</td>
+                                              <td style='text-align:center;'>{{i.medium_44}}</td>
+                                              <td style='text-align:center;'>{{i.subject_44}}</td>
+                                              <!-- <td style='text-align:center;'></td> -->
+                                              <td style='text-align:center;'>{{i.quantity_44}}</td>
+                                              <td style='text-align:center;'>{{i.rim_44}}</td>
+                                              <td style='text-align:center;'>{{i.printing_received_form_44}}</td>
+                                              <td style='text-align:center;'>{{i.total_gathering_44}}</td>
+                                              <td style='text-align:center;'>{{i.binding_received_44}}</td>
+                                              <td style='text-align:center;'>{{i.total_cutting_44}}</td>
+                                           {% endif %}
+                                           {% if i.item45 != '' %}
+                                           <tr>
+                                               <td style='text-align:center;'>45.</td>
+                                               <td style='text-align:center;'>{{i.brand_name_45}}</td>
+                                               <td style='text-align:center;'>{{i.class_name_45}}</td>
+                                               <td style='text-align:center;'>{{i.medium_45}}</td>
+                                               <td style='text-align:center;'>{{i.subject_45}}</td>
+                                               <td style='text-align:center;'>{{i.quantity_45}}</td>
+                                               <td style='text-align:center;'>{{i.rim_45}}</td>
+                                               <td style='text-align:center;'>{{i.printing_received_form_45}}</td>
+                                               <td style='text-align:center;'>{{i.total_gathering_45}}</td>
+                                               <td style='text-align:center;'>{{i.binding_received_45}}</td>
+                                               <td style='text-align:center;'>{{i.total_cutting_45}}</td>
+                                            {% endif %}
+                                            {% if i.item46 != '' %}
+                                            <tr>
+                                                <td style='text-align:center;'>46.</td>
+                                                <td style='text-align:center;'>{{i.brand_name_46}}</td>
+                                                <td style='text-align:center;'>{{i.class_name_46}}</td>
+                                                <td style='text-align:center;'>{{i.medium_46}}</td>
+                                                <td style='text-align:center;'>{{i.subject_46}}</td>
+                                                <td style='text-align:center;'>{{i.quantity_46}}</td>
+                                                <td style='text-align:center;'>{{i.rim_46}}</td>
+                                                <td style='text-align:center;'>{{i.printing_received_form_46}}</td>
+                                                <td style='text-align:center;'>{{i.total_gathering_46}}</td>
+                                                <td style='text-align:center;'>{{i.binding_received_46}}</td>
+                                                <td style='text-align:center;'>{{i.total_cutting_46}}</td>
+                                             {% endif %}
+                                             {% if i.item47 != '' %}
+                                             <tr>
+                                                 <td style='text-align:center;'>47.</td>
+                                                 <td style='text-align:center;'>{{i.brand_name_47}}</td>
+                                                 <td style='text-align:center;'>{{i.class_name_47}}</td>
+                                                 <td style='text-align:center;'>{{i.medium_47}}</td>
+                                                 <td style='text-align:center;'>{{i.subject_47}}</td>
+                                                 <td style='text-align:center;'>{{i.quantity_47}}</td>
+                                                 <td style='text-align:center;'>{{i.rim_47}}</td>
+                                                 <td style='text-align:center;'>{{i.printing_received_form_47}}</td>
+                                                 <td style='text-align:center;'>{{i.total_gathering_47}}</td>
+                                                 <td style='text-align:center;'>{{i.binding_received_47}}</td>
+                                                 <td style='text-align:center;'>{{i.total_cutting_47}}</td>
+                                              {% endif %}
+                                              {% if i.item48 != '' %}
+                                              <tr>
+                                                  <td style='text-align:center;'>48.</td>
+                                                  <td style='text-align:center;'>{{i.brand_name_48}}</td>
+                                                  <td style='text-align:center;'>{{i.class_name_48}}</td>
+                                                  <td style='text-align:center;'>{{i.medium_48}}</td>
+                                                  <td style='text-align:center;'>{{i.subject_48}}</td>
+                                                  <td style='text-align:center;'>{{i.quantity_48}}</td>
+                                                  <td style='text-align:center;'>{{i.rim_48}}</td>
+                                                  <td style='text-align:center;'>{{i.printing_received_form_48}}</td>
+                                                  <td style='text-align:center;'>{{i.total_gathering_48}}</td>
+                                                  <td style='text-align:center;'>{{i.binding_received_48}}</td>
+                                                  <td style='text-align:center;'>{{i.total_cutting_48}}</td>
+                                               {% endif %}
+                                               {% if i.item49 != '' %}
+                                               <tr>
+                                                   <td style='text-align:center;'>49.</td>
+                                                   <td style='text-align:center;'>{{i.brand_name_49}}</td>
+                                                   <td style='text-align:center;'>{{i.class_name_49}}</td>
+                                                   <td style='text-align:center;'>{{i.medium_49}}</td>
+                                                   <td style='text-align:center;'>{{i.subject_49}}</td>
+                                                   <td style='text-align:center;'>{{i.quantity_49}}</td>
+                                                   <td style='text-align:center;'>{{i.rim_49}}</td>
+                                                   <td style='text-align:center;'>{{i.printing_received_form_49}}</td>
+                                                   <td style='text-align:center;'>{{i.total_gathering_49}}</td>
+                                                   <td style='text-align:center;'>{{i.binding_received_49}}</td>
+                                                   <td style='text-align:center;'>{{i.total_cutting_49}}</td>
+                                                {% endif %}
+                                                {% if i.item50 != '' %}
+                                                <tr>
+                                                    <td style='text-align:center;'>50.</td>
+                                                    <td style='text-align:center;'>{{i.brand_name_50}}</td>
+                                                    <td style='text-align:center;'>{{i.class_name_50}}</td>
+                                                    <td style='text-align:center;'>{{i.medium_50}}</td>
+                                                    <td style='text-align:center;'>{{i.subject_50}}</td>
+                                                    <td style='text-align:center;'>{{i.quantity_50}}</td>
+                                                    <td style='text-align:center;'>{{i.rim_50}}</td>
+                                                    <td style='text-align:center;'>{{i.printing_received_form_50}}</td>
+                                                    <td style='text-align:center;'>{{i.total_gathering_50}}</td>
+                                                    <td style='text-align:center;'>{{i.binding_received_50}}</td>
+                                                    <td style='text-align:center;'>{{i.total_cutting_50}}</td>
+                                                 {% endif %}
+                                               
+                                        {% endfor %}
+
+                                       </tr>
+                                        <!-- {% for i in data %}
+                                        <tr >
+                                            <td >
+                                            
+                                            </td>
+                                            <td >
+                                                {{ i.brand_name_2 }} 
+                                            </td>
+                                            <td >
+                                                {{i.class_name_2}} 
+                                          </td>
+                                          <td >
+                                              {{i.subject_2}}  
+                                          </td>
+                                           <td >
+                                             {{i.medium_2}} 
+                                          </td> 
+                                          <td >
+                                            {{i.item1_page2}}
+                                        </td>
+                                        {% endfor %}
+                                        </tr>
+
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                            
+                                            </td>
+                                            <td >
+                                                {{ i.brand_name_3 }} 
+                                            </td>
+                                            <td >
+                                                {{i.class_name_3}} 
+                                          </td>
+                                          <td >
+                                              {{i.subject_3}}  
+                                          </td>
+                                           <td >
+                                             {{i.medium_3}} 
+                                          </td> 
+                                          <td >
+                                            {{i.item1_page3}}
+                                        </td>
+                                        {% endfor %}
+                                        </tr>
+
+
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                            
+                                            </td>
+                                            <td >
+                                                {{ i.brand_name_4 }} 
+                                            </td>
+                                            <td >
+                                                {{i.class_name_4}} 
+                                          </td>
+                                          <td >
+                                              {{i.subject_4}}  
+                                          </td>
+                                           <td >
+                                             {{i.medium_4}} 
+                                          </td> 
+                                          <td >
+                                            {{i.item1_page4}}
+                                        </td>
+                                        {% endfor %}
+                                        </tr>
+
+
+
+
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                            
+                                            </td>
+                                            <td >
+                                                {{ i.brand_name_5 }} 
+                                            </td>
+                                            <td >
+                                                {{i.class_name_5}} 
+                                          </td>
+                                          <td >
+                                              {{i.subject_5}}  
+                                          </td>
+                                           <td >
+                                             {{i.medium_5}} 
+                                          </td> 
+                                          <td >
+                                            {{i.item1_page5}}
+                                        </td>
+                                        {% endfor %}
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
+    <script>
+      function submitForm() {
+        // Submit the form using AJAX
+        $.ajax({
+          url: $('#profile-form').attr('action'),
+          type: 'POST',
+          data: $('#profile-form').serialize(),
+          success: function(response) {
+            // Show a success message using SweetAlert
+            swal({
+              title: "Success!",
+              text: "Brands added successfully",
+              icon: "success",
+              button: "OK",
+            });
+            .then(function() {
+              location.reload();
+          });
+          },
+          error: function(response) {
+            // Show an error message using SweetAlert
+            swal({
+              title: "Error!",
+              text: response.responseText,
+              icon: "error",
+              button: "OK",
+            });
+            .then(function() {
+              location.reload();
+          });
+          }
+        });
+      }
+    </script>
+
+
+</body>  
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Form{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 col-sm-6 mx-auto">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                        <div class="mb-3">
+                            <label  class="form-label">Edit No. of Forms1</label>
+                            <input type="text" class="form-control radius-10" id="" name = "no_of_forms" value="{{data.no_of_forms}}" maxlength="30" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label  class="form-label">Edit Form length</label>
+                            <input type="text" class="form-control radius-10" id="" name ="form_length" value="{{data.form_length}}" required="" >
+                        </div> 
+                        <div class="mb-3">
+                            <label class="form-label">Edit Form width</label>
+                            <input type="tel" name="form_width" minlength="" class="form-control" value="{{data.form_width}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Edit Form GSM</label>
+                            <input type="tel" name="form_gsm" minlength="" class="form-control" value="{{data.form_gsm}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                        
+                    
+                    <div class="col-md-12" style="text-align: center;">
+                       <button class="btn btn-primary" style="background-color:mediumaquamarine; ">
+                            <a href="{% url 'forms-setting' %}" style="color: white;">Back</a>
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;">Save</button>
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

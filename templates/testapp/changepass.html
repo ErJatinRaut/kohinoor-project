@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block body_block %}
+<div class="container">
+    <h1>Change Password</h1>
+    <hr>
+
+    <div class="form-group">
+        <form id="profile-form" action="" method="post" style="margin-left: 800px; position:relative; left:-265px; top:2px;">
+            {% csrf_token %}
+            
+            <!-- Old Password Field -->
+            <div class="input-group mb-3">
+                <input type="password" name="old_password" id="id_old_password" class="form-control" placeholder="Old Password" required>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="toggleOldPassword">
+                        <i class="fa fa-eye-slash" id="oldPasswordIcon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- New Password Field 1 -->
+            <div class="input-group mb-3">
+                <input type="password" name="new_password1" id="id_new_password1" class="form-control" placeholder="New Password" required>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword1">
+                        <i class="fa fa-eye-slash" id="newPassword1Icon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- New Password Field 2 -->
+            <div class="input-group mb-3">
+                <input type="password" name="new_password2" id="id_new_password2" class="form-control" placeholder="Confirm New Password" required>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword2">
+                        <i class="fa fa-eye-slash" id="newPassword2Icon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <a href="/dashboard/"><input type="button" class="btn btn-secondary" style="background-color: mediumaquamarine;" value="Back"></a>
+            <input type="submit" class="btn btn-secondary" style="background-color: mediumaquamarine;" onclick="submitForm()" value="Change Password">
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+  // Code for toggling password visibility
+  function togglePasswordVisibility(fieldId, iconId) {
+    var passwordField = document.getElementById(fieldId);
+    var passwordIcon = document.getElementById(iconId);
+    
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      passwordIcon.classList.remove("fa-eye-slash");
+      passwordIcon.classList.add("fa-eye");
+    } else {
+      passwordField.type = "password";
+      passwordIcon.classList.remove("fa-eye");
+      passwordIcon.classList.add("fa-eye-slash");
+    }
+  }
+  
+  document.getElementById("toggleOldPassword").addEventListener("click", function() {
+    togglePasswordVisibility("id_old_password", "oldPasswordIcon");
+  });
+  document.getElementById("toggleNewPassword1").addEventListener("click", function() {
+    togglePasswordVisibility("id_new_password1", "newPassword1Icon");
+  });
+  document.getElementById("toggleNewPassword2").addEventListener("click", function() {
+    togglePasswordVisibility("id_new_password2", "newPassword2Icon");
+  });
+  
+  async function submitForm(event) {
+    // Rest of your form submission code
+  }
+  
+  var form = document.getElementById("profile-form");
+  form.addEventListener("submit", submitForm);
+</script>
+
+{% endblock %}

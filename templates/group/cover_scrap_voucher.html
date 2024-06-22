@@ -1,0 +1,1236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+    * {
+        font-family: Georgia;
+        
+    }
+
+
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .box {
+        width: 40%;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 35px;
+        border: 2px solid #fff;
+        border-radius: 20px/50px;
+        background-clip: padding-box;
+        text-align: center;
+    }
+
+    .button {
+        font-size: 1em;
+        padding: 10px;
+        color: #fff;
+        border: 2px solid #06D85F;
+        border-radius: 20px/50px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+    }
+
+    .button:hover {
+        background: #06D85F;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        transition: opacity 500ms;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .overlay:target {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .popup {
+        margin: 70px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        width: 30%;
+        position: relative;
+        transition: all 5s ease-in-out;
+    }
+
+    .popup h4 {
+        margin-top: 0;
+        color: #333;
+        /* font-family: Tahoma, Arial, sans-serif; */
+    }
+
+    .popup .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        transition: all 200ms;
+        font-size: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .popup .close:hover {
+        color: #06D85F;
+    }
+
+    .popup .content {
+        max-height: 30%;
+        overflow: auto;
+    }
+
+    @media screen and (max-width: 700px) {
+        .box {
+            width: 70%;
+        }
+
+        .popup {
+            width: 70%;
+        }
+    }
+</style>
+<style type="text/css">
+    .select-style {
+        border-radius: 0.25rem;
+        border-color: black;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+        border-color: black;
+    }
+</style>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<body>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Cover Scrap Vouchers</div>
+            <hr>
+            <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                <button class="btn btn-primary me-md-2" id="myBtn" type="button"
+                    style="background-color: mediumaquamarine;"><i class="fa fa-plus"></i>&nbsp;Create Cover Scrap Voucher</button>
+
+            </div>
+            <!-- create -->
+            <div id="myModal" class="modal">
+
+
+                <div class="modal-content" style="background-color: lightcyan;">
+                    <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"
+                            style="color:black; background-color:mediumaquamarine;text-align:center;">
+                            <h4 style="color:white ;">Create Cover Scrap Voucher</h4>
+                        </div>
+                        <hr style="color:black">
+                        <form method="POST" id="profile-form1">
+                            {% csrf_token %}
+                            <div class="panel-body" align="left">
+                                <div class="row p-0">
+                                    <div class="d-grid gap-2 col-sm-6 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; font-size:12px;">Date<span style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                        <input  style="border-radius:0px;" type="date" class="form-control mobile" name="cover_date" id="cover_date_input" placeholder="{% now 'Y-m-d' %}" value="" max="{% now 'Y-m-d' %}" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row d-flex">
+                                    
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">Particulars1<span
+                                                    style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                <select  style="color: black; border-radius:0px;" style="border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular1" id="cover_scrap_particular1" >
+                                                        <option disabled selected value>Select subject</option>
+                                                        {% for i in data26 %}
+                                                            <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                       </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">QTY1<span
+                                                    style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                    placeholder="Quantity" name="cover_scrap_qty1"
+                                                    id="cover_scrap_qty1" class="form-control" maxlength="" value=""
+                                                    >
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">Unit1<span style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                    placeholder="Unit" name="cover_scrap_unit1" id="cover_scrap_unit1"
+                                                    class="form-control" maxlength="" value="" >
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">Rate1<span
+                                                    style="color: red;">*</span></label>
+                                            <div class=" mb-4">
+                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                    placeholder="Rate" name="cover_scrap_rate1"
+                                                    id="cover_scrap_rate1" class="form-control" maxlength="" value=""
+                                                    >
+                                                    
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                   <div class="row d-flex">
+
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">Particulars2<span
+                                                    style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                <select  style="color: black; border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular2" id="cover_scrap_particular2" >
+                                                    <option disabled selected value>Select Books</option>
+                                                    {% for i in data26 %}
+                                                        <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                    {% endfor %}
+                                                   </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">QTY2<span
+                                                    style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                    placeholder="Quantity" name="cover_scrap_qty2"
+                                                    id="cover_scrap_qty2" class="form-control" maxlength="" value=""
+                                                    >
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">Unit2<span style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                    placeholder="Unit" name="cover_scrap_unit2" id="cover_scrap_unit2"
+                                                    class="form-control" maxlength="" value="" >
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 p-0">
+                                        <div class="mb-0">
+                                            <label style="color:black ; ">Rate2<span
+                                                    style="color: red;">*</span></label>
+                                            <div class=" mb-4">
+                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                    placeholder="Rate" name="cover_scrap_rate2"
+                                                    id="cover_scrap_rate2" class="form-control" maxlength="" value=""
+                                                    >
+                                                    
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                   </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Particulars3<span
+                                                            style="color: red;"></span></label>
+                                                    <div class=" mb-4">
+                                                        <select  style="color: black; border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular3" id="cover_scrap_particular3" >
+                                                            <option disabled selected value>Select Books</option>
+                                                            {% for i in data26 %}
+                                                                <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                            {% endfor %}
+                                                           </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">QTY3<span
+                                                            style="color: red;"></span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                            placeholder="Quantity" name="cover_scrap_qty3"
+                                                            id="cover_scrap_qty3" class="form-control" maxlength="" value=""
+                                                            >
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+        
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Unit3<span style="color: red;"></span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Unit" name="cover_scrap_unit3" id="cover_scrap_unit3"
+                                                            class="form-control" maxlength="" value="" >
+        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Rate3<span
+                                                            style="color: red;">*</span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Rate" name="cover_scrap_rate3"
+                                                            id="cover_scrap_rate3" class="form-control" maxlength="" value=""
+                                                            >
+                                                            
+        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-3 p-0">
+                                                    <div class="mb-0">
+                                                        <label style="color:black ; ">Particulars4<span
+                                                                style="color: red;"></span></label>
+                                                        <div class=" mb-4">
+                                                            <select  style="color: black; border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular4" id="cover_scrap_particular4" >
+                                                                <option disabled selected value>Select Books</option>
+                                                                {% for i in data26 %}
+                                                                    <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                                {% endfor %}
+                                                               </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 p-0">
+                                                    <div class="mb-0">
+                                                        <label style="color:black ; ">QTY4<span
+                                                                style="color: red;"></span></label>
+                                                        <div class=" mb-4">
+                                                            <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                placeholder="Rate" name="cover_scrap_qty4"
+                                                                id="cover_scrap_qty4" class="form-control" maxlength="" value=""
+                                                                >
+                                                        </div>
+                                                    </div>
+                                                </div>
+            
+            
+                                                <div class="col-md-3 p-0">
+                                                    <div class="mb-0">
+                                                        <label style="color:black ; ">Unit4<span style="color: red;"></span></label>
+                                                        <div class=" mb-4">
+                                                            <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                placeholder="Rate" name="cover_scrap_unit4"
+                                                                id="cover_scrap_unit4" class="form-control" maxlength="" value=""
+                                                                >
+            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 p-0">
+                                                    <div class="mb-0">
+                                                        <label style="color:black ; ">Rate4<span
+                                                                style="color: red;">*</span></label>
+                                                        <div class=" mb-4">
+                                                            <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                placeholder="Rate" name="cover_scrap_rate4"
+                                                                id="cover_scrap_rate4" class="form-control" maxlength="" value=""
+                                                                >
+                                                                
+            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">Particulars5<span
+                                                                    style="color: red;"></span></label>
+                                                            <div class=" mb-4">
+                                                                <select  style="color: black; border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular5" id="cover_scrap_particular5" >
+                                                                    <option disabled selected value>Select Books</option>
+                                                                    {% for i in data26 %}
+                                                                        <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                                    {% endfor %}
+                                                                   </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">QTY5<span
+                                                                    style="color: red;"></span></label>
+                                                            <div class=" mb-4">
+                                                                <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                                    placeholder="Quantity" name="cover_scrap_qty5"
+                                                                    id="cover_scrap_qty5" class="form-control" maxlength="" value=""
+                                                                    >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">Unit5<span style="color: red;"></span></label>
+                                                            <div class=" mb-4">
+                                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                    placeholder="Unit" name="cover_scrap_unit5" id="cover_scrap_unit5"
+                                                                    class="form-control" maxlength="" value="" >
+                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">Rate5<span
+                                                                    style="color: red;">*</span></label>
+                                                            <div class=" mb-4">
+                                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                    placeholder="Rate" name="cover_scrap_rate5"
+                                                                    id="cover_scrap_rate5" class="form-control" maxlength="" value=""
+                                                                    >
+                                                                    
+                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">Particulars6<span
+                                                                        style="color: red;"></span></label>
+                                                                <div class=" mb-4">
+                                                                    <select  style="color: black; border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular6" id="cover_scrap_particular6" >
+                                                                        <option disabled selected value>Select Books</option>
+                                                                        {% for i in data26 %}
+                                                                            <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                                        {% endfor %}
+                                                                       </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">QTY6<span
+                                                                        style="color: red;"></span></label>
+                                                                <div class=" mb-4">
+                                                                    <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                                        placeholder="Quantity" name="cover_scrap_qty6"
+                                                                        id="cover_scrap_qty6" class="form-control" maxlength="" value=""
+                                                                        >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                    
+                    
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">Unit6<span style="color: red;"></span></label>
+                                                                <div class=" mb-4">
+                                                                    <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                        placeholder="Unit" name="cover_scrap_unit6" id="cover_scrap_unit6"
+                                                                        class="form-control" maxlength="" value="" >
+                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">Rate6<span
+                                                                        style="color: red;">*</span></label>
+                                                                <div class=" mb-4">
+                                                                    <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                        placeholder="Rate" name="cover_scrap_rate6"
+                                                                        id="cover_scrap_rate6" class="form-control" maxlength="" value=""
+                                                                        >
+                                                                        
+                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                
+                                                        
+                                                <div class="row">
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">Particulars7<span
+                                                                    style="color: red;"></span></label>
+                                                            <div class=" mb-4">
+                                                                <select style="color: black; border-radius:0px;"  type="text" class="form-control mobile" name="cover_scrap_particular7" id="cover_scrap_particular7" >
+                                                                    <option disabled selected value>Select Books</option>
+                                                                    {% for i in data26 %}
+                                                                        <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                                    {% endfor %}
+                                                                   </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">QTY7<span
+                                                                    style="color: red;"></span></label>
+                                                            <div class=" mb-4">
+                                                                <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                                    placeholder="Quantity" name="cover_scrap_qty7"
+                                                                    id="cover_scrap_qty7" class="form-control" maxlength="" value=""
+                                                                    >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">Unit7<span style="color: red;"></span></label>
+                                                            <div class=" mb-4">
+                                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                    placeholder="Unit" name="cover_scrap_unit7" id="cover_scrap_unit7"
+                                                                    class="form-control" maxlength="" value="" >
+                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 p-0">
+                                                        <div class="mb-0">
+                                                            <label style="color:black ; ">Rate7<span
+                                                                    style="color: red;">*</span></label>
+                                                            <div class=" mb-4">
+                                                                <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                    placeholder="Rate" name="cover_scrap_rate7"
+                                                                    id="cover_scrap_rate7" class="form-control" maxlength="" value=""
+                                                                    >
+                                                                    
+                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">Particulars8<span
+                                                                        style="color: red;"></span></label>
+                                                                <div class=" mb-4">
+                                                                    <select  style="color: black; border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular8" id="cover_scrap_particular8" >
+                                                                        <option disabled selected value>Select Books</option>
+                                                                        {% for i in data26 %}
+                                                                            <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                                        {% endfor %}
+                                                                       </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">QTY8<span
+                                                                        style="color: red;"></span></label>
+                                                                <div class=" mb-4">
+                                                                    <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                                        placeholder="Quantity" name="cover_scrap_qty8"
+                                                                        id="cover_scrap_qty8" class="form-control" maxlength="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                    
+                    
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">Unit8<span style="color: red;"></span></label>
+                                                                <div class=" mb-4">
+                                                                    <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                        placeholder="Unit" name="cover_scrap_unit8" id="cover_scrap_unit8"
+                                                                        class="form-control" maxlength="" value="" >
+                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 p-0">
+                                                            <div class="mb-0">
+                                                                <label style="color:black ; ">Rate8<span
+                                                                        style="color: red;">*</span></label>
+                                                                <div class=" mb-4">
+                                                                    <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                        placeholder="Rate" name="cover_scrap_rate8"
+                                                                        id="cover_scrap_rate8" class="form-control" maxlength="" value=""
+                                                                        >
+                                                                        
+                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        
+                                                        <div class="row">
+                                                            <div class="col-md-3 p-0">
+                                                                <div class="mb-0">
+                                                                    <label style="color:black ; ">Particulars9<span
+                                                                            style="color: red;"></span></label>
+                                                                    <div class=" mb-4">
+                                                                        <select  style="color: black; border-radius:0px;" type="text" class="form-control mobile" name="cover_scrap_particular9" id="cover_scrap_particular9" >
+                                                                            <option disabled selected value>Select Books</option>
+                                                                            {% for i in data26 %}
+                                                                                <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                                            {% endfor %}
+                                                                           </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 p-0">
+                                                                <div class="mb-0">
+                                                                    <label style="color:black ; ">QTY9<span
+                                                                            style="color: red;"></span></label>
+                                                                    <div class=" mb-4">
+                                                                        <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                                            placeholder="Quantity" name="cover_scrap_qty9"
+                                                                            id="cover_scrap_qty9" class="form-control" maxlength="" value=""
+                                                                            >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                        
+                        
+                                                            <div class="col-md-3 p-0">
+                                                                <div class="mb-0">
+                                                                    <label style="color:black ; ">Unit9<span style="color: red;"></span></label>
+                                                                    <div class=" mb-4">
+                                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                            placeholder="Unit" name="cover_scrap_unit9" id="cover_scrap_unit9"
+                                                                            class="form-control" maxlength="" value="" >
+                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 p-0">
+                                                                <div class="mb-0">
+                                                                    <label style="color:black ; ">Rate9<span
+                                                                            style="color: red;">*</span></label>
+                                                                    <div class=" mb-4">
+                                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                            placeholder="Rate" name="cover_scrap_rate9"
+                                                                            id="cover_scrap_rate9" class="form-control" maxlength="" value=""
+                                                                            >
+                                                                            
+                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-3 p-0">
+                                                                    <div class="mb-0">
+                                                                        <label style="color:black ; ">Particulars10<span
+                                                                                style="color: red;"></span></label>
+                                                                        <div class=" mb-4">
+                                                                            <select  style="color: black; border-radius:0px;"  type="text" class="form-control mobile" name="cover_scrap_particular10" id="cover_scrap_particular10" >
+                                                                                <option disabled selected value>Select Books</option>
+                                                                                {% for i in data26 %}
+                                                                                    <option value="{{ i.subject }}">{{i.subject}}</option>
+                                                                                {% endfor %}
+                                                                               </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 p-0">
+                                                                    <div class="mb-0">
+                                                                        <label style="color:black ; ">QTY10<span
+                                                                                style="color: red;"></span></label>
+                                                                        <div class=" mb-4">
+                                                                            <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                                                placeholder="Quantity" name="cover_scrap_qty10"
+                                                                                id="cover_scrap_qty10" class="form-control" maxlength="" value=""
+                                                                                >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                            
+                            
+                                                                <div class="col-md-3 p-0">
+                                                                    <div class="mb-0">
+                                                                        <label style="color:black ; ">Unit10<span style="color: red;"></span></label>
+                                                                        <div class=" mb-4">
+                                                                            <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                                placeholder="Unit" name="cover_scrap_unit10" id="cover_scrap_unit10"
+                                                                                class="form-control" maxlength="" value="" >
+                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 p-0">
+                                                                    <div class="mb-0">
+                                                                        <label style="color:black ; ">Rate10<span
+                                                                                style="color: red;">*</span></label>
+                                                                        <div class=" mb-4">
+                                                                            <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                                                placeholder="Rate" name="cover_scrap_rate10"
+                                                                                id="cover_scrap_rate10" class="form-control" maxlength="" value=""
+                                                                                >
+                                                                                
+                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="mb-0">
+                                                                    <label style="color:black; ">Total Quantity<span style="color: red;"></span></label>
+                                                                    <div class=" mb-4">
+                                                                        <input style="color: black; border-radius:0px;" width="50" type="text" placeholder="Total Quantity" name="cover_scrap_total_quantity" id="cover_scrap_total_quantity" class="form-control" readonly>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                                
+                                    <div class="row">
+                                        <div class="col-md-3 p-0">
+                                            <div class="mb-0">
+                                            <label style="color:black ; ">Bill of Material<span
+                                                    style="color: red;"></span></label>
+                                            <div class=" mb-4">
+                                                <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                    placeholder="Enter Bill of Material" name="cover_bill_material"
+                                                    id="cover_bill_material" class="form-control" maxlength="" value=""
+                                                    >
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="col-md-3 p-0">
+                                            <div class="mb-0">
+                                                <label style="color:black ; ">Bill of Material (BOM)Name<span
+                                                        style="color: red;"></span></label>
+                                                <div class=" mb-4">
+                                                    <select  style="color: black; border-radius:0px;"  type="text" class="form-control mobile" name="cover_bill_material_name" id="cover_bill_material_name" onchange="generateVoucherNo()">
+                                                        <option disabled selected value>Select BOM</option>
+                                                        {% for i in data27 %}
+                                                            <option value="{{ i.bom_name }}">{{i.bom_name}}</option>
+                                                        {% endfor %}
+                                                       </select>
+                                                </div>
+                                            </div>
+                                                
+                                                
+                                        </div>
+
+
+                                                <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Voucher No<span
+                                                            style="color: red;">*</span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="text" min="0"
+                                                            placeholder="Enter Voucher No" name="cover_voucher_no"
+                                                            id="cover_voucher_no" class="form-control" maxlength="" value=""
+                                                            >
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Alias<span style="color: red;"></span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Enter Currency" name="cover_alias" id="cover_alias"
+                                                            class="form-control" maxlength="" value="" >
+        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                           <div class="row d-flex">
+                                               <div class="col-md-6 p-0">
+                                                <div class="row d-flex">
+                                                    <div class="col-md-3 mb-0" style="padding-right: 0;">
+                                                    <label style="color:black ; ">Item To produce<span
+                                                            style="color: red;">*</span></label>
+                                                            <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Enter Item To produce" name="cover_item_produce"
+                                                            id="cover_item_produce" class="form-control" maxlength="" value=""
+                                                            >
+                                                    </div>
+                                                    <div class="col-md-3 mb-4 p-0">
+                                                        <label style="color:transparent ; user-select: none;">Item To produce<span
+                                                            style="color: red;"></span></label>
+                                                        
+                                                            <select style="color: black; border-radius:0px;" width="50" name="cover_item_produce" id="cover_item_produce" class="form-control">
+                                                                    <option value="" disabled selected>Select </option>
+                                                                    <option value="by product">by product</option>
+                                                                    <option value="book">book</option>
+                                                                    <option value="item creation">item creation</option>
+                                                                    <option value="raw material">raw material</option>
+                                                            </select>
+        
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                           
+
+
+
+
+
+                                        </div>
+                                    
+
+
+                                    
+
+                                        <div class="row d-flex">
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">QTY<span style="color: red;">*</span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Enter QTY" name="cover_quantity" id="cover_quantity"
+                                                            class="form-control" maxlength="" value="" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Unit<span style="color: red;">*</span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Enter Unit" name="cover_unit1" id="cover_unit1"
+                                                            class="form-control" maxlength="" value="" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Expenses<span style="color: red;">*</span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Enter Expenses" name="cover_expenses" id="cover_expenses"
+                                                            class="form-control" maxlength="" value="" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 p-0">
+                                                <div class="mb-0">
+                                                    <label style="color:black ; ">Specify-Default MC For item Generated<span
+                                                            style="color: red;">*</span></label>
+                                                    <div class=" mb-4">
+                                                        <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                            placeholder="Enter item Generated" name="item_generated" id="item_generated"
+                                                            class="form-control" maxlength="" value="" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+
+                                    <div class="row d-flex">
+                                        <div class="col-md-3 p-0">
+                                            <div class="mb-0">
+                                                <label style="color:black ; ">Specify-Default MC For item Consumed<span
+                                                        style="color: red;">*</span></label>
+                                                <div class=" mb-4">
+                                                    <input style="color: black; border-radius:0px;" width="50" type="number" min="0"
+                                                        placeholder="Enter item Consumed" name="item_consumed" id="item_consumed"
+                                                        class="form-control" maxlength="" value="" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                 <!-- <div class="form-group">
+                                        <label style="color:black ;">Qty<span style="color: red;">*</span></label>
+                                        <div class=" mb-4">
+                                            <input style="color: black;" width="50" type="text" min="0"
+                                                placeholder="Enter Qty" name="cover_qty" id="cover_qty"
+                                                class="form-control" maxlength="" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label style="color:black ;">Unit<span style="color: red;">*</span></label>
+                                        <div class=" mb-4">
+                                            <input style="color: black;" width="50" type="text" min="0"
+                                                placeholder="Enter Unit" name="cover_unit" id="cover_unit"
+                                                class="form-control" maxlength="" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label style="color:black ;">Rate<span style="color: red;">*</span></label>
+                                        <div class=" mb-4">
+                                            <input style="color: black;" width="50" type="number" min="0"
+                                                placeholder="Enter Rate" name="cover_rate" id="cover_rate"
+                                                class="form-control" maxlength="" value="">
+                                        </div>
+                                    </div> -->
+
+
+                                    <div class="col-md-12" id="addedFieldsContainer"></div>
+                            <!-- <div class="col-md-8 text-center"></div> -->
+                            <div class="col-md-12 text-center">
+                                 <a href="{{ form.get_cancel_link }}" >
+                                                      <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                                                  </a>
+                                <input type="submit" class="btn btn-primary"
+                                    style="background-color:mediumaquamarine ; color:white;" onsubmit="submitForm()"
+                                    value="Save">
+                            </div>
+                        
+                            
+                            
+                            
+                            
+                    </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- table -->
+        <div class="card-body">
+            <div class="row" style="text-align: center;">
+                <div class="col-md-11">
+                    <div class="table-responsive">
+                        <table class="display table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr style="text-align: center; background-color: lightcyan;">
+
+
+
+                                    <th align="center">Sr. No</th>
+                                    <th align="center">Voucher No</th>
+                                    <!-- <th align="center">Cover Subject</th>
+                                    <th align="center">Qty</th>
+                                    <th align="center">Unit</th>
+                                    <th align="center">Rate</th> -->
+                                    <th align="center">Bill of Material</th>
+                                    <th align="center">Bill of Material (BOM)Name</th>
+                                    <th align="center">Alias</th>
+                                    <th align="center">Item To produce</th>
+                                    {% comment %} <th align="center">Qty</th>
+                                    <th align="center">Unit</th> {% endcomment %}
+                                    <th align="center">Expenses</th>
+                                    <th align="center">item Generated</th>
+                                    <th align="center"> item Consumed</th>
+                                    <th align="center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data25 %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_voucher_no }}
+                                    </td>
+                                    <!-- <td>
+                                        {{ i.cover_subject }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_qty }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_unit }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_rate }}
+                                    </td> -->
+                                    <td>
+                                        {{ i.cover_bill_material }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_bill_material_name }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_alias }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_item_produce }}
+                                    </td>
+                                    {% comment %} <td>
+                                        {{ i.cover_quantity }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_unit1 }}
+                                    </td> {% endcomment %}
+                                    <td>
+                                        {{ i.cover_expenses }}
+                                    </td>
+                                    <td>
+                                        {{ i.item_generated }}
+                                    </td>
+                                    <td>
+                                        {{ i.item_consumed }}
+                                    </td>
+                                    <td>
+
+                    </div>
+                    {% if request.user.is_authenticated and request.user.is_superuser   %} 
+                    <a href="/edit_cover_scrap_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_printing and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_cover_scrap_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_cover_scrap_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_cover_scrap_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_binding and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_cover_scrap_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_packing and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_cover_scrap_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_sale and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_cover_scrap_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+
+                    
+                    {% if request.user.is_authenticated and request.user.is_superuser   %} 
+                    <a href="/delete_cover_scrap_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_printing and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                    <a href="/delete_cover_scrap_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                    <a href="/delete_cover_scrap_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_binding and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                    <a href="/delete_cover_scrap_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                    <a href="/delete_cover_scrap_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_packing and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                    <a href="/delete_cover_scrap_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_sale and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                    <a href="/delete_cover_scrap_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    
+                    
+
+                </div>
+                </td>
+                {% endfor %}
+                </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    function generateVoucherNo() {
+        var selectedOption = document.getElementById("cover_bill_material_name").value;
+        var vendorName = selectedOption.split(" ")[0].substring(0, 2).toUpperCase(); // Get the first three characters of the vendor name and convert to uppercase
+        var uniqueNumber = Math.floor(Math.random() * 1000); // Generate a random number
+        
+        var voucherNoInput = document.getElementById("cover_voucher_no");
+        // Set the value of the voucher number input field
+        voucherNoInput.value = vendorName + uniqueNumber;
+    }
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        // Function to clone and append fields
+        function addMoreFields() {
+            var clonedFields = $("#clonableFields").clone(true).removeAttr("id");
+
+            // Update input field names to ensure uniqueness
+            clonedFields.find("[name='cover_subject']").attr("name", "cover_subject[]");
+            clonedFields.find("[name='cover_qty']").attr("name", "cover_qty[]");
+            clonedFields.find("[name='cover_unit']").attr("name", "cover_unit[]");
+            clonedFields.find("[name='cover_rate']").attr("name", "cover_rate[]");
+
+            // Append the cloned fields to the container
+            $("#addedFieldsContainer").append(clonedFields.show());
+        }
+
+        // Attach the click event to the "Add More" button
+        $("#addMoreBtn").click(function (e) {
+            e.preventDefault();
+            addMoreFields();
+        });
+    });
+</script>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addMoreButton = document.getElementById('addMoreButton');
+        const form = document.getElementById('profile-form1');
+
+        addMoreButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Clone the form elements you want to add
+            const cloneElement = document.querySelector('#cloneFormSection').cloneNode(true);
+
+            // Assign unique IDs to the cloned elements
+            const uniqueId = new Date().getTime();
+            cloneElement.querySelector('input[name="cover_subject"]').id = `cover_subject_${uniqueId}`;
+            cloneElement.querySelector('input[name="tehsil"]').id = `tehsil_${uniqueId}`;
+            cloneElement.querySelector('input[name="town"]').id = `town_${uniqueId}`;
+
+            cloneElement.querySelector('input[name="cover_subject"]').value = '';
+            cloneElement.querySelector('input[name="tehsil"]').value = '';
+            cloneElement.querySelector('input[name="town"]').value = '';
+
+            // Append the cloned elements to the form
+            form.appendChild(cloneElement);
+        });
+    });
+</script>
+
+<script>
+    // JavaScript to set the default date value
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select the input field
+        const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        const dateInput = document.getElementById('cover_date_input');
+        
+        // Set the default value to the current date
+        dateInput.value = currentDate;
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Bind the input fields to the input event
+        $('input[name^="cover_scrap_qty"]').on('input', function () {
+            calculateTotal();
+        });
+
+        function calculateTotal() {
+            var total = 0;
+
+            // Loop through all input fields starting with the name "cover_scrap_qty"
+            $('input[name^="cover_scrap_qty"]').each(function () {
+                var quantity = parseFloat($(this).val()) || 0; // Get the value and convert to a float, default to 0 if not a number
+                total += quantity;
+            });
+
+            // Update the total_quantity input field with the calculated total
+            $('#cover_scrap_total_quantity').val(total);
+        }
+    });
+</script>
+  
+
+
+
+</body>
+
+{% endblock %}

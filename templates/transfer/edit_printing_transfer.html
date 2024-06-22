@@ -1,0 +1,491 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+  * {
+    font-family: Georgia;
+  }
+</style>
+
+<body>
+  <div class="page-wrapper">
+    <div class="page-content">
+      <!--breadcrumb-->
+      <div class="page-breadcrumb mb-3 p-5" style="background-color: lightcyan">
+        <div class="breadcrumb-title pe-3">Edit Printing Transfer</div>
+        <hr />
+        <form method="POST">
+          {% csrf_token %}
+          <div class="row">
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">from</label>
+                <select
+                  type="text"
+                  class="form-control mobile"
+                  name="vender_transfer_from"
+                  id="vender_transfer_from"
+                >
+                  {% if data %}
+                  <option value="{{ data.vender_transfer_from }}" selected>
+                    {{ data.vender_transfer_from }}
+                  </option>
+                  {% else %}
+                  <option disabled selected value>Select Books</option>
+                  {% endif %} {% for i in data1 %}
+                  <option value="{{ i.organization_name }}">
+                    {{ i.organization_name }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">To</label>
+                <select
+                  type="text"
+                  class="form-control mobile"
+                  name="vender_transfer_to"
+                  id="vender_transfer_to"
+                >
+                  {% if data %}
+                  <option value="{{ data.vender_transfer_to }}" selected>
+                    {{ data.vender_transfer_to }}
+                  </option>
+                  {% else %}
+                  <option disabled selected value>Select Vendor</option>
+                  {% endif %} {% for i in data2 %}
+                  <option value="{{ i.gorganization_name1 }}">
+                    {{ i.gorganization_name1 }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Voucher No</label>
+                <input
+                  type="tel"
+                  name="print_transfer_voucher_no"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_voucher_no}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Subject</label>
+                <select
+                  type="text"
+                  class="form-control mobile"
+                  name="print_transfer_subject"
+                  id="print_transfer_subject"
+                >
+                  {% if data %}
+                  <option value="{{ data.print_transfer_subject }}" selected>
+                    {{ data.print_transfer_subject }}
+                  </option>
+                  {% else %}
+                  <option disabled selected value>Select Subject</option>
+                  {% endif %} {% for i in data26 %}
+                  <option value="{{ i.subject }}">{{ i.subject }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 1</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no1"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no1}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 1</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty1"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty1}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 2</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no2"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no2}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 2</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty2"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty2}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 3</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no3"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no3}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 3</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty3"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty3}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 4 </label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no4"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no4}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 4</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty4"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty4}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 5</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no5"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no5}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 5</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty5"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty5}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 6</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no6"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no6}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 6</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty6"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty6}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 7</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no7"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no7}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 7</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty7"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty7}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 8 </label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no8"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no8}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 8</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty8"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty8}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 9</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no9"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no9}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 9</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty9"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty9}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 10 </label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no10"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no10}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 10</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty10"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty10}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 11</label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no11"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no11}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 11</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty11"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty11}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Form no. 12 </label>
+                <input
+                  type="tel"
+                  name="print_transfer_form_no12"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_form_no12}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+            <div class="d-grid gap-2 col-sm-6">
+              <div class="mb-3">
+                <label class="form-label">Qty 12</label>
+                <input
+                  type="tel"
+                  name="print_transfer_qty12"
+                  minlength=""
+                  class="form-control"
+                  value="{{data.print_transfer_qty12}}"
+                  id=""
+                  placeholder=""
+                  maxlength=""
+                />
+              </div>
+            </div>
+
+            <div class="col-md-12" style="text-align: center">
+              <button
+                class="btn btn-primary"
+                style="background-color: mediumaquamarine"
+              >
+                <a href="{% url 'database' %}" style="color: white">Back</a>
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="background-color: mediumaquamarine; color: white"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+</body>

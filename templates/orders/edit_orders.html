@@ -1,0 +1,483 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST" onsubmit="return myfun()" >
+                    {% csrf_token %}
+    <div class="panel-body" >
+        <div class=""  >
+            <div class="title">
+                <h4 style="margin-left:205px;">Winwings Publications</h4><br><br>
+                <h5 style="color: rgb(90, 88, 88); font-size:17px;"><b>Address:</b> 780,Gulgulwar Niwas,Golibar Chowk,<br>Nagpur-440002</h5>
+            </div>
+            <div class="row" style="text-align: right;">
+                <div class="col-md-8"></div>
+                <div class="col-md-4">
+                    <div class="form-group" >
+                        <div class="input-group">
+                            <input type="date" class="form-control mobile" name="date" id="date" placeholder="{% now 'Y-m-d' %}" value="" required max="{% now 'Y-m-d' %}" />
+                        </div>
+                    </div>
+                </div>
+            </div> <br><br>   
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Vender Name<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-10">
+                        <input  class="form-control" name="vender_name" value="{{data1.vender_name}}" >
+
+                    </div>                                    
+                </div>
+            </div> <br>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Address</b></label>
+                    </div>
+                    <div class="col-md-10">
+                        <input class="form-control"  name="vender_address" value= "{{data1.vender_address}}">
+                            
+                    </div>  
+                </div>
+            </div><br>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="name" class="control-label" ><b>Mobile No<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-10">
+                        <input class="form-control"  name="vender_mob" value= "{{data1.vender_mob}}">
+                        
+                    </div>  
+                </div>
+            </div><br> 
+            
+            <div class="col-md-12" style="">
+                
+                <div class="col-md-12" style="">
+                    <div class="input_fields_container">
+                        <div class="form-group" style="padding-left: 12px; padding-bottom: 0px;">
+                            <div class="row" id="myDiv" style=" padding-top: 12px ;padding-bottom: 0%;"> 
+                                {% comment %} <div class="col-md-6"><label>Total Quantity<span style="color:red;">*</span></label></div>
+                                <div class="col-md-2"><label>Received Printing<span style="color:red;">*</span></label></div>
+                                <div class="col-md-4"><label>Balance Printing<span style="color:red;">*</span></label></div> {% endcomment %}
+                                {% comment %} <div class="col-md-2"><label>Subject<span style="color:red;">*</span></label></div>
+                                <div class="col-md-2"><label>Quantity<span style="color:red;">*</span></label></div>
+                                <div class="col-md-2"><label>Rims<span style="color:red;">*</span></label></div></div>   {% endcomment %}
+                                <div class="form-group row">
+                                    <div class="col-md-6" style="padding-left:0;">
+                                        {% comment %} {% for i in data1%} {% endcomment %}
+                                        <div class="col-md-10">
+                                            {% comment %} <input class="form-control"  name="total_quantity" value= "{{data1.total_quantity}}"> {% endcomment %}
+                                            
+                                        </div> 
+                                        {% comment %} {% endfor %}  {% endcomment %}
+
+                                        {% comment %} <select class="form-control" id="brand_name_1" style="width:20%%;" name="brand_name_1" required>
+                                            <option disabled selected value>Select Brand</option>
+                                            {% for i in book %}
+                                            <option>{{i.books_name}}</option>
+                                            {% endfor %}
+                                        </select> {% endcomment %}
+                                    </div>
+                                    {% comment %} <div class="col-md-2" style="padding-left:0;">
+                                        <div class="col-md-10">
+                                            <input class="form-control"  name="printing_received_form" value= "{{data1.printing_received_form}}">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" style="padding-left:0;">
+                                        <div class="col-md-10">
+                                            <input class="form-control"  name="print_wastage_form" value= "{{data1.print_wastage_form}}" >
+                                            
+                                        </div>  
+                                    </div>   {% endcomment %}
+                                    {% comment %} <select class="form-control" id="class_name_1" style="width:15%;" name="class_name_1" required>
+                                        <option disabled selected value>Select Class</option>
+                                        {% for i in book %}
+                                        <option>{{i.books_class}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="col-md-2 form-group quantity">
+                                        <select class="form-control" id="medium_1" style="width:15%%;pading-left:10%;" name="medium_1" required>
+                                            <option disabled selected value>Select Medium</option>
+                                            {% for i in book %}
+                                            <option>{{i.medium}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <select class="form-control" id="subject_1" style="width:15%;" name="subject_1" required>
+                                        <option disabled selected value>Select Subject</option>
+                                        {% for i in book %}
+                                        <option>{{i.subject}}</option>
+                                        {% endfor %}
+                                    </select> {% endcomment %}
+                                    {% comment %} <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="quantity_1" id="quantity_1" maxlength="10" placeholder="Quantity" min="1" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" required style="margin-left:15%" /></div>
+                                    <div class="col-md-2 form-group rate"><input type="number" class="form-control mobile" name="rim_1" id="rim_1" pattern="[1-9]{1}[0-9]{9}" placeholder="Rims" maxlength="30" step="0.01" oninput="validity.valid||(value='');" onkeypress="return (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))" value="" style="margin-left:15%" /></div>                                       {% endcomment %}
+                                </div>
+                            </div>
+                        </div><br>
+                
+                    <div class="col-md-12" style="text-align: right;">
+                    {% comment %} <button class="btn btn-primary btn-sm add_more_button" >Add New Items</button> {% endcomment %}
+                    </div>
+                </div>
+
+                
+                <div class="col-md-12" >
+                    <div class="form-group">
+                        <label style="padding-right:100%;">Note</label>
+                        <input type="text" class="form-control mobile" name="term_and_condition1" maxlength="60" 
+                        id="term_and_condition1" placeholder="1. Terms and Conditions" value="{{first_condition}}" style="border-bottom: 1px solid rgb(214, 213, 213);
+                        border-left:none ; border-top: none; border-right: none; margin-bottom: 13px;"/>
+                    </div>
+                </div>
+                <div class="col-md-8 text-center"></div>
+                <div class="col-md-12">
+                    <div class="text-center mt-3 mb-3">
+                        <button type="button" class="btn btn-primary" ><a href="/order-purchase/" style="color:white;"> Back</button></a>
+                        <button type="submit" class="btn btn-success" style=" color:white;">Save</button>
+                        
+                        {% comment %} <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+            
+
+
+
+
+            <script>
+              $(document).ready(function() {
+               var max_fields_limit= 51;
+               var x = 1;
+               $('.add_more_button').click(function(e){ 
+               e.preventDefault();
+               $('#myDiv').show();
+               if(x < max_fields_limit){ 
+                   x++;  
+                   $('.input_fields_container').append(
+                       
+                   '<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description"><input type="text" pattern="[a-z A-Z 0-9\s]+" class="form-control mobile" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" placeholder="brand name" value="" required maxlength="30" /></div><div class="col-md-2 form-group "><input type="text" class="form-control mobile" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" maxlength="30" placeholder="Class Name" min=""  pattern="^[a-z A-Z 0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;"  name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" type="text" maxlength="30" placeholder=" Medium" min=""  pattern="^[a-zA-Z0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" placeholder="Subject" value="" required maxlength="30"></div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+                       // <input type="text" class="form-control mobile" name="amount_'+x.toString()+'" id="amount_'+x.toString()+'" placeholder="Amount" value="" required />
+                   }
+     
+     
+           });  
+           $('.input_fields_container').on("click",".remove_field", function(e){ //user click on remove text links
+               e.preventDefault(); $(this).parent('div').remove(); x--;
+              
+           })
+       });
+     
+     
+       function restrictMinus(e) {
+               var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+     
+               if (inputKeyCode != null) {
+                   if (inputKeyCode == 45) e.preventDefault();
+               }
+       }
+     
+       </script>
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+      modal.style.display = "none";
+      }
+  }
+
+  </script>
+
+
+
+
+
+  <script>
+    document.getElementById("from_date").onchange = function () {
+    var input = document.getElementById("to_date");
+    input.setAttribute("min", this.value);
+  }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+    <script type="text/javascript">
+  var rad = document.cash_memo_add.stamp_type;
+  var prev = null;
+  for (var i = 0; i < rad.length; i++) {
+      rad[i].addEventListener('change', function() {
+          (prev) ? console.log(prev.value): null;
+          if (this !== prev) {
+              prev = this;
+          }
+          if(this.value == 'merchant_stamp')
+          {
+              document.getElementById('default_stmaps').style.display = 'block';
+              document.getElementById('own_stamps').style.display = 'none';
+          }
+          else if(this.value == 'own_stamp')
+          {
+              // document.getElementById('messageError').innerHTML = "";
+              document.getElementById('default_stmaps').style.display = 'none';
+              document.getElementById('own_stamps').style.display = 'block';
+          }
+      });
+  }
+</script>
+<script type="text/javascript">
+  jQuery.validator.addMethod("greaterStart", function (value, element, params) {
+      return this.optional(element) || new Date(value) >= new Date($(params).val());
+  },'Must be greater than from date.');
+  
+  $("#add_merchant_form").validate({
+      rules: {
+          chk: {
+              required: true,
+          },
+      },
+
+  });
+  $("#stamp_image_form").validate({
+      rules: {
+          chkcashmeo: {
+              required: true,
+          },
+      },
+
+  });
+  $("#bill_info_filter_form").validate({
+      rules: {
+          from_date: {
+              required: true,
+          },
+          to_date: {
+              required: true,
+              greaterStart: "#from_date",
+          },
+      },
+
+  });
+  $(document).ready(function() {
+// $('input[name=to_date]').change(function() {
+//         var to_date = $('#to_date').val();
+//         document.getElementById('from_date').setAttribute("max", to_date);
+// })
+
+// $('input[name=from_date]').change(function() {
+//   var from_date = $('#from_date').val();
+//     document.getElementById('to_date').setAttribute("min", from_date);
+// })
+})
+</script>
+<script>
+  $(document).ready(function() {
+    $('#add-row').DataTable({
+        dom: 'lBfrtip',
+        "ordering": false,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        buttons: [
+           'excel', 'pdf', 'print'
+        ],
+        initComplete: function () {
+        this.api().columns([2,3]).every( function () {
+            var column = this;
+            var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+            
+            .appendTo( $("#type_filter_" + column[0][0]).empty())
+                
+            .on( 'change', function () {
+
+            var val = $(':selected', select).map(function(index, element) {
+            return $.fn.dataTable.util.escapeRegex($(this).val());
+            }).toArray().join('|');
+                  
+            column
+                .search( val ? '^'+val+'$' : '', true, false )
+                .draw();
+            } );
+
+            column.data().unique().sort().each( function ( d, j ) {
+                select.append( '<option value="'+d+'">'+d+'</option>' )
+            });
+        });        
+      }
+    });
+
+    $("#column_id_2").select2({
+      placeholder:" Select Date",
+      closeOnSelect: true,
+      width: '90%',
+    })
+
+    $("#column_id_3").select2({
+      placeholder:" Select Number",
+      closeOnSelect: true,
+      width: '80%',
+    })
+
+  });
+</script>
+
+
+<script >
+var today = new Date();
+
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    // today = yyyy + '/' + mm + '/' + dd;
+     today = yyyy + '-' + mm + '-' + dd;
+
+    console.log(today);
+    document.getElementById('date').value = today;
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_venderlist").on('change', function()
+        {
+
+            var state = $("#id_venderlist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Orderlist/"+state,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'organization_name': state
+                },
+                success: function(result){
+                  
+                    $("#id_courselist").empty();
+                    var empty = ""
+                    $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Address *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_courselist").on('change', function()
+        {
+
+            var state = $("#id_courselist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Addresslist/"+maha,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'medium': maha
+                },
+                success: function(result){
+                  
+                    $("#id_offervalue").empty();
+                    var empty = ""
+                    $('#id_offervalue').append("<option value='" + empty + "' disabled selected value>" + "Select special offer*" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_offervalue').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_brand").on('change', function()
+        {
+
+            var state = $("#id_brand").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Brandlist/"+city,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'books_name': city
+                },
+                success: function(result){
+                  
+                    $("#id_classname").empty();
+                    var empty = ""
+                    $('#id_classname').append("<option value='" + empty + "' disabled selected value>" + "Select classname *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_classname').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
+
+{% endblock %}

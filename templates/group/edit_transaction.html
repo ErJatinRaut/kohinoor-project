@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    * {
+        font-family: Georgia;
+    }
+</style>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3 p-5" style="background-color: lightcyan;" >
+                <div class="breadcrumb-title pe-3">Update transaction Data</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="d-grid gap-2 col-sm-4">
+                            <!-- <div class="mb-3">
+                                <label style = "color: white;" class="form-label">customer ID</label>
+                                <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>-->
+
+                            <div class="mb-3">
+                                <label class="form-label">Select Company Type</label>
+                                <input type="text" class="form-control radius-10" id="" name="company_type"
+                                    value="{{data.company_type}}" maxlength="30" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Series</label>
+                                <input type="text" class="form-control radius-10" id="" name="t_series"
+                                    value="{{data.t_series}}" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Veh .No </label>
+                                <input type="tel" name="vehno" minlength="" class="form-control" value="{{data.vehno}}"
+                                    id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Material Centre(delivered at)</label>
+                                <input type="tel" name="delivered_at" minlength="" class="form-control"
+                                    value="{{data.delivered_at}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Narration</label>
+                                <input type="text" class="form-control radius-10" id="" name="narration"
+                                    value="{{data.narration}}" maxlength="30" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Paper Roll Quantity</label>
+                                <input type="text" class="form-control radius-10" id="" name="roll_quantity"
+                                    value="{{data.roll_quantity}}" required="">
+                            </div>
+
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">unit </label>
+                                <input type="tel" name="roll_unit" minlength="" class="form-control"
+                                    value="{{data.roll_unit}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Rate</label>
+                                <input type="tel" name="roll_rate" minlength="" class="form-control"
+                                    value="{{data.roll_rate}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Amount</label>
+                                <input type="text" class="form-control radius-10" id="" name="roll_amount"
+                                    value="{{data.roll_amount}}" maxlength="30" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Paper Rim Qty</label>
+                                <input type="text" class="form-control radius-10" id="" name="paper_rim_qty"
+                                    value="{{data.paper_rim_qty}}" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">unit </label>
+                                <input type="tel" name="rim_unit" minlength="" class="form-control"
+                                    value="{{data.rim_unit}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Rate</label>
+                                <input type="tel" name="rim_rate" minlength="" class="form-control"
+                                    value="{{data.rim_rate}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Amount</label>
+                                <input type="text" class="form-control radius-10" id="" name="rim_amount"
+                                    value="{{data.rim_amount}}" maxlength="30" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Cover Paper Qty</label>
+                                <input type="text" class="form-control radius-10" id="" name="cover_paper_qty"
+                                    value="{{data.cover_paper_qty}}" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">unit </label>
+                                <input type="tel" name="cover_paper_unit" minlength="" class="form-control"
+                                    value="{{data.cover_paper_unit}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Rate</label>
+                                <input type="tel" name="cover_paper_rate" minlength="" class="form-control"
+                                    value="{{data.cover_paper_rate}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-4">
+                            <div class="mb-3">
+                                <label class="form-label">Amount</label>
+                                <input type="text" class="form-control radius-10" id="" name="cover_paper_amount"
+                                    value="{{data.cover_paper_amount}}" maxlength="30" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="text-align: center;">
+                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'transactions_operation' %}" style="color:white;">Back</a></button>
+
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color:mediumaquamarine; color:white;">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+    .page-wrapper {
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    /* Style the page content */
+    .page-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        /* Adjust the max-width as needed */
+        margin-top: 55px auto;
+        /* Center the container horizontally */
+    }
+
+    /* Style the breadcrumb section */
+    .page-breadcrumb {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: lightcyan;
+        border-radius: 5px;
+    }
+
+    /* Style the breadcrumb title */
+    .breadcrumb-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Style the form elements */
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+
+        border-radius: 5px;
+    }
+
+    /* Style the buttons */
+    .btn {
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-right: 10px;
+    }
+
+    /* Style the Back button */
+    .btn-back {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    /* Style the Save button */
+    .btn-save {
+        background-color: #2ecc71;
+        color: #fff;
+    }
+
+    /* Center align elements */
+    .text-center {
+        text-align: center;
+    }
+
+    /* Responsive layout for small screens */
+    @media (max-width: 768px) {
+        .d-grid {
+            display: block;
+        }
+
+        .col-sm-6 {
+            width: 100%;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 col-sm-12">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                        <div class="mb-3">
+                            <label  class="form-label">Distributor Name </label>
+                            <input type="text" class="form-control radius-10" id="" name = "distributor_name" value = "{{data.distributor_name}}" maxlength="30" required="">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Mobile No</label>
+                                
+                                <input type="tel" name="distributor_contact" class="form-control" id="distributor_contact" placeholder="Enter Mobile No"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10" value="{{data.distributor_contact}}" required>
+                                
+                                
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Distributor Email  </label>
+                            <input type="email" name="distributor_email" minlength="" class="form-control" value="{{data.distributor_email}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Distributor Gstin No</label>
+                                <div class="mb-3">
+                                    <input style="color: black;" type="text"  
+                                        name="distributor_gstin_no" id="gstin_input" class="form-control" maxlength="15" 
+                                        value="{{data.distributor_gstin_no}}" placeholder="Enter Gstin No" >
+                                </div>
+                            </div>
+                          </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dstributor Address  </label>
+                            <textarea name="distributor_address" class="form-control" id="" placeholder="" maxlength="" required="" >{{data.distributor_address}}</textarea>
+                        </div>
+                       
+                        <div class="mb-3">
+                            <label class="form-label">Distributor Group  </label>
+                            <input type="text" name="distributor_group" minlength="" class="form-control" value="{{data.distributor_group}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                         
+                    
+                    <div class="col-md-12" style="text-align: center;">
+                                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a href="{% url 'distributor' %}" style="color:white;" >Back</a></button>
+
+                                          <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine; color:white;">Save</button>
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const inputElement = document.getElementById('gstin_input');
+    
+        inputElement.addEventListener('input', function() {
+            const gstinPattern = /^[A-Z]{3}[0-9]{12}$/;
+            const validInput = inputElement.value.match(gstinPattern);
+            if (!validInput) {
+                inputElement.setCustomValidity('Please enter a valid GSTIN with three uppercase alphabets followed by twelve numbers.');
+            } else {
+                inputElement.setCustomValidity('');
+            }
+        });
+    </script>
+    <script>
+        flatpickr("#date", {
+          dateFormat: "d-m-Y",
+          altInput: true,
+          altFormat: "d-m-Y",
+          allowInput: true,
+          
+        });
+      </script>
+
+    {% endblock %}

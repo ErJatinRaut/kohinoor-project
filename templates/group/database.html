@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+/ The Close Button /
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  / font-family: Tahoma, Arial, sans-serif; /
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Database Creation</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color: mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Create Database</button>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Create Database</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" id="profile-form1">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        
+                                            <div class="row">
+                                                 <div class="d-grid gap-2 col-sm-6">
+                                          
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Tehsil<span style="color: red;">*</span></label>
+                                                        <select type="text" class="form-control mobile" name="tehsil" id="tehsil" />
+                                                        <option disabled selected value>Select Tehsil</option>
+                                                        {% for i in data1 %}
+                                                            <option value="{{ i.tehsil_master }}">{{i.tehsil_master}}</option>
+                                                        {% endfor %}
+                                                       </select>
+                                                        {% comment %} <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Tehsil"
+                                                                name="tehsil" id="tehsil" class="form-control" maxlength="" value=""
+                                                                required>
+                                                        </div> {% endcomment %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                          
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">District<span style="color: red;">*</span></label>
+                                                        <select type="text" class="form-control mobile" name="district_d" id="district_d"  />
+                                                        <option disabled selected value>Select District</option>
+                                                        {% for i in data1 %}
+                                                            <option value="{{ i.district_master }}">{{i.district_master}}</option>
+                                                        {% endfor %}
+                                                       </select>
+                                                        {% comment %} <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter District"
+                                                                name="district_d" id="district_d" class="form-control" maxlength="" value=""
+                                                                required>  
+                                                        </div> {% endcomment %}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                                <div class="d-grid gap-2 col-sm-6">
+                                          
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Town/village<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Town/village"
+                                                                name="town" id="town" class="form-control" maxlength="" value=""
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                               <div class="d-grid gap-2 col-sm-6">
+                                          
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Pincode<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="number" min="0" placeholder="Enter Pincode"
+                                                                name="pincode" id="pincode" class="form-control" maxlength="" value=""
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                               
+                                            </div>
+
+
+                                                <!-- <div class="col-md-8 text-center"></div> -->
+                                                    <div class="col-md-12">
+                                                      <button class="btn btn-primary" style="background-color: mediumaquamarine; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                                      <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;" onsubmit="submitForm()" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;>
+                                            
+
+                                            "cent<!--  -->
+                                            <th align="center">Sr. No</th>
+                                            <th align="center">District</th>
+                                            <th align="center">Tehsil</th>
+                                            <th align="center">Town/village</th>
+                                            <th align="center">Pincode</th>
+                                             
+                                            <th align="center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data52 %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <!-- <td >
+                                                {{ i.brand_code }}
+                                            </td> -->
+                                            <td>
+                                                {{ i.district_d }}
+                                            </td>
+                                             <td>
+                                              {{ i.tehsil }}
+                                          </td>
+                                            <td >
+                                                {{ i.town }}
+                                            </td> 
+                                            <td >
+                                                {{ i.pincode }}
+                                            </td> 
+                                            
+                                            <!-- <td >
+                                                {{ i.brands_added_on }}
+                                            </td>                                                                                       -->
+                                             <td>
+                                                
+                                                    </div>
+                                                    <a  href="/edit_database/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a> 
+                                                    <a  href="/delete_database_creation/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                     
+                                                </div>
+                                            </td> 
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var districtSelect = $("#district_d");
+            var tehsilSelect = $("#tehsil");
+    
+            tehsilSelect.on("change", function () {
+                var selectedTehsil = tehsilSelect.val();
+                districtSelect.empty();
+                districtSelect.append('<option disabled selected value>Select District</option>');
+    
+                {% for i in data1 %}
+                    if ("{{ i.tehsil_master }}" === selectedTehsil) {
+                        districtSelect.append('<option value="{{ i.district_master }}">{{i.district_master}}</option>');
+                    }
+                {% endfor %}
+            });
+        });
+    </script>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
+    
+<script>
+  function submitForm() {
+    // Submit the form using AJAX
+    $.ajax({
+      url: $('#profile-form1').attr('action'),
+      type: 'POST',
+      data: $('#profile-form1').serialize(),
+      success: function(response) {
+        // Show a success message using SweetAlert
+        Swal.fire({
+          title: "Success!",
+          text: "Group Added Successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      },
+      error: function(response) {
+        // Show an error message using SweetAlert
+        Swal.fire({
+          title: "Error!",
+          text: response.responseText,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    });
+  }
+</script>
+
+
+</body>  
+
+{% endblock %}

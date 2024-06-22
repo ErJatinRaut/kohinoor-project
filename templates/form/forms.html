@@ -1,0 +1,847 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+.myModal{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .responsive-form input[type="text"],
+  .responsive-form input[type="email"],
+  .responsive-form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Raw Material Info</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" style=background-color:mediumaquamarine; id="myBtn"  type="button"><i class="fa fa-plus" ></i>&nbsp;Raw Material</button>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content" style="background-color:lightcyan">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span>  -->
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Create Raw Material</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" onsubmit="return myfun()">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                            <div class="row" style="text-align: left;">
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                      <div class="form-group">
+                                                        <label style="color:black ; margin-right: 210px;">Raw Material Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-3">
+                                                            <input width="50" type="text" min="0" 
+                                                                name="rmname" id="rawMaterialName" class="form-control" maxlength="500" value="" required oninput="updatePrintName()">
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                      <div class="form-group">
+                                                        <label style="color:black ; margin-right: 210px;">Material Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-3">
+                                                            <select class="form-control" name="raw_material_center" id="raw_material_center" style="width:100%;" required>
+                                                                <option disabled selected value>Select Material Center</option>
+                                                                {% for i in center %}
+                                                                    <option>{{i.centre_name}}</option>
+                                                                {% endfor %}
+                                                                </select>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <div class="form-group">
+                                                            <label style="color:black ; margin-right: 300px;">Alias <span id="messages" style="color: red;">*</span></label>
+                                                            <div class="input-group mb-3">
+                                                                <input width="50" type="name"
+                                                                    name="rmalias" id="" class="form-control" step="any" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                             <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <div class="form-group">
+                                                            <label style="color:black ; margin-right: 280px;">Print Name<span style="color: red;">*</span></label>
+                                                            <div class="input-group mb-3">
+                                                                 <input type="name" name="print_name" minlength="" class="form-control" step="any" id="printName" placeholder="" maxlength="500" style="width:200px;padding:6px;" >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               <div class="d-grid gap-2 col-sm-6">
+                                                <div class="mb-3">
+                                                <div class="form-group">
+                                                        <label style="color: black; margin-right: 200px;">Opening Stock(QTY)<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-3">
+                                                            <input style="color: black;" width="50" type="number" placeholder="" name="opening_stock_rm" id="opening_stock_rm" class="form-control" step="any" maxlength="" value="" required oninput="calculate1()">
+                                                            
+                                                            <!-- Dropdown menu for kg, rim, and sheet options -->
+                                                            <div class="input-group-append">
+                                                                <select class="custom-select" name="qunit">
+                                                                    <option value="kg">kg</option>
+                                                                    <option value="rim">rim</option>
+                                                                    <option value="sheet">sheet</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="d-grid gap-2 col-sm-6">
+
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        <label style="color:black ; margin-right: 200px;">Opening Stock(Value)<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="number" step="any" placeholder=""
+                                                                name="opening_stock_value" id="" class="form-control" maxlength="" value=""
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <div class="d-grid gap-2 col-sm-3">
+                                                <div class="mb-3">
+                                                   
+                                                        <label style="color:black ;">GSM<span style="color: red;"></span></label>
+                                                       
+
+                                                            <input style="color: black;" width="50" type="text" step="any" placeholder=""
+                                                                name="gsm" id="gsm" class="form-control" maxlength="" value="" oninput="calculate()"
+                                                                >
+                                                        </div>
+                                                   
+                                            </div>
+                                            <div class="d-grid gap-2 col-sm-3">
+                                                <div class="mb-3">
+                                               
+                                                    <label style="color:black; ">P.Width c.m.<span style="color: red;"></span></label>
+                                                   
+                                                        <input style="color: black;" width="50" type="text" step="any" placeholder=""
+                                                                name="p_width" id="p_width" class="form-control" maxlength="" value=""
+                                                                required oninput="calculate()">
+                                                            </div>
+                                                     
+                                            </div>
+                                                <div class="d-grid gap-2 col-sm-3">
+                                                <div class="mb-3">
+                                               
+                                                    <label style="color:black;">P.length c.m<span style="color: red;"></span></label>
+                                                    
+                                                        <input style="color: black;" width="50" type="text" step="any" placeholder=""
+                                                                name="p_length" id="p_length" class="form-control" maxlength="" value=""
+                                                                required oninput="calculate()">
+                                                            </div>
+                                                    </div>
+                                                
+                                           
+                                            <div class="d-grid gap-2 col-sm-3">
+                                                <div class="mb-3">
+                                                
+                                                        <label style="color: black;">Unit 1 Conversion<span style="color: red;">*</span></label>
+                                                       
+                                                            
+                                                            
+                                                            <!-- Dropdown menu for kg, rim, and sheet options -->
+                                                            <div class="input-group-append">
+                                                                <input style="color: black;" width="10" type="number" placeholder="" name="unit1_conversion" id="unit1_conversion" class="form-control" step="any" maxlength="" value=""  oninput="calculate()" readonly>
+                                                                <select class="custom-select" name="cunit1">
+                                                                    <option value="kg/rim">kg/rim</option>
+                                                                    <option value="rim/kg">rim/kg</option>
+                                                                    <!-- <option value="sheet">sheet</option> -->
+                                                                </select>
+                                                            </div>
+                                                        
+                                                   
+                                                </div>
+                                            </div>
+                                            
+                                           <div class="d-grid gap-2 col-sm-6">
+                                                <div class="mb-3">
+                                                <div class="form-group">
+                                                    <label style="color: black; float:left;">Waste<span style="color: red;"></span></label>
+                                                        <select style="color: black;" width="50" name="Waste" id="waste" class="form-control">
+                                                            <option value="" disabled selected>Select Waste</option>
+                                                            <option value="yes">Yes</option>
+                                                            <option value="No">No</option>
+                                                        </select>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-grid gap-2 col-sm-6">
+                                            <div class=" mb-3" id="wastePercentageContainer" style="display: none;">
+                                            <div class="form-group">
+                                               <label style="color: black; float:left;">Waste Percentage<span style="color: red;"></span></label>
+                                                <input style="color: black;" width="50" type="number" placeholder="" name="waste_percent" id="waste_percent" class="form-control"  maxlength="" value="" oninput="updateUnit1WithWaste() ">
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                            <div style="color: black; margin-center: 200px;"><p><b>Conversion</b></p></div>
+                                        <div class="row d-flex">
+                                           
+                                                <div class=" gap-2 col-sm-4">
+
+                                                <div class="mb-3">
+                                                   <div class="form-group">
+                                                      <label style="color: black; margin-right: 300px;">Unit2<span style="color: red;">*</span></label>
+                                                      
+                                                              
+                                                              <div class="input-group mb-3">
+                                                                <select class="form-control" name="unit2" id="unit2" style="width:100%;" required>
+                                                                    <option disabled selected value>Select </option>
+                                                                    {% for i in data1 %}
+                                                                        <option>{{i.unit_name_master}}</option>
+                                                                    {% endfor %}
+                                                                    </select>
+                                                            
+                                                        
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="gap-2 col-sm-4">
+
+                                                <div class="mb-3">
+                                                   <div class="form-group">
+                                                      <label style="color: black; ">Conversion Factor<span style="color: red;">*</span></label>
+                                                      <div class="input-group mb-3">
+                                                          <input style="color: black;" width="50" type="number" placeholder="" name="conversion_factor1" id="conversion_factor1" class="form-control" step="any" maxlength="" value=""  required oninput="calculate1()" >
+                                                          
+                                                          <!-- Dropdown menu for kg, rim, and sheet options -->
+                                                          <div class="input-group-append">
+                                                               <select class="custom-select" name="cunit4" id="cunit4" readonly/>
+                                                                <option disabled selected value>Select </option>
+                                                                  <option value="Kg/Rims">Kg/Rims</option>
+                                                                 
+                                                                  <option value="Rims/Kg">Rims/Kg</option>
+                                                                  
+                                                              </select>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="gap-2 col-sm-4">
+
+                                            <div class="mb-3">
+                                               <div class="form-group">
+                                                  <label style="color: black;">Opening Stock<span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-3">
+                                                      <input style="color: black;" width="50" type="number" placeholder="" name="opening_stock1" id="opening_stock1" class="form-control" step="any" maxlength="" value=""  required   readonly/>
+                                                      
+                                                      <!-- Dropdown menu for kg, rim, and sheet options -->
+                                                      <div class="input-group-append">
+                                                           <select class="custom-select" name="unit4" id="unit4" >
+                                                            <option disabled selected value>Select </option>
+                                                            <option value="Rims">Rims</option>
+                                                             
+                                                              
+                                                              
+                                                          </select>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                   
+                                
+                                              <div class="row d-flex">
+                                           
+                                                <div class="gap-2 col-sm-4">
+                                                <div class="mb-3">
+                                                <div class="form-group">
+                                                        <label style="color: black; ">Unit 3<span style="color: red;">*</span></label>
+                                                        
+                                                    <div class="input-group mb-3">
+                                                        <select class="form-control" name="unit3" id="unit3" style="width:100%;" required>
+                                                            <option disabled selected value>Select </option>
+                                                            {% for i in data1 %}
+                                                                <option>{{i.unit_name_master}}</option>
+                                                            {% endfor %}
+                                                            </select>
+                                                    </div>
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                          <div class="gap-2 col-sm-4">
+
+                                            <div class="mb-3">
+                                               <div class="form-group">
+                                                  <label style="color: black;">Conversion Factor<span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-3">
+                                                      <input style="color: black;"  type="number" placeholder="" name="unit3_conversion"  id="unit3_conversion"  class="form-control" step="any" maxlength="" value=""  required oninput="calculate1()" >
+                                                      
+                                                      <!-- Dropdown menu for kg, rim, and sheet options -->
+                                                      <div class="input-group-append">
+                                                           <select class="custom-select" name="cunit3"  >
+                                                            <option disabled selected value>Select </option>
+                                                              <option value="Sheet/Kg">Sheet/Kg</option>
+                                                              <option value="Kg/Sheet">Kg/Sheet</option>
+                                                              <option value="Rims/Sheet">Rims/Sheet</option>
+                                                              <option value="Sheet/Rims">Sheet/Rims</option> 
+                                                          </select>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                            
+                                            
+                                            <div class="gap-2 col-sm-4">
+                                                <div class="mb-3">
+                                                <div class="form-group">
+                                                        <label style="color: black; ">Opening Stock<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-3">
+                                                            <input style="color: black;" width="50" type="number"  placeholder="" name="unit2_conversion" id="unit2_conversion" class="form-control" step="any" maxlength="" value="" required  readonly/>
+                                                            
+                                                            <!-- Dropdown menu for kg, rim, and sheet options -->
+                                                            <div class="input-group-append">
+                                                                <select class="custom-select" name="qunit3"  >
+                                                                   <option disabled selected value>Select </option>
+                                                                    
+                                                                    
+                                                                    <option value="Sheet">Sheet</option>
+                                                                    
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+
+                                    </div>
+                                        
+                                </div>
+                            </div>
+                                           
+                                               
+                                            
+                                           
+                                           
+                                            
+
+                                            
+                                                <div class="col-md-12 text-center" style="padding-top: 30px;">
+                                                <button class="btn btn-primary" style="background-color: mediumaquamarine;">
+                                                    <a href="{{ form.get_cancel_link }}" style="color: white;">Back</a>
+                                                </button>
+                                                <button type="submit" class="btn btn-primary" style="background-color: mediumaquamarine; color: white;">Save</button>
+                                            </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;">
+                                            <th align="center">Sr.No</th>
+                                            <!-- <th align="center">Wastage Percentage</th> -->
+                                            <th align="center">Raw Material </th>
+                                            <th align="center">Material Center</th>
+                                            <th align="center">Alias</th>
+                                            <th align="center">Print Name </th>
+                                            <!-- <th align="center">Per Kg Weight </th> -->
+                                            <th align="center">Opening Stock QTY</th>
+                                            <!-- <th align="center">Gross Weight </th> -->
+                                            <th align="center">Opening Stock Value</th>
+                                            <th align="center">GSM</th>
+                                            <th align="center">P Width</th>
+                                            <th align="center">P length</th> 
+                                            <th align="center">Weste Percent</th> 
+                                            <th align="center">Unit 1 Conversion</th>
+                                            
+                                            <th align="center">Unit 2</th>
+                                            <th align="center">Conversion Factor</th> 
+                                            <th align="center">Oppeing Stock</th>
+                                            <th align="center">Unit 3</th>
+                                            <th align="center">Conversion Factor</th>
+                                            <th align="center">Opening Stock</th>
+                                           
+                                            
+                                            <th align="center">Material Added On</th>
+                                            
+                                            <th align="center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <!-- <td>
+                                                {{ i.no_of_forms }}
+                                            </td> -->
+                                            <td >
+                                                {{ i.rmname }}
+                                            </td>
+                                            <td>
+                                                {{ i.raw_material_center }}
+                                            </td>
+                                            <td >
+                                                {{ i.rmalias }}
+                                            </td>
+                                            <td >
+                                                {{ i.print_name }}
+                                            </td>
+                                            <td >
+                                                {{ i.opening_stock_rm }}{{i.qunit}}
+                                            </td> 
+                                            <td >
+                                                {{ i.opening_stock_value }}
+                                            </td>
+                                            <td >
+                                                {{ i.gsm }}
+                                            </td>
+                                            <td >
+                                                {{ i.p_width }}
+                                            </td>
+                                            <td >
+                                                {{ i.p_length }}
+                                            </td> 
+                                            <td >
+                                                {{ i.waste_percent }}
+                                            </td>
+                                            <td >
+                                                {{ i.unit1_conversion }}{{i.cunit1}}
+                                            </td> 
+                                            
+                                            <td >
+                                                {{ i.unit2 }}
+                                            </td>
+                                            <td >
+                                                {{ i.conversion_factor1 }}{{i.cunit4}}
+                                            </td>
+                                            <td >
+                                                {{ i.opening_stock1 }}{{i.unit4}}
+                                            </td>
+
+                                            <td >
+                                                {{ i.unit3 }}
+                                            </td> 
+                                            
+                                            <td>
+                                                {{ i.unit3_conversion }}{{ i.cunit3 }}
+                                            </td>
+                                            <td>
+                                                {{ i.unit2_conversion }}{{ i.qunit3 }}
+                                            </td>
+                                            
+                                            <td >
+                                                {{ i.forms_added_on }}
+                                            </td> 
+                                                                                                                                    
+                                            <td>
+                                                {% comment %} <div>
+                                                     <a  href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a>
+                                                    <div id="popup1 {{i.id}}" class="overlay">
+                                                        <div class="popup">
+                                                            <h4 style="background-color :#6e95fc;padding : 10px; color:white;">View Details</h4>
+                                                            <a class="close" href="#">&times;</a>
+                                                            <br><br>
+                                                            <div style = "color: black; font-size: 15px;" class="content">
+
+                                                               <span><b>Classes Name</b> = {{i.class_name}}</span> <br><br>
+                                                               <span><b>Class book</b> = {{i.class_book}}</span> <br><br>
+                        
+                                                            </div>
+                                                        </div>
+                                                    </div>  {% endcomment %}
+                                                    <a  href="/edit-form/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    <a  href="/delete-form/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    
+                                                </div>
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+        </script>
+
+        
+        
+
+
+       <script>
+            function calculate() {
+                var gsm = parseFloat(document.getElementById('gsm').value) || 0;
+                var pWidth = parseFloat(document.getElementById('p_width').value) || 0;
+                var pLength = parseFloat(document.getElementById('p_length').value) || 0;
+        
+                var unit1Conversion = (gsm * pWidth * pLength) / 20000;
+        
+                // Update the unit1_conversion field
+                document.getElementById('unit1_conversion').value = unit1Conversion.toFixed(2);
+            }
+        
+            function updateUnit1WithWaste() {
+                var wastePercent = parseFloat(document.getElementById('waste_percent').value) || 0;
+        
+                // Calculate the new unit1_conversion with waste percentage
+                var newUnit1Conversion = calculateUnit1WithWaste(wastePercent);
+        
+                // Update the unit1_conversion field
+                document.getElementById('unit1_conversion').value = newUnit1Conversion.toFixed(2);
+            }
+        
+            function calculateUnit1WithWaste(wastePercent) {
+                var gsm = parseFloat(document.getElementById('gsm').value) || 0;
+                var pWidth = parseFloat(document.getElementById('p_width').value) || 0;
+                var pLength = parseFloat(document.getElementById('p_length').value) || 0;
+        
+                var unit1Conversion = (gsm * pWidth * pLength) / 20000;
+        
+                // Calculate the new unit1_conversion with waste percentage
+                var newUnit1Conversion = unit1Conversion + (wastePercent / 100);
+        
+                return newUnit1Conversion;
+            }
+        
+            // Add event listener to cwaste_percent field for input changes
+            document.getElementById('waste_percent').addEventListener('input', updateUnit1WithWaste);
+        
+            // Add event listener to cwaste_percent field for delete key press
+            document.getElementById('waste_percent').addEventListener('keydown', function (event) {
+                // Check if the pressed key is the delete key
+                if (event.key === 'Delete' || event.key === 'Backspace') {
+                    // If wastePercent is not a number (e.g., empty or non-numeric), recalculate unit1_conversion without waste
+                    var newUnit1Conversion = calculateUnit1WithWaste(0);
+        
+                    // Update the unit1_conversion field
+                    document.getElementById('unit1_conversion').value = newUnit1Conversion.toFixed(2);
+                }
+            });
+        </script>
+        
+      
+        <script>
+            function calculate1() {
+                // Get the values from the input fields
+                var openingStockRM = parseFloat(document.getElementById("opening_stock_rm").value);
+                var conversionFactor = parseFloat(document.getElementById("conversion_factor1").value);
+                var conversionFactor1 = parseFloat(document.getElementById("unit3_conversion").value);
+        
+                // Check if openingStockRM and conversionFactor are valid numbers
+                if (!isNaN(openingStockRM) && !isNaN(conversionFactor)) {
+                    // Perform the calculation for opening_stock1
+                    var openingStock1 = openingStockRM / conversionFactor;
+        
+                    // Display the result in the "opening_stock1" field
+                    document.getElementById("opening_stock1").value = openingStock1.toFixed(2); // Adjust the precision as needed
+                }
+        
+                // Check if conversionFactor and conversionFactor1 are valid numbers
+                if (!isNaN(openingStock1) && !isNaN(conversionFactor1)) {
+                    // Perform the calculation for unit2_conversion
+                    var openingStock2 = openingStock1 * conversionFactor1;
+        
+                    // Display the result in the "unit2_conversion" field
+                    document.getElementById("unit2_conversion").value = openingStock2.toFixed(2); // Adjust the precision as needed
+                }
+            }
+        </script>
+        
+        
+        
+        {% comment %} <script>
+            $(document).ready(function () {
+                // Function to update cunit3 options based on unit2 and unit3 selections
+                function updateCUnit3Options() {
+                    var unit2Value = $('#unit2').val();
+                    var unit3Value = $('#unit3').val();
+                    var unit3ConversionValue = $('#unit3_conversion').val();
+        
+                    // Logic to determine options for cunit3 based on unit2 and unit3 values
+                    var cunit3Options = [];
+                    if (unit2Value === 'Sheet(s)' && unit3Value === 'Rims') {
+                        cunit3Options = ['Sheet(S)/Rims'];
+                    } else if (unit2Value === 'Rims' && unit3Value === 'Sheet(s)') {
+                        cunit3Options = ['Rims/Sheet(s)', 'Sheet/Rim', 'Rim/Gruce', 'Gruce/Rim'];
+                    } else if (unit2Value === 'Rims' && unit3Value === 'Gruce(s)') {
+                        cunit3Options = ['Rims/Gruce(s)'];
+                    } else if (unit2Value === 'Gruce(s)' && unit3Value === 'Rims') {
+                        cunit3Options = ['Gruce(s)/Rims'];
+                    } else {
+                        // Default options when no specific conditions met
+                        cunit3Options = ['Default Option 1', 'Default Option 2'];
+                    }
+        
+                    // Update cunit3 options
+                    var cunit3Select = $('#cunit3');
+                    cunit3Select.empty();
+                    $.each(cunit3Options, function (index, value) {
+                        cunit3Select.append('<option value="' + value + '">' + value + '</option>');
+                    });
+        
+                    // Update qunit3 based on cunit3 selection
+                    var qunit3Select = $('#qunit3');
+                    var selectedCUnit3 = $('#cunit3 option:selected').text();
+                    if (selectedCUnit3 === 'Sheet(S)/Rims') {
+                        qunit3Select.val('Rims');
+                    } else if (selectedCUnit3 === 'Rims/Sheet(s)') {
+                        qunit3Select.val('Sheet(s)');
+                    } else if (selectedCUnit3 === 'Rims/Gruce(s)') {
+                       qunit3Select.val('Gruce(s)');
+                    }  else if (selectedCUnit3 === 'Gruce(s)/Rims') {
+                        qunit3Select.val('Rims');
+                    }
+                    else {
+                        // Reset to default value if condition not met
+                        qunit3Select.val('');
+                    }
+        
+                    // Update unit2_conversion based on cunit3 selection
+                    if (selectedCUnit3 === 'Sheet(S)/Rims') {
+                        $('#unit2_conversion').val(500 / parseFloat(unit3ConversionValue));
+                    } else if (selectedCUnit3 === 'Rims/Sheet(s)') {
+                        $('#unit2_conversion').val(parseFloat(unit3ConversionValue) / 500);
+                    } else if (selectedCUnit3 === 'Rims/Gruce(s)') {
+                        $('#unit2_conversion').val(parseFloat(unit3ConversionValue) / 144);
+                    } else if (selectedCUnit3 === 'Gruce(s)/Rims') {
+                        $('#unit2_conversion').val(144 / parseFloat(unit3ConversionValue));
+                    } else {
+                        // Reset to default value if condition not met
+                        $('#unit2_conversion').val('');
+                    }
+                }
+        
+                // Call the update function on unit2, unit3, and unit3_conversion change
+                $('#unit2, #unit3, #unit3_conversion').on('change input', function () {
+                    updateCUnit3Options();
+                });
+        
+                // Initial call to populate cunit3 options on page load
+                updateCUnit3Options();
+            });
+        </script> {% endcomment %}
+          
+        
+
+                
+        
+
+        
+
+        <script>
+    function updatePrintName() {
+        // Get the value of Raw Material Name
+        var rawMaterialName = document.getElementById('rawMaterialName').value;
+
+        // Update the value of Print Name with the Raw Material Name
+        document.getElementById('printName').value = rawMaterialName;
+    }
+</script>
+
+<script>
+    $(document).ready(function(){
+        // Triggered when the value of the dropdown changes
+        $("#waste").change(function(){
+            // If "Yes" is selected, show the waste percentage input box
+            if($(this).val() === "yes"){
+                $("#wastePercentageContainer").show();
+            } else {
+                // If "No" or nothing selected, hide the waste percentage input box
+                $("#wastePercentageContainer").hide();
+            }
+        });
+    });
+</script>
+        
+         
+
+
+</body>  
+
+{% endblock %}

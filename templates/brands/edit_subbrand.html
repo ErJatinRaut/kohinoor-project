@@ -1,0 +1,556 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+     .container {
+            /*max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;*/
+            
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* Buttons */
+        .btn-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .btn-primary {
+            background-color: mediumaquamarine;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+        .page-content {
+        background-color: lightcyan;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 700px;
+        /* Adjust the max-width as needed */
+        margin-top: 83px;
+        margin-left: 294px;
+    }
+    
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                 <form  method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                        <div class="mb-3">
+                            <label  class="form-label">Sub Brands Name</label>
+                            <input type="text" class="form-control radius-10" id="" name = "subbrand" value = "{{data.subbrand}}" maxlength="30" required="" >
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        <div class="mb-3">
+                            <label class="form-label">Brand Name</label>
+                            {% comment %} <input type="text" class="form-control radius-10" id="" name="books_name" value="{{data.books_name}}" maxlength="30" required=""> {% endcomment %}
+                            <select name="brand" id="id_c_course"  required class="form-control" style="padding:5px;">
+                                <option disabled selected value>Select Brands</option>
+                                {% for object in data1 %}
+                                <option value="{{ object.brand_name }}" {% if object.brand_name == data.brand %}selected{% endif %}>{{ object.brand_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        
+                        <div class="mb-3">
+                            <label  class="form-label">Subtitle</label>
+                            <input type="text" class="form-control radius-10" id="" name = "subtitle" value = "{{data.subtitle}}" maxlength="30" required="" >
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        
+                        <div class="mb-3">
+                            <label  class="form-label">Brand Size</label>
+                            <input type="text" class="form-control radius-10" id="" name = "brand_size" value = "{{data.brand_size}}" maxlength="30"  >
+                        </div>
+                    </div>
+                   
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        
+                        <div class="mb-3">
+                            <label  class="form-label">Pages Per Form (Binding)</label>
+                            <input type="text" class="form-control radius-10" id="" name = "binding_form_size" value = "{{data.binding_form_size}}" maxlength="30"  >
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        
+                        <div class="mb-3">
+                            <label  class="form-label">Pages Per Form (Printing)</label>
+                            <input type="text" class="form-control radius-10" id="" name = "printing_form_size" value = "{{data.printing_form_size}}" maxlength="30"  >
+                        </div>
+                    </div>
+                    <!-- <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        
+                        <div class="mb-3">
+                            <label  class="form-label">Pages Per Form</label>
+                            <input type="text" class="form-control radius-10" id="" name = "pages_per_form" value = "{{data.pages_per_form}}" maxlength="30"  >
+                        </div>
+
+                    </div> -->
+                    <h4>Category</h4>
+                    
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.category_1  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            
+                            <div class="input-group mb-4">
+                                <select id="category_1" name="category_1" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_1 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                        {% endif %}
+                         
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.mainDiscount_1  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_1" value = "{{data.mainDiscount_1}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_1  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_1" value = "{{data.extraDiscount_1}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_1  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_1" value = "{{data.additionalDiscount_1}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.category_2  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            
+                            <div class="input-group mb-4">
+                                <select id="category_1" name="category_2" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_2 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.mainDiscount_2  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_2" value = "{{data.mainDiscount_2}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_2  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_2" value = "{{data.extraDiscount_2}}" maxlength="30" >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_2  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_2" value = "{{data.additionalDiscount_2}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.category_3  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <div class="input-group mb-4">
+                                <select id="category_3" name="category_3" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_3 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.mainDiscount_3  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_3" value = "{{data.mainDiscount_3}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_3  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_3" value = "{{data.extraDiscount_3}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_3  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_3" value = "{{data.additionalDiscount_3}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.category_4  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <div class="input-group mb-4">
+                                <select id="category_4" name="category_4" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_4 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.mainDiscount_4  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_4" value = "{{data.mainDiscount_4}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_4  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_4" value = "{{data.extraDiscount_4}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_4 %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_4" value = "{{data.additionalDiscount_4}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.category_5  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <div class="input-group mb-4">
+                                <select id="category_1" name="category_5" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_2 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.mainDiscount_5 %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_5" value = "{{data.mainDiscount_5}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_5  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_5" value = "{{data.extraDiscount_5}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_5  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_5" value = "{{data.additionalDiscount_5}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.category_6 %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <div class="input-group mb-4">
+                                <select id="category_6" name="category_6" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_6 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                        {% endif  %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.mainDiscount_6  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_6" value = "{{data.mainDiscount_6}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_6 %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_6" value = "{{data.extraDiscount_6}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_6  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_6" value = "{{data.additionalDiscount_6}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.category_7 %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <div class="input-group mb-4">
+                                <select id="category_7" name="category_27" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_7 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.mainDiscount_7  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_7" value = "{{data.mainDiscount_7}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_7  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_7" value = "{{data.extraDiscount_7}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_7  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_7" value = "{{data.additionalDiscount_7}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.category_8  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <div class="input-group mb-4">
+                                <select id="category_8" name="category_8" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_8 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.mainDiscount_8  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_8" value = "{{data.mainDiscount_8}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.extraDiscount_8  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_8" value = "{{data.extraDiscount_8}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.category_9  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <div class="input-group mb-4">
+                                <select id="category_9" name="category_9" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_9 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                         {% endif %}
+                    </div>
+                   
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.category_9  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <input type="text" class="form-control radius-10" id="" name = "category_9" value = "{{data.category_9}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.mainDiscount_9  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Main Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "mainDiscount_9" value = "{{data.mainDiscount_9}}" maxlength="30"  >
+                        </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.extraDiscount_9  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Extra Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "extraDiscount_9" value = "{{data.extraDiscount_9}}" maxlength="30" required="" >
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.additionalDiscount_9  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Additional Discount</label>
+                            <input type="text" class="form-control radius-10" id="" name = "additionalDiscount_9" value = "{{data.additionalDiscount_9}}" maxlength="30" required="" >
+                        </div>
+                         {% endif %}
+                    </div>
+                   
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                         {% if data.category_10  %}
+                        <div class="mb-3">
+                            <label  class="form-label">Category</label>
+                            <div class="input-group mb-4">
+                                <select id="category_10" name="category_10" minlength="" class="form-control" required>
+                                  <option value="" selected disabled>Select a category</option>
+                                  {% for i in categories %}
+                                    
+                                    <option value="{{ i.category }}" {% if  i.category  == data.category_10 %}selected{% endif %}>{{  i.category }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                        </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.mainDiscount_10  %}
+                            <div class="mb-3">
+                                <label  class="form-label">Main Discount</label>
+                                <input type="text" class="form-control radius-10" id="" name = "mainDiscount_10" value = "{{data.mainDiscount_10}}" maxlength="30" >
+                            </div>
+                         {% endif %}
+                    </div>
+                   <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.extraDiscount_10  %}
+                            <div class="mb-3">
+                                <label  class="form-label">Extra Discount</label>
+                                <input type="text" class="form-control radius-10" id="" name = "extraDiscount_10" value = "{{data.extraDiscount_10}}" maxlength="30"  >
+                            </div>
+                         {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6" style="background-color:lightcyan;">
+                        {% if data.additionalDiscount_10  %}
+                            <div class="mb-3">
+                                <label class="form-label">Additional Discount</label>
+                                <input type="text" class="form-control radius-10" id="" name="additionalDiscount_10" value="{{ data.additionalDiscount_10 }}" maxlength="30">
+                            </div>
+                        {% endif %}
+                    </div>
+                   
+                   
+                   
+                   
+                    
+                        
+                    
+                    <div class="col-md-12" style="text-align: center; margin-top: 16px;">
+                                            <button class="btn btn-primary" style="background-color:mediumaquamarine; margin-top: -34px;"><a href="{% url 'subbrand_name' %}" style="color:white;" >Back</a></button>
+
+                                          <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine; margin-top: -34px;">Save</a></button>
+                         </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+ 
+    {% endblock %}

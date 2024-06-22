@@ -1,0 +1,1191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Books{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: lightcyan;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+
+}
+
+/ The Close Button /
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: lightcyan;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  / font-family: Tahoma, Arial, sans-serif; /
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb mb-3">
+            <div class="breadcrumb-title pe-3">Books Info</div>
+            <hr>
+                <div class="row">
+                  <div class="col-md-3">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color:mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Create Books</button>
+                  </div> 
+
+                  <div class="col-md-3">
+                      <button class="btn btn-primary" style="background-color:mediumaquamarine;"><a href="{% url 'excel_export_view' %}" style="color: #fff; text-decoration: none;">Download Excel Format</a></button>
+                  </div>  
+                      <!-- <button class="btn btn-primary me-md-2" id="myBtn"  type="button"><i class="fa fa-plus" ></i>&nbsp;Create Books</button> -->
+
+                  <div class="col-md-2">
+                    <div>Import Books from CSV</div>
+                  </div>  
+                  <div class="col-md-4">                    
+                    <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      
+                        <!-- <img src="{% static 'assets/img/grampanchayat.png' %}" alt="Image description" width="550" height="400"> -->
+                       
+                        <div class="input-group">
+                          <input type="file" name="myfile" class="form-control">
+                          <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine;">Upload</button> 
+                        </div>              
+                         <p style="color:red;">The upload data should be in CSV format.</p>        
+                    </form>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+                  </div>
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal" style="width: 127%;margin-left: -5%;margin-top: 1%;margin-bottom: 3%;height: 100%;">
+
+
+  
+                    
+                    <div class="modal-content " >
+                      <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                      
+                        <div  class="panel panel-default ">
+                          
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine; text-align:center;"><h4 style="color:white ;">Create Books</h4></div>
+                                <hr style="color:black">
+                                <method method="POST" onsubmit="return myfun()" id="profile-form">
+                                </method>
+               <form method="post" enctype="multipart/form-data">                 
+              {% csrf_token %} 
+              <div class="panel-body" align="left"> 
+                <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                <div class="row">
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Books Code<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <!-- <input style="color: black;" width="50" type="textarea" min="0" name="no_of_pages" id="no_of_pages"
+                          class="form-control" maxlength="" value="" oninput="calculateBindingSize()" required> -->
+                          <input class="form-control" id="code" type="text" name="code" required  oninput="calculateBindingSize()">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Brands Name<span style="color: red;">*</span></label>
+                      <select name="books_name" id="books_name" required class="form-control">
+                        <option disabled selected value>Select Brands</option>
+                        {% for object in brand1 %}
+                        <option value="{{object.brand}}*{{object.subbrand}}*{{object.subtitle}}" >
+                          {{object.brand}}*{{object.subbrand}}*{{object.subtitle}}
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Page Per form(Printing)<span style="color: red;">*</span></label>
+                      <div class="input-group">
+                        <!-- <input style="color: black;" width="50" type="textarea" min="0" 
+                                                              name="subject" id="inputdefault" class="form-control" maxlength="" value=""> -->
+                        
+                        <select name="subbrand_printing_form_size" id="subbrand_printing_form_size" class="form-control">
+                          <option disabled selected value>Select </option>
+                          {% for object in brand1 %}
+                          <option value="{{object.printing_form_size}}">{{object.printing_form_size}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Page Per form(Binding)<span style="color: red;">*</span></label>
+                      <div class="input-group">
+                        <!-- <input style="color: black;" width="50" type="textarea" min="0" 
+                                                              name="subject" id="inputdefault" class="form-control" maxlength="" value=""> -->
+                        
+                        <select name="subbrand_binding_form_size" id="subbrand_binding_form_size" class="form-control">
+                          <option disabled selected value>Select </option>
+                          {% for object in brand1 %}
+                          <option value="{{object.binding_form_size}}">{{object.binding_form_size}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <!-- <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label >Main Diacount<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <select name="main_discount" id="main_discount" class="form-control">
+                          <option disabled selected value>Select</option>
+                          {% for object in brand1 %}
+                          <option value="{{object.mainDiscount_1}}">{{object.mainDiscount_1}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label >Extra Discount<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <select name="extra_discount" id="extra_discount" class="form-control">
+                          <option disabled selected value>Select</option>
+                          {% for object in brand1 %}
+                          <option value="{{object.extraDiscount_1}}">{{object.extraDiscount_1}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  </div> -->
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Books Class<span style="color: red;">*</span></label>
+                      <select name="books_class" id="id_courselist" aria-required="true" class="form-control">
+                        <option disabled selected value>Select Class</option>
+                        {% for object in data2|dictsort:"class_name" %}
+                        <option value="{{object.class_name}}">{{object.class_name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Medium<span style="color: red;">*</span></label><br>
+                      <select name="medium" id="id_fees" aria-required="true" class="form-control">
+                        <option disabled selected value>Select Medium</option>
+                        {% for object in data3 %}
+                        <option value="{{object.medium}}">{{object.medium}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  </div>
+                
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Subject<span style="color: red;">*</span></label>
+                      <div class="input-group">
+                        <!-- <input style="color: black;" width="50" type="textarea" min="0" 
+                                                              name="subject" id="inputdefault" class="form-control" maxlength="" value=""> -->
+                        <input class="form-control" id="ss" type="textarea" name="subject" required >
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color: black;">Books Pages<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                            <input type="number" name="no_of_pages" class="form-control" id="no_of_pages" placeholder="Enter Pages" required onchange="calculateBindingSize()">
+                        </div>
+                    </div>
+                  </div>
+                  </div>
+
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Required Form Per Book(Binding) </label>
+                      <div class="input-group mb-4">
+                        <input type="textarea"  name="binding_form_size" id="binding_form_size"
+                          class="form-control" maxlength="" value="" readonly>
+                      </div>
+                    </div>
+                  </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Required Form Per Book(Printing) </label>
+                      <div class="input-group mb-4">
+                        <input type="textarea"  name="printing_form_size" id="printing_form_size"
+                          class="form-control" maxlength="" value="" readonly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                    <div class="form-group">
+                      <label > Stock Of Book<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <input type="textarea" min="0" name="stock" id="" class="form-control" maxlength="" value="" required>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label>Shrink Pack Size<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                            <input type="text" min="0" name="shrink_pack_size" id="shrink_pack_size_1" class="form-control" maxlength="" value="" required>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="d-grid gap-2 col-sm-6">
+                  <div class="mb-3">
+                    <div class="form-group">
+                      <label >Bitti Pack Size<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <input type="textarea" min="0" name="bitti_pack_size" id="" class="form-control" maxlength="" value="" required>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                
+                
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                <div class="form-group">
+                  <label >Binding Rate<span style="color: red;">*</span></label>
+                  <div class="input-group mb-4">
+                    <input type="number" step="any" name="binding_rate" id="binding_rate"
+                      class="form-control" maxlength="" value="" required>
+                  </div>
+                </div>
+              </div>
+              </div>
+              {% comment %} <div class="d-grid gap-2 col-sm-6">
+                <div class="mb-3">
+                <div class="form-group">
+                  <label >Printing Rate<span style="color: red;">*</span></label>
+                  <div class="input-group mb-4">
+                    <input type="textarea" min="0" name="printing_rate1" id="" class="form-control" maxlength="" value="" required>
+                  </div>
+                </div>
+              </div>
+              </div> {% endcomment %}
+              
+              <div class="d-grid gap-2 col-sm-6">
+                <div class="mb-3">
+                <div class="form-group">
+                  <label >Selling Price<span style="color: red;">*</span></label>
+                  <div class="input-group mb-4">
+                    <input type="textarea" min="0" name="selling_price" id="selling_price" class="form-control" maxlength="" value="" required>
+                  </div>
+                </div>
+              </div>
+              </div>
+              
+              <div class="row">
+                <div class="d-grid gap-2 col-sm-6">
+                  <div class="mb-3">
+                  <div class="form-group">
+                    <label>Printed In Color<span style="color: red;">*</span></label>
+                    <div class="input-group mb-4">
+                      
+                        
+                      <select class="form-control" id="color" name="color" required onchange="toggleRateFields()">
+                            <option disabled selected value>Select Color</option>
+                              <option value="single rate">One Rate</option>
+                              <option value="double rate">Two Rate</option> 
+                              <option value="four rate">Four Rate</option>
+                              
+                              <!-- Add more options as needed -->
+                          </select>
+                      </div> 
+                    </div>
+                  </div>
+                </div>
+                <div class="d-grid gap-2 col-sm-6">
+                  <div class="mb-3">
+                  <div class="">
+
+                 
+               <div class="row" id="singleRateField" style="display: none;">
+               <div class="col-md-15">
+                
+                  <label>One color Rate<span style="color: red;">*</span></label>
+                  <div class="input-group mb-6">
+                    <input type="number" min="0" name="onec_rate" id=""
+                      class="form-control" maxlength="" value="" >
+                  </div>
+                
+               </div>
+            </div>
+            </div>
+            <div class="row" id="doubleRateField" style="display: none;">
+              <div class="col-md-15">
+                
+                  <label>Two color Rate<span style="color: red;">*</span></label>
+                  <div class="input-group mb-6">
+                    <input type="number" min="0" name="twoc_rate" id="" class="form-control" maxlength="" value="" >
+                  </div>
+                
+              </div>
+            </div>
+            <div class="row" id="fourRateField" style="display: none;">
+              <div class="col-md-15">
+                
+                  <label>Four color Rate<span style="color: red;">*</span></label>
+                  <div class="input-group mb-6">
+                    <input type="number" min="0" name="fourc_rate" id="" class="form-control" maxlength="" value="" >
+                  </div>
+                
+              </div>
+            </div>
+
+            </div>
+          </div>
+
+            </div>
+                <h6 class="left-align">Forms</h6>
+                <div class="row">
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Form 1<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <input type="number" min="0" name="form1" placeholder="1-32" id=""
+                          class="form-control" maxlength="" value="">
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label style="color:black ;">Form 2<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <input type="number" min="0" name="form2" placeholder="33-64" id=""
+                          class="form-control" maxlength="" value="">
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="d-grid gap-2 col-sm-6">
+                    <div class="mb-3">
+                    <div class="form-group">
+                      <label>Form 3<span style="color: red;">*</span></label>
+                      <div class="input-group mb-4">
+                        <input type="number" min="0" name="form3" placeholder="65-96" id=""
+                          class="form-control" maxlength="" value="">
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+
+                  <!-- <div class="row"> -->
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 4<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form4" placeholder="97-128" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label>Form 5<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form5" placeholder="129-160" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 6<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form6" placeholder="161-192" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  <!-- </div> -->
+
+                  <!-- <div class="row"> -->
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 7<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form7" placeholder="193-224" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 8<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form8" placeholder="225-256" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 9<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input  type="number" min="0" name="form9" placeholder="257-288" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  <!-- </div> -->
+
+
+                  <!-- <div class="row"> -->
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 10<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form10" placeholder="289-320" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 11<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form11" placeholder="321-352" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Form 12<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="form12" placeholder="353-384" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  <!-- </div> -->
+
+                  <!-- <div class="row"> -->
+
+                   
+                       <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;"> Opening Stock of Cover<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="cover" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+
+                    <div class="d-grid gap-2 col-sm-6">
+                      <div class="mb-3">
+                      <div class="form-group">
+                        <label style="color:black ;">Opening Stock Of Topi<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                          <input type="number" min="0" name="topi" id=""
+                            class="form-control" maxlength="" value="">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <!-- 
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                          <label style="color:black ;">Books Pages<span style="color: red;">*</span></label>
+                                          <div class="input-group mb-4">
+                                              <input style="color: black;" width="50" type="textarea" min="0" 
+                                                  name="no_of_pages" id="" class="form-control" maxlength="" value="">
+                                          </div>
+                                      </div>
+                                  </div> -->
+                  <!-- </div> -->
+
+                </div>
+
+
+                <div>
+
+                </div>
+              </div>
+
+
+
+
+                {% comment %} <div class="col-md-4">
+                  <div class="form-group">
+                    <label style="color:black ;">Per Book Forms<span style="color: red;">*</span></label>
+                    <div class="input-group mb-4">
+                      <input style="color: black;" width="50" type="textarea" min="0" name="per_book_forms" id=""
+                        class="form-control" maxlength="" value="">
+                    </div>
+                  </div> {% endcomment %}
+                </div>
+
+                <div class="col-md-8 text-center"></div>
+                <div class="col-md-12" style="text-align: center;" >
+                  <a href="{{ form.get_cancel_link }}" >
+                                                      <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                                                  </a>
+                  {% comment %} <button type="button" class="btn btn-success"
+                    style="background-color: ; color:white;" onclick="submitForm()">Save</button> {% endcomment%}
+                  <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine; color:white;"
+                    value="Save">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      <!-- </div>
+    </div> -->
+    <div class="card-body">
+      <div class="row" >
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="display table table-hover table-striped table-bordered">
+              <thead>
+                <tr style="text-align: center; background-color: lightcyan;">
+                   <th align="center">Sr.No</th>
+                  <th align="center">Book Code</th>
+                  <th align="center">Brands Name</th>
+                  <th align="center">Class Name</th>
+                  <th align="center">Medium</th>
+                  <th align="center">Subject</th>
+                  <th align="center">Books Pages</th>
+                  <th align="center">No Of Printing Form </th>
+                  <th align="center">No Of Binding Form </th>
+                  {% comment %} <th align="center">Printing Rate</th> {% endcomment %}
+                  <th align="center">Binding Rate</th>
+                  
+                  <th align="center">Single Rate</th>
+                  <th align="center">Double Rate</th>
+                  <th align="center">Four Rate</th>
+                  <th align="center">Books Added On</th>
+                  <th align="center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+               
+                {% for i in data %}
+                <tr>
+                  <td>
+                    {{ forloop.counter }}
+                  </td>
+                  <td>
+                    {{ i.code }}
+                  </td>
+                  <td>
+                    {{ i.books_name }}
+                  </td>
+                  <td>
+                    {{ i.books_class }}
+                  </td>
+                  <td>
+                    {{ i.medium }}
+                  </td>
+                  <td>
+                    {{ i.subject }}
+                  </td>
+                  <td>
+                    {{ i.no_of_pages }}
+                  </td>
+                  <td>
+                    {{ i.printing_form_size }}
+                  </td>
+                  <td>
+                    {{ i.binding_form_size }}
+                  </td>
+                  {% comment %} <td>
+                    {{i.printing_rate1}}
+                </td> {% endcomment %}
+                  <td>
+                      {{i.binding_rate}}
+                  </td> 
+                   
+                  <td>
+                      {{i.onec_rate}} 
+                  </td>
+                  <td>
+                      {{i.twoc_rate}} 
+                  </td> 
+                  <td>
+                      {{i.fourc_rate}} 
+                  </td> 
+                  <td>
+                    {{ i.books_added_on}}
+                  </td>
+                  <td>
+                    <div>
+                      <a href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a>
+                      <div id="popup1 {{i.id}}" class="overlay">
+                        <div class="popup">
+                          <h4 style="background-color :mediumaquamarine; color:white; text-align: center;">View Details</h4>
+                          <a class="close" href="#">&times;</a>
+                          <br><br>
+                          <div style="color: black; font-size: 15px; text-align: center;" class="content">
+                            {% if i.books_name %}
+                            <span><b>Books Name</b> = {{i.books_name}}</span> <br>
+                            {% endif %}
+                            {% if i.selling_price %}
+                            <span><b>Selling Price</b> = {{i.selling_price}}</span> <br>
+                            {% endif %}
+                            {% if i.extra_discount %}
+                            <span><b>Extra Discount</b> = {{i.extra_discount}}</span> <br>
+                            {% endif %}
+                            {% if i.main_discount %}
+                            <span><b>Discount</b> = {{i.main_discount}}</span> <br>
+                            {% endif %}
+                            {% if i.stock %}
+                            <span><b>Opening Stock </b> = {{i.stock}}</span> <br>
+                            {% endif %}
+                            {% if i.cover %}
+                                <span><b>Cover </b> = {{i.cover}}</span> <br>
+                            {% endif %}
+                            {% if i.topi %}
+                                <span><b>Topi </b> = {{i.topi}}</span> <br>
+                            {% endif %}
+                            {% if i.form1 %}
+                            <span><b>Form1 </b> = {{i.form1}}</span><br>
+                            {% endif %}
+                            {% if i.form2 %}
+                            <span><b>Form2 </b> = {{i.form2}}</span><br>
+                            {% endif %}
+                            {% if i.form3 %}
+                            <span><b>Form3 </b> = {{i.form3}}</span> <br>
+                            {% endif %}
+                            {% if i.form4 %}
+                            <span><b>Form4 </b> = {{i.form4}}</span><br>
+                            {% endif %}
+                            {% if i.form5 %}
+                            <span><b>Form5 </b> = {{i.form5}}</span><br>
+                            {% endif %}
+                            {% if i.form6 %}
+                            <span><b>Form6 </b> = {{i.form6}}</span> <br>
+                            {% endif %}
+                            {% if i.form7 %}
+                            <span><b>Form7 </b> = {{i.form7}}</span><br>
+                            {% endif %}
+                            {% if i.form8 %}
+                            <span><b>Form8 </b> = {{i.form8}}</span><br>
+                            {% endif %}
+                            {% if i.form9 %}
+                            <span><b>Form9 </b> = {{i.form9}}</span> <br>
+                            {% endif %}
+                            {% if i.form10 %}
+                            <span><b>Form10 </b> = {{i.form10}}</span><br>
+                            {% endif %}
+                            {% if i.form11 %}
+                            <span><b>Form11 </b> = {{i.form11}}</span><br>
+                            {% endif %}
+                            {% if i.form12 %}
+                            <span><b>Form12 </b> = {{i.form12}}</span> <br><br>
+                            {% endif %}
+                          </div>
+
+                        </div>
+                      </div>
+                      <!-- <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a> -->
+                      {% if request.user.is_authenticated and request.user.is_superuser  %}
+                      <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_printing and request.user.is_master_listing and request.user.is_master  %}
+                      <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_master_listing and request.user.is_master  %}
+                      <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_master_listing and request.user.is_master  %}
+                      <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_binding and request.user.is_master_listing and request.user.is_master  %}
+                      <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_packing and request.user.is_master_listing and request.user.is_master  %}
+                      <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_sale and request.user.is_master_listing and request.user.is_master  %}
+                      <a href="/edit-books/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                      {% endif %}
+
+                      {% if request.user.is_authenticated and request.user.is_superuser  %}
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_printing and request.user.is_master_listing and request.user.is_master_deletion %}
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_master_listing and request.user.is_master_deletion %}
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_binding and request.user.is_master_listing and request.user.is_master_deletion %}
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_master_listing and request.user.is_master_deletion %}
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_packing and request.user.is_master_listing and request.user.is_master_deletion %}
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                      {% endif %}
+                      {% if request.user.is_authenticated and request.user.is_sale and request.user.is_master_listing and request.user.is_master_deletion %}
+                      <a href="/delete-books/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                      {% endif %}
+                     
+                    </div>
+                  </td>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  $(document).ready(function () {
+      var brandSelect = $("#books_name");
+      var printingFormSizeSelect = $("#subbrand_printing_form_size");
+      var bindingFormSizeSelect = $("#subbrand_binding_form_size");
+      
+
+      printingFormSizeSelect.on("change", function () {
+          // Handle the change event for subbrand_printing_form_size if needed
+          // This function can be modified based on your requirements
+      });
+      bindingFormSizeSelect.on("change", function () {
+        // Handle the change event for subbrand_printing_form_size if needed
+        // This function can be modified based on your requirements
+      });
+      
+
+      brandSelect.on("change", function () {
+          var selectedBrand = brandSelect.val();
+          printingFormSizeSelect.empty();
+          printingFormSizeSelect.append('<option disabled selected value>Select</option>');
+          bindingFormSizeSelect.empty();
+          bindingFormSizeSelect.append('<option disabled selected value>Select</option>');
+          
+
+          {% for object in brand1 %}
+              if ("{{ object.brand }}*{{ object.subbrand }}*{{ object.subtitle }}" === selectedBrand) {
+                  printingFormSizeSelect.append('<option value="{{ object.printing_form_size }}">{{object.printing_form_size}}</option>');
+              }
+              if ("{{ object.brand }}*{{ object.subbrand }}*{{ object.subtitle }}" === selectedBrand) {
+                  bindingFormSizeSelect.append('<option value="{{ object.binding_form_size }}">{{object.binding_form_size}}</option>');
+              }
+              if ("{{ object.brand }}*{{ object.subbrand }}*{{ object.subtitle }}" === selectedBrand) {
+                   
+              
+                
+          }
+          {% endfor %}
+          
+      });
+    })
+ 
+</script>
+
+
+<script>
+  function toggleRateFields() {
+    var colorSelect = document.getElementById("color");
+    var singleRateField = document.getElementById("singleRateField");
+    var doubleRateField = document.getElementById("doubleRateField");
+    var fourRateField = document.getElementById("fourRateField");
+
+    singleRateField.style.display = "none";
+    doubleRateField.style.display = "none";
+    fourRateField.style.display = "none";
+
+    if (colorSelect.value === "single rate") {
+      singleRateField.style.display = "block";
+    } else if (colorSelect.value === "double rate") {
+      doubleRateField.style.display = "block";
+    } else if (colorSelect.value === "four rate") {
+      fourRateField.style.display = "block";
+    }
+  }
+  
+</script>
+
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+
+
+        </script>
+
+        <script type="text/javascript">
+          $(document).ready(function () {
+        
+                $("#id_c_course").on('change', function()
+                {
+        
+                    var state = $("#id_c_course").val();
+                    // alert(state);
+        
+                    $.ajax({
+                        type: "POST",
+                        url: "/Courselist/"+state,
+                        data: {
+                            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                            'brand_name': state
+                        },
+                        success: function(result){
+                          
+                            $("#id_courselist").empty();
+                            var empty = ""
+                            $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Brand *" + "</option>");
+                            $.each(result.data, function (key, value) {
+                                $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                            });
+                        }
+                    });
+        
+                })
+            })
+        </script>
+        <script type="text/javascript">
+          $(document).ready(function () {
+        
+                $("#id_courselist").on('change', function()
+                {
+        
+                    var city = $("#id_courselist").val();
+                    // alert(city);
+        
+                    $.ajax({
+                        type: "POST",
+                        url: "/Feeslist/"+city,
+                        data: {
+                            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                            'class_name': city
+                        },
+                        success: function(result){
+                          
+                            $("#id_fees").empty();
+                            var empty = ""
+                            $('#id_fees').append("<option value='" + empty + "' disabled selected value>" + "class name *" + "</option>");
+                            $.each(result.data, function (key, value) {
+                                $('#id_fees').append("<option value='" + value + "'>" + value + "</option>");
+                            });
+                        }
+        
+                    });
+        
+                })
+            })
+        </script>
+
+        <script type="text/javascript">
+          $(document).ready(function () {
+        
+                $("#id_size").on('change', function()
+                {
+        
+                    var city = $("#id_size").val();
+                    // alert(city);
+        
+                    $.ajax({
+                        type: "POST",
+                        url: "/Brandsize/"+city,
+                        data: {
+                            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                            'brand_size': city
+                        },
+                        success: function(result){
+                          
+                            $("#id_fees").empty();
+                            var empty = ""
+                            $('#id_fees').append("<option value='" + empty + "' disabled selected value>" + "class name *" + "</option>");
+                            $.each(result.data, function (key, value) {
+                                $('#id_fees').append("<option value='" + value + "'>" + value + "</option>");
+                            });
+                        }
+        
+                    });
+        
+                })
+            })
+        </script>
+
+        <script>
+          function submitForm() {
+            // Submit the form using AJAX
+            $.ajax({
+              url: $('#profile-form').attr('action'),
+              type: 'POST',
+              data: $('#profile-form').serialize(),
+              success: function(response) {
+                // Show a success message using SweetAlert
+                swal({
+                  title: "Success!",
+                  text: "Books Added Successfully",
+                  icon: "success",
+                  button: "OK",
+                });
+              },
+              error: function(response) {
+                // Show an error message using SweetAlert
+                swal({
+                  title: "Error!",
+                  text: response.responseText,
+                  icon: "error",
+                  button: "OK",
+                });
+              }
+            });
+          }
+        </script>
+
+
+
+
+
+        <!-- binding form size script  -->
+
+
+        
+        <script>
+          function calculateFormSizes() {
+            var noOfPages = document.getElementById("no_of_pages").value;
+            var selectedPrintingFormSize = document.getElementById("subbrand_printing_form_size").value;
+            var selectedBindingFormSize = document.getElementById("subbrand_binding_form_size").value;
+        
+        
+            // Assuming that the value in subbrand_printing_form_size is a number
+            var bindingFormSize = (noOfPages) / (selectedBindingFormSize);
+            var printingFormSize = (noOfPages) / (selectedPrintingFormSize); // Assuming 64
+        
+            document.getElementById("binding_form_size").value = bindingFormSize;
+            document.getElementById("printing_form_size").value = printingFormSize;
+          }
+        
+          document.getElementById("no_of_pages").addEventListener("input", calculateFormSizes);
+          document.getElementById("subbrand_printing_form_size").addEventListener("change", calculateFormSizes);
+        </script>
+        
+<script>
+  $(document).ready(function() {
+      // Function to sort the dropdown options numerically
+      function sortDropdownOptions(selectElement) {
+          var options = selectElement.find('option');
+          var selectedValue = selectElement.val();
+          
+          options.sort(function(a, b) {
+              return parseInt($(a).val()) - parseInt($(b).val());
+          });
+          
+          selectElement.empty().append(options);
+          selectElement.val(selectedValue);
+      }
+      
+      // Call the sortDropdownOptions function for your specific dropdown
+      sortDropdownOptions($('#id_courselist'));
+  });
+</script>
+
+</body>  
+
+{% endblock %}
+
+
+

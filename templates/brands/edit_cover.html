@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+        /* Style the page wrapper */
+    .page-wrapper {
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    /* Style the page content */
+    .page-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 700px;
+        /* Adjust the max-width as needed */
+        margin-top: 55px auto;
+        /* Center the container horizontally */
+    }
+
+    /* Style the breadcrumb section */
+    .page-breadcrumb {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: lightcyan;
+        border-radius: 5px;
+    }
+
+    /* Style the breadcrumb title */
+    .breadcrumb-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Style the form elements */
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+
+        border-radius: 5px;
+    }
+
+    /* Style the buttons */
+    .btn {
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-right: 10px;
+    }
+
+    /* Style the Back button */
+    .btn-back {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    /* Style the Save button */
+    .btn-save {
+        background-color: #2ecc71;
+        color: #fff;
+    }
+
+    /* Center align elements */
+    .text-center {
+        text-align: center;
+    }
+
+    /* Responsive layout for small screens */
+    @media (max-width: 768px) {
+        .d-grid {
+            display: block;
+        }
+
+        .col-sm-6 {
+            width: 100%;
+        }
+    }
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <class class="row">
+                    <div class="d-grid gap-2 col-sm-6">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                        <div class="mb-3">
+                            <label  class="form-label">Plate No</label>
+                            <input type="text" class="form-control radius-10" id="" name = "plate_no" value = "{{data.plate_no}}" maxlength="30" required="" readonly/>
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label  class="form-label">Paper To be Used</label>
+                            <input type="text" class="form-control radius-10" id="" name ="paper_to_be_used" value="{{data.paper_to_be_used}}" required="" readonly/>
+                        </div> 
+                        </div>
+                        <!-- <div class="d-grid gap-2 col-sm-6">
+                       <div class="mb-3">
+                            <label class="form-label">Transfer From</label>
+                            <input type="tel" name="from_vend" minlength="" class="form-control" value="{{data.from_vend}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">To</label>
+                            <input type="tel" name="to_vend" minlength="" class="form-control" value="{{data.to_vend}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                        </div>  -->
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">No of UPS</label>
+                            <input type="tel" name="no_of_ups" maxlength="16" class="form-control" value="{{data.no_of_ups}}" id="" placeholder="" maxlength="" required=""readonly/>
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject1</label>
+                            <input type="tel" name="subject1" minlength="" class="form-control" value="{{data.subject1}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject2</label>
+                            <input type="tel" name="subject2" minlength="" class="form-control" value="{{data.subject2}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                    </div>
+                      
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject3</label>
+                            <input type="tel" name="subject3" minlength="" class="form-control" value="{{data.subject3}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                        </div>
+                        
+                       
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject4</label>
+                            <input type="tel" name="subject4" minlength="" class="form-control" value="{{data.subject4}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                       
+                      
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject5</label>
+                            <input type="tel" name="subject5" minlength="" class="form-control" value="{{data.subject5}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                       
+                       
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject6</label>
+                            <input type="tel" name="subject6" minlength="" class="form-control" value="{{data.subject6}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                       
+                       
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject7</label>
+                            <input type="tel" name="subject7" minlength="" class="form-control" value="{{data.subject7}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                      
+                       
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject8</label>
+                            <input type="tel" name="subject8" minlength="" class="form-control" value="{{data.subject8}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                        
+                       
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject9</label>
+                            <input type="tel" name="subject9" minlength="" class="form-control" value="{{data.subject9}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                       
+                        
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject10</label>
+                            <input type="tel" name="subject10" minlength="" class="form-control" value="{{data.subject10}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                       
+                        
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject11</label>
+                            <input type="tel" name="subject11" minlength="" class="form-control" value="{{data.subject11}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                       
+                       
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject12</label>
+                            <input type="tel" name="subject12" minlength="" class="form-control" value="{{data.subject12}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                      
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject13</label>
+                            <input type="tel" name="subject13" minlength="" class="form-control" value="{{data.subject13}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject14</label>
+                            <input type="tel" name="subject14" minlength="" class="form-control" value="{{data.subject14}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div> 
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject15</label>
+                            <input type="tel" name="subject15" minlength="" class="form-control" value="{{data.subject15}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                        <div class="mb-3" id="subject-container">
+                            <label class="form-label">Subject16</label>
+                            <input type="tel" name="subject16" minlength="" class="form-control" value="{{data.subject16}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">Plate rate</label>
+                            <input type="tel" name="plate_rate" minlength="" class="form-control" value="{{data.plate_rate}}" id="" placeholder="" maxlength="" required="" >
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">Printing rate</label>
+                            <input type="tel" name="printing_rate" minlength="" class="form-control" value="{{data.printing_rate}}" id="" placeholder="" maxlength="" required="" >
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">bill Company</label>
+                            <input type="tel" name="bill_company" minlength="" class="form-control" value="{{data.bill_company}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">Total Cover</label>
+                            <input type="tel" name="quantity_cover" minlength="" class="form-control" value="{{data.quantity_cover}}" id="" placeholder="" maxlength="" required="" readonly/>
+                        </div>
+                    </div>
+                    <!-- <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label>Total transfer<span style="color:red;">*</span></label>
+                                <input  type="tel" class="form-control" name="transfer" id="" placeholder="" maxlength="" required=""value="{{data.transfer}}" >
+                            </div>
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label>Pending<span style="color:red;">*</span></label>
+                                <input  type="tel" class="form-control" name="transfer_pending" id="" placeholder="" maxlength="" required="" value="{{data.transfer_pending}}" readonly >
+                            </div>
+                        </div>
+                        </div> -->
+
+
+
+
+
+                         
+                          
+                         
+                         <div class="col-md-12" style="text-align: center;">
+                            <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine; color:white;">DONE</button> 
+                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a href="{% url 'cover_printing' %}" style="color:white;" >Back</a></button>
+                         <!-- {% if data.cover_transfer %}
+                         <button type="submit" class="btn btn-success btn-round ml-auto" data-toggle="modal" style="background-color: mediumaquamarine;" >Cover Transfer</button>
+                         {% else %}
+                         <button type="submit" name="cover_transfer" value="approval_button"  class="btn btn-primary" style="background-color:mediumaquamarine; color:white;">Transfer Cover</button>
+                         <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine; color:white;">DONE</button> 
+                         {% endif %} -->
+                         </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <script>
+        function updatePrintingReceivedForms() {
+            const noOfUpsValue = parseInt(document.querySelector('[name="no_of_ups"]').value);
+            const printingReceivedForms = document.querySelectorAll('[name^="subject"]');
+            
+            printingReceivedForms.forEach((input, index) => {
+                if (index < noOfUpsValue) {
+                    input.closest('.mb-3').style.display = 'block';
+                } else {
+                    input.closest('.mb-3').style.display = 'none';
+                    input.value = "";
+                }
+            });
+        }
+    
+        // Call the function initially and whenever the "No of UPS" value changes
+        updatePrintingReceivedForms();
+        document.querySelector('[name="no_of_ups"]').addEventListener('change', updatePrintingReceivedForms);
+    </script>
+    
+    {% endblock %}

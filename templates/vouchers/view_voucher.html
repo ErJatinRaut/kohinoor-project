@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+   <style type="text/css">
+    *
+    {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    } 
+
+
+      table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 90%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  /*background-color: #dddddd;*/
+}
+.div1
+{
+   
+  width: 800px;
+  height: 453px;
+  border: 1px solid black;
+   border-radius: 15px 50px;
+  box-shadow: 10px 11px 5px  lightgreen inset;
+   /*border-radius: 15px 50px;
+*/
+}
+
+.div2 {
+  width: 800px;
+  height: 900px;  
+  padding: 0px;
+  padding-right: 0%;
+  
+}
+ 
+   </style>
+
+</head>
+<body>
+<center>
+   <div class="div1">
+   <h1 style="padding-left: 5%;">WINWINGS PUBLICATIONS</h1>
+   <img src="images/logo2 kohinoor.png"style="width: 5%;height: 5%;"><span style="padding-right: 3%;color: purple; font-size:400%;">KOHINOOR</span>
+  <h4>776, GULGULWAR NIWAS, GOLIBAR CHOWK, NAGPUR</h4>
+  
+  <h4>GOLIBAR CHOWK, NAGPUR</h4>
+  <h4>GST NO.: 27AAYPA2006L2ZL</h4>
+  <!-- <h4 style="padding-left: 70%;">DATE: {{data.date}}</h4> -->
+   <h4> PARTY:SHARPINDUSTRIES, NAGPUR</h4>
+   <h4>LOT</h4>
+   <!-- <span style="padding-left: 15%;">Binding Order No.</span>{{data.border_id}} -->
+
+   <div style="float:left; margin-left: 12px; display: flex; justify-content: space-evenly; font-weight: bold;">
+      <span>Cover Order:</span><span>{{data.id}}</span>
+      <h4 style="margin-left: 365px;">DATE: {{data.ord_date}}</h4>
+   </div>
+
+
+<div class="div2">
+   <table >
+   <tr>
+      <th style='text-align:center;'>SR. </th>
+      <!-- <th style='text-align:center;'>BRAND </th>
+      <th style='text-align:center;'>STD. </th>
+      <th style='text-align:center;'>MEDIUM. </th> -->
+      
+      <th style='text-align:center;'>D/C</th>
+      <th style='text-align:center;'>ACCOUNT</th>
+      <th style='text-align:center;'>DEBIT </th>
+      <th style='text-align:center;'>CREDIT</th>
+      <th style='text-align:center;'>SHORT NARRATION</th>
+      
+      {% comment %} <th style='text-align:center;'>QUANTITY</th>
+      <th style='text-align:center;'>BINDING RATE</th> {% endcomment %}
+      <!-- <th style='text-align:center;'>RIM</th> -->
+   </tr>
+   {% if data.dc %} 
+   <tr>
+      <td style='text-align:center;'>1.</td>
+      <td style='text-align:center;'>{{data.dc}}</td>
+      
+      <td style='text-align:center;'>{{data.account}}</td>
+      <td style='text-align:center;'>{{data.debit}}</td>
+      <td style='text-align:center;'>{{data.credit}}</td>
+      <td style='text-align:center;'>{{data.short_narration}}</td>
+     
+   {% endif %} 
+   </tr>
+  
+</tr>
+{% if data.dc1 %} 
+<tr>
+   <td style='text-align:center;'>2.</td>
+   <td style='text-align:center;'>{{data.dc1}}</td>
+      
+   <td style='text-align:center;'>{{data.account1}}</td>
+   <td style='text-align:center;'>{% if data.debit1 %} {{data.debit1}} {% endif %}</td>
+   <td style='text-align:center;'>{% if data.credit1 %} {{data.credit1}} {% endif %}</td>
+   <td style='text-align:center;'>{{data.short_narration1}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc3 %} 
+<tr>
+   <td style='text-align:center;'>3.</td>
+   <td style='text-align:center;'>{{data.dc2}}</td>
+      
+   <td style='text-align:center;'>{{data.account2}}</td>
+   <td style='text-align:center;'>{% if data.debit2 %} {{data.debit2}} {% endif %}</td>
+   <td style='text-align:center;'>{% if data.credit2 %} {{data.credit2}} {% endif %}</td>
+   <td style='text-align:center;'>{{data.short_narration2}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc3 %} 
+<tr>
+   <td style='text-align:center;'>4.</td>
+   <td style='text-align:center;'>{{data.dc3}}</td>
+      
+      <td style='text-align:center;'>{{data.account3}}</td>
+      <td style='text-align:center;'>{% if data.debit3 %} {{data.debit3}} {% endif %}</td>
+      <td style='text-align:center;'>{% if data.credit3 %} {{data.credit3}} {% endif %}</td>
+      <td style='text-align:center;'>{{data.short_narration3}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc4 %} 
+<tr>
+    <td style='text-align:center;'>5.</td>
+    <td style='text-align:center;'>{{data.dc4}}</td>
+      
+      <td style='text-align:center;'>{{data.account4}}</td>
+      <td style='text-align:center;'>{% if data.debit4 %} {{data.debit4}} {% endif %}</td>
+      <td style='text-align:center;'>{% if data.credit4 %} {{data.credit4}} {% endif %}</td>
+      <td style='text-align:center;'>{{data.short_narration4}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc5 %} 
+<tr>
+   <td style='text-align:center;'>6.</td>
+   <td style='text-align:center;'>{{data.dc5}}</td>
+      
+    <td style='text-align:center;'>{{data.account5}}</td>
+    <td style='text-align:center;'>{% if data.debit5 %} {{data.debit5}} {% endif %}</td>
+    <td style='text-align:center;'>{% if data.credit5 %} {{data.credit5}} {% endif %}</td>
+    <td style='text-align:center;'>{{data.short_narration5}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc6 %} 
+<tr>
+   <td style='text-align:center;'>7.</td>
+   <td style='text-align:center;'>{{data.dc6}}</td>
+      
+      <td style='text-align:center;'>{{data.account6}}</td>
+      <td style='text-align:center;'>{% if data.debit6 %} {{data.debit6}} {% endif %}</td>
+      <td style='text-align:center;'>{% if data.credit6 %} {{data.credit6}} {% endif %}</td>
+      <td style='text-align:center;'>{{data.short_narration6}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc7 %} 
+<tr>
+   <td style='text-align:center;'>8.</td>
+   <td style='text-align:center;'>{{data.dc7}}</td>
+      
+      <td style='text-align:center;'>{{data.account7}}</td>
+      <td style='text-align:center;'>{% if data.debit7 %} {{data.debit7}} {% endif %}</td>
+      <td style='text-align:center;'>{% if data.credit7 %} {{data.credit7}} {% endif %}</td>
+      <td style='text-align:center;'>{{data.short_narration7}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc8 %} 
+<tr>
+   <td style='text-align:center;'>9.</td>
+   <td style='text-align:center;'>{{data.dc8}}</td>
+      
+      <td style='text-align:center;'>{{data.account8}}</td>
+      <td style='text-align:center;'>{% if data.debit8 %} {{data.debit8}} {% endif %}</td>
+      <td style='text-align:center;'>{% if data.credit8 %} {{data.credit8}} {% endif %}</td>
+      <td style='text-align:center;'>{{data.short_narration8}}</td>
+    {% endif %} 
+</tr>
+
+</tr>
+{% if data.dc9 %} 
+<tr>
+   <td style='text-align:center;'>10.</td>
+   <td style='text-align:center;'>{{data.dc9}}</td>
+      
+      <td style='text-align:center;'>{{data.account9}}</td>
+      <td style='text-align:center;'>{% if data.debit9 %} {{data.debit9}} {% endif %}</td>
+      <td style='text-align:center;'>{% if data.credit9 %} {{data.credit9}} {% endif %}</td>
+      <td style='text-align:center;'>{{data.short_narration9}}</td>
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc10 %} 
+<tr>
+   <td style='text-align:center;'>11.</td>
+   <td style='text-align:center;'>{{data.dc10}}</td>
+      
+      <td style='text-align:center;'>{{data.account10}}</td>
+      <td style='text-align:center;'>{% if data.debit10 %} {{data.debit10}} {% endif %}</td>
+      <td style='text-align:center;'>{% if data.credit10 %} {{data.credit10}} {% endif %}</td>
+      <td style='text-align:center;'>{{data.short_narration10}}</td>
+{% endif %} 
+</tr>
+</tr>
+{% if data.dc11 %} 
+<tr>
+   <td style='text-align:center;'>12.</td>
+   <td style='text-align:center;'>{{data.dc11}}</td>
+   
+   <td style='text-align:center;'>{{data.account11}}</td>
+   <td style='text-align:center;'>{% if data.debit11 %} {{data.debit11}} {% endif %}</td>
+   <td style='text-align:center;'>{% if data.credit11 %} {{data.credit11}} {% endif %}</td>
+   <td style='text-align:center;'>{{data.short_narration11}}</td>
+  
+{% endif %} 
+</tr>
+</tr>
+{% if data.dc12 %} 
+<tr>
+   <td style='text-align:center;'>13.</td>
+   <td style='text-align:center;'>{{data.dc12}}</td>
+   
+   <td style='text-align:center;'>{{data.account12}}</td>
+   <td style='text-align:center;'>{% if data.debit12 %} {{data.debit12}} {% endif %}</td>
+   <td style='text-align:center;'>{% if data.credit12 %} {{data.credit12}} {% endif %}</td>
+   <td style='text-align:center;'>{{data.short_narration12}}</td>
+  
+{% endif %} 
+</tr>
+
+</tr>
+{% if data.dc13 %} 
+<tr>
+   <td style='text-align:center;'>14.</td>
+   <td style='text-align:center;'>{{data.dc13}}</td>
+   
+   <td style='text-align:center;'>{{data.account13}}</td>
+   <td style='text-align:center;'>{% if data.debit13 %} {{data.debit13}} {% endif %}</td>
+   <td style='text-align:center;'>{% if data.credit13 %} {{data.credit13}} {% endif %}</td>
+   <td style='text-align:center;'>{{data.short_narration13}}</td>
+  
+{% endif %} 
+</tr>
+</tr>
+{% if data.dc14 %} 
+<tr>
+   <td style='text-align:center;'>15.</td>
+   <td style='text-align:center;'>{{data.dc14}}</td>
+   
+   <td style='text-align:center;'>{{data.account14}}</td>
+   <td style='text-align:center;'>{% if data.debit14 %} {{data.debit14}} {% endif %}</td>
+   <td style='text-align:center;'>{% if data.credit14 %} {{data.credit14}} {% endif %}</td>
+   <td style='text-align:center;'>{{data.short_narration14}}</td>
+  
+{% endif %} 
+</tr>
+</tr>
+{% if data.dc15 %} 
+<tr>
+   <td style='text-align:center;'>16.</td>
+   <td style='text-align:center;'>{{data.dc15}}</td>
+   
+   <td style='text-align:center;'>{{data.account15}}</td>
+   <td style='text-align:center;'>{% if data.debit15 %} {{data.debit15}} {% endif %}</td>
+   <td style='text-align:center;'>{% if data.credit15 %} {{data.credit15}} {% endif %}</td>
+   <td style='text-align:center;'>{{data.short_narration15}}</td>
+  
+{% endif %} 
+</tr>
+{% comment %} <tr>
+   <td style='text-align:center;'></td>
+   <th style='text-align:center;'>TOTAL</th>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'></td>
+   <td style='text-align:center;'>{{data.binding_order_total}}</td> 
+  
+   <!-- <td style='text-align:center;'>{{data.total_rim}}</td>   -->
+</tr>  {% endcomment %}
+   
+   </table>
+</div>
+</center>
+</body>
+</html>
+
+

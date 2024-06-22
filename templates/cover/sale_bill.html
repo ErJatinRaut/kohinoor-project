@@ -1,0 +1,1590 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>orders</title>
+    <style>
+        * {
+            font-family: Georgia;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 50px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+
+        .select-style {
+            border-radius: 0.25rem;
+            border-color: black;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+            border-color: black;
+            padding-left: 10%;
+        }
+
+        .title h3 {
+
+            border-bottom: 2px solid blueviolet;
+            display: inline-block;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .title h5 {
+
+            display: inline-block;
+
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Sale Bill Info</div>
+                <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn" type="button"
+                        style="background-color: mediumaquamarine;"><i class="fa fa-plus"></i>&nbsp;Create
+                        Sale Bill</button>
+                </div>
+                <br>
+               
+                <div id="myModal" class="modal">
+                    <div class="modal-content" style="background-color: lightcyan;">
+                       
+                        <div class="panel panel-default">
+                            <div class="panel-heading"
+                                style="color:black; background-color:mediumaquamarine;text-align:center;">
+                                <h4 style="color:white;">Sale Bill Now</h4>
+                            </div>
+                            <hr style="color:black">
+                            <form method="POST" onsubmit="return myfun()">
+                                {% csrf_token %}
+                                <div class="panel-body">
+                                    <div class="">
+                                        <div class="title">
+
+                                            <div class="row" style="text-align: right;">
+                                                <div class="col-md-8"></div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control mobile" name="sale_date"
+                                                                id="ord_date" placeholder="{% now 'Y-m-d' %}" value=""
+                                                                required max="{% now 'Y-m-d' %}" readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+                                                    
+                                                
+                                                    <label for="name" class="control-label"><b>Material Center<span
+                                                                style="color:red;">*</span></b></label>
+
+                                                        <select class="form-control" name="material_center" id="material_center"
+                                                        style="width:100%;">
+                                                        <option disabled selected value>Select Material Center</option>
+                                                        {% for i in data4 %}
+                                                         <option value="{{ i.centre_name }}">{{i.centre_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                
+                                                </div>
+                                                
+
+                                                <div class="col-md-6">
+                                                      <div class="mb-3">
+                                                        
+                                                            <label for="name" class="control-label"><b>Company Name<span
+                                                                        style="color:red;">*</span></b></label>
+                                                            <select class="form-control" name="company" id=""
+                                                                style="width:100%;" required>
+                                                                <option disabled selected value>Select Company</option>
+                                                                {% for i in comp %}
+                                                                <option>{{i.company_name}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        
+                                                      </div>
+                                                </div>
+                                        <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                
+                                                    <label for="name" class="control-label"><b>Vendor Name<span
+                                                                style="color:red;">*</span></b></label>
+                                                
+
+                                                    <select class="form-control" name="sale_vendor" id="vender_name"
+                                                        style="width:100%;"  onchange="generateVoucherNo()">
+                                                        <option disabled selected value>Select Vendor</option>
+                                                        {% for i in vend %}
+                                                         <option value="{{ i.cust_name }}">{{i.cust_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="mb-3">
+                                           
+                                            <label for="name" class="control-label"><b>Category<span
+                                                        style="color:red;">*</span></b></label>
+                                            
+
+                                                <select class="form-control" name="vend_category" id="vend_category" 
+                                                    style="width:100%;">
+                                                    <option disabled selected value>Select Vendor</option>
+                                                    {% for i in vend %}
+                                                    <option value="{{ i.price_category }}"> {{i.price_category}} </option>
+                                                    
+                                                    {% endfor %}
+                                                </select>
+                                            
+                                          </div>
+                                       </div>
+                                        <div class="col-md-6">
+                                           <div class="mb-3">
+                                        
+
+                                            <label for="name" class="control-label"><b>Voucher No<span
+                                                        style="color:red;"></span></b></label>
+                                            <input class="form-control" id="class_name_1" name="voucher_no" >
+
+                                        </div>
+                                    </div>
+                                </div>
+                                   
+                    <div class="row d-flex">
+                                    
+                        <div class="col" style=" padding:0;">
+                            
+                        
+                            <label><b style="font-size: 75%;">Particular<span style="color:red;"></span></b></label>
+                            {% comment %} <input type="text" class="form-control" name="plate_no1" id="plate_no1" readonly> {% endcomment %}
+                            <select class="form-control" name="plate_no1" id="plate_no1" onchange="updateCategoryDropdown1(); updateFieldsOnPlateSelect();"
+                                style="width:100%; border-radius: 0px;"   >
+                                <option disabled selected value>Select</option>
+                                {% for i in combined_data %}
+                                 <option>{{i.code}}</option>
+                                {% endfor %}
+                            </select> 
+                        </div>
+                       <div class="col" id="subject_container" style="padding:0;">
+                            <label><b>Subject<span style="color:red;"></span></b></label>
+                            <input type="text" class="form-control" name="subject" id="subject" readonly>
+                        </div> 
+                        <div class="col" style="padding: 0;">
+                            <div class="mb-0">
+                                <label for="name" class="control-label"><b style="font-size: 75%;">Brand Name<span style="color:red;">*</span></b></label>
+                               <input type="text" class="form-control mobile" name="brand_name" id="brand_name"   style="border-radius: 0px;" /> 
+                                {% comment %} <select class="form-control" name="" id="brand_name"
+                                style="width:100%; border-radius: 0px;"   >
+                                <option disabled selected value>Select</option>
+                                {% for i in combined_data %}
+                                 <option>{{i.book_name}}</option>
+                                {% endfor %}
+                            </select> {% endcomment %}
+                            </div>
+                        </div>
+              
+                            <div class="col" style="padding: 0;">
+                                <div class="mb-0">
+                                    <label for="name" class="control-label"><b style="font-size: 75%;">Quantity<span style="color:red;">*</span></b></label>
+                                    <input type="number" class="form-control mobile" name="sale_quantity1" id="quantity" oninput="updateSubject()"  style="border-radius: 0px;" />
+                                </div>
+                            </div>
+
+                            <div class="col" style="padding: 0;">
+                                        <div class="mb-0">
+                                    <label for="name" class="control-label"><b style="font-size: 75%;">Qty/Bitti<span style="color:red;"></span></b></label>
+                                    <input class="form-control" id="qty_per_bitti1" name="qty_per_bitti1"  oninput="updateSubject()"  style="border-radius: 0px;" />
+
+                                </div>
+                            </div>
+
+
+                   
+                    
+                                            <div class="col" style="padding: 0;">
+                                                    <div class="mb-0">
+                                                <label for="name" class="control-label"><b style="font-size: 75%;">No of Bitti<span style="color:red;"></span></b></label>
+                                                <input class="form-control" id="no_of_bitti1" name="no_of_bitti1" style="border-radius: 0px;" />
+                                            </div>
+                                        </div>
+                                        <div class="col" style="padding: 0;">
+                                                    <div class="mb-0">
+                                                <label for="name" class="control-label"><b style="font-size: 75%;">Sale Price<span style="color:red;"></span></b></label>
+                                                <input class="form-control" id="sale_price1" name="sale_price1"  oninput="calculateBitti()" style="border-radius: 0px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col" style="padding: 0;">
+                                                <div class="mb-0">
+                                            <label for="name" class="control-label"><b style="font-size: 75%;">Category<span style="color:red;"></span></b></label>
+                                        
+                                            <select class="form-control" name="category1" id="category1" oninput="updateDiscountFields1()"
+                                                        style="width:100%; border-radius: 0px;"  >
+                                                        <option disabled selected value>Select</option>
+                                                {% for i in combined_data %}
+                                                    {% if i.category   %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category}}">{{i.category}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_1  %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_1}}">{{i.category_1}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_2   %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_2}}">{{i.category_2}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_3 %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_3}}">{{i.category_3}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_4 %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_4}}">{{i.category_4}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_5 %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_5}}">{{i.category_5}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_6 %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_6}}">{{i.category_6}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_7 %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_7}}">{{i.category_7}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_8 %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_8}}">{{i.category_8}}</option>
+                                                    {% endif %}
+                                                    {% if i.category_9 %}
+                                                        <option data-plate="{{i.code}}" value="{{i.category_9}}">{{i.category_9}}</option>
+                                                    {% endif %}
+                                                            <!-- Add more options as needed -->
+                                                {% endfor %}
+                                                </select>
+                                        </div>
+                                        </div>
+                                        <div class="col" style="padding: 0;">
+                                            <div class="mb-0">
+                                                <label for="name" class="control-label"><b style="font-size: 75%;">Discount<span style="color:red;"></span></b></label>
+                                                <select class="form-control" name="discount1" id="discount1" oninput="updateMainFields1()"
+                                                    style="width:100%; border-radius: 0px;">
+                                                    <option disabled selected value>Select</option>
+                                                    {% for i in combined_data %}
+                                                        {% if i.main_discount %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category}}" value="{{i.main_discount}}">{{i.main_discount}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_1 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_1}}" value="{{i.main_discount_1}}">{{i.main_discount_1}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_2 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_2}}" value="{{i.main_discount_2}}">{{i.main_discount_2}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_3 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_3}}" value="{{i.main_discount_3}}">{{i.main_discount_3}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_4 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_4}}" value="{{i.main_discount_4}}">{{i.main_discount_4}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_5 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_5}}" value="{{i.main_discount_5}}">{{i.main_discount_5}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_6 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_6}}" value="{{i.main_discount_6}}">{{i.main_discount_6}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_7 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_7}}" value="{{i.main_discount_7}}">{{i.main_discount_7}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_8 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_8}}" value="{{i.main_discount_8}}">{{i.main_discount_8}}</option>
+                                                        {% endif %}
+                                                        {% if i.main_discount_9 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_9}}" value="{{i.main_discount_9}}">{{i.main_discount_9}}</option>
+                                                        {% endif %}
+                                                        <!-- Add more options as needed -->
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col" style="padding: 0;">
+                                                    <div class="mb-0">
+                                                <label for="name" class="control-label"><b style="font-size: 75%;">Ext Discount<span style="color:red;"></span></b></label>
+                                                {% comment %} <input class="form-control" id="extra_discount1" name="extra_discount1"   oninput="calculateBitti()" style="border-radius: 0px;"/> {% endcomment %}
+                                                <select class="form-control" name="extra_discount1" id="extra_discount1" 
+                                                    style="width:100%; border-radius: 0px;">
+                                                    <option disabled selected value>Select</option>
+                                                    {% for i in combined_data %}
+                                                        {% if i.extra_discount %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category}}" data-discount="{{i.main_discount}}" value="{{i.extra_discount}}">{{i.extra_discount}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_1 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_1}}" data-discount="{{i.main_discount_1}}" value="{{i.extra_discount_1}}">{{i.extra_discount_1}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_2 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_2}}" data-discount="{{i.main_discount_2}}"  value="{{i.extra_discount_2}}">{{i.extra_discount_2}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_3 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_3}}" data-discount="{{i.main_discount_3}}" value="{{i.extra_discount_3}}">{{i.extra_discount_3}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_4 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_4}}" data-discount="{{i.main_discount_4}}" value="{{i.extra_discount_4}}">{{i.extra_discount_4}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_5 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_5}}" data-discount="{{i.main_discount_5}}" value="{{i.extra_discount_5}}">{{i.extra_discount_5}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_6 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_6}}" data-discount="{{i.main_discount_6}}" value="{{i.extra_discount_6}}">{{i.extra_discount_6}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_7 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_7}}" data-discount="{{i.main_discount_7}}" value="{{i.extra_discount_7}}">{{i.extra_discount_7}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_8 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_8}}" data-discount="{{i.main_discount_8}}" value="{{i.extra_discount_8}}">{{i.extra_discount_8}}</option>
+                                                        {% endif %}
+                                                        {% if i.extra_discount_9 %}
+                                                            <option data-plate="{{i.code}}" data-category="{{i.category_9}}" data-discount="{{i.main_discount_9}}" value="{{i.extra_discount_9}}">{{i.extra_discount_9}}</option>
+                                                        {% endif %} 
+                                                        <!-- Add more options as needed -->
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col" style="padding: 0;">
+                                                    <div class="mb-0">
+                                                <label for="name" class="control-label"><b style="font-size: 75%;"> Rate<span
+                                                            style="color:red;">*</span></b></label>
+                                                <input class="form-control" id="rate1" name="rate1"   onselect="updateRate1()" 
+                                                style="border-radius: 0px;">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col" style="padding: 0;">
+                                            <div class="mb-0">
+
+                                            
+                                                <label for="name" class="control-label"><b style="font-size: 75%;">Amount<span
+                                                            style="color:red;">*</span></b></label>
+                                                <input class="form-control" id="sale_amount1" name="sale_amount1" 
+                                                onselect="updateSubject()"  readonly  style="border-radius: 0px;">
+
+                                            </div>
+                                        </div>
+                                
+                                
+
+                                        <div class="col" style="padding: 0; style="width:145px;" >
+                                            
+                                            </div>
+                                        </div>
+                                        <div class="input_fields_container">
+                                            <!-- Newly added items will be appended here -->
+                                        </div>
+
+                                        <div class="row d-flex">
+
+                                            <div class="col-md-10"></div>
+                                            
+                                            
+                                            <div class="col" style=" padding: 0;">
+                                                <input style="width: 110px; margin-left: 18px;" type="text" name="total_amount" id="totalAmountInput" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-3" style="text-align: center;">
+                                                <button class="btn btn-primary btn-sm " id="add_more_button"
+                                                    style="background-color:mediumaquamarine;">Add New
+                                                    Items</button>
+                                            </div>
+
+            
+
+            </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-primary" onclick="addNewField()">Add New Item</button>
+                </div>
+            </div> -->
+
+            <!-- {% comment %} <div id="additionalFieldsContainer"></div> {% endcomment %} -->
+            <!-- <input type="text" name="total_amount" id="totalAmountInput" readonly /> -->
+            <!-- Add a button for triggering the total amount calculation -->
+            <!-- {% comment %} <button id="calculateTotalButton">Calculate Total</button> {% endcomment %} -->
+
+
+            <div class="input_fields_container2">
+                <!-- Newly added items will be appended here -->
+            </div>
+
+            
+
+            <div class="col-md-12 mt-3" style="text-align: center;">
+<!--                 <button class="btn btn-primary btn-sm" type="text" id="add_sundries_link"
+                    style="background-color:mediumaquamarine;">Add bill sundries</button> -->
+
+                    <a href="#" style="background-color: mediumaquamarine;padding: 8px;border-radius: 5px;font-size: 14px;text-decoration: none;color: white" id="add_sundries_link">Add bill sundries</a>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary" name="create_form_btn"
+                        value="save_cashmemo_btn"
+                        style="background-color:mediumaquamarine;">Create</button>
+                    <a href="{{ form.get_cancel_link }}" >
+                              <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+</form>
+</div>
+</div>
+</div>
+
+
+       
+
+            <!-- uper vali new add kiya hai  -->
+            <div class="card-body">
+                <div class="row" style="text-align: center;">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="display table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr style="text-align: center; background-color: lightcyan;">
+                                        <th align="center">Sr.No</th>
+                                        <th align="center">Material Center</th>
+                                        <th align="center">Company</th>
+                                        <th align="center">Voucher Number</th>
+                                        <th align="center">Particular</th>
+                                        <th align="center">Date</th>
+                                        <th align="center">Vendor Name</th>
+                                        <th align="center">Quantity Per Bitti</th>
+                                        <th align="center">No of  Bitti</th> 
+                                        <th align="center">Rate</th>
+                                        <th align="center">Quantity</th>
+                                        
+                                        <th align="center">Amount </th>
+                                        <th align="center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in data %}
+
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{i.material_center}}</td>
+                                        <td>{{i.company}}</td>
+                                        <td>{{i.voucher_no}}</td>
+                                        <td>{{i.plate_no1}}</td>
+                                        <td>{{i.sale_date}}</td>
+                                        <td>{{ i.sale_vendor }}</td>
+                                        <td>{{ i.qty_per_bitti1 }}</td>
+                                        <td>{{ i.no_of_bitti1 }}</td>
+
+                                        
+                                        <td >{{ i.rate1 }}</td>  
+                                        <td>{{ i.sale_quantity1 }}</td> 
+                                        <td>{{ i.total_sale_amount }}</td> 
+                                        <td>
+                                            <div>
+                                                <a href="{{i.id}}"><i class="bi bi-eye"></i></a>
+                                                <a href="/delete_sale_bill/{{i.id}}/"><i class="bi bi-archive"></i></a></i></a>
+                                                <!-- <div id="popup1 {{i.id}}" class="overlay">
+                                                </div> -->
+                                                <!-- <a  href="/edit_binding/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a> -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    <script>
+    function generateVoucherNo() {
+        var selectedOption = document.getElementById("vender_name").value;
+        var vendorName = selectedOption.split(" ")[0].substring(0, 2).toUpperCase(); // Get the first three characters of the vendor name and convert to uppercase
+        var uniqueNumber = Math.floor(Math.random() * 1000); // Generate a random number
+        
+        var voucherNoInput = document.getElementById("class_name_1");
+        // Set the value of the voucher number input field
+        voucherNoInput.value = vendorName + uniqueNumber;
+    }
+</script>
+   <script>
+    $(document).ready(function () {
+        var vendorSelect = $("#vender_name");
+        var categorySelect = $("#vend_category");
+
+        vendorSelect.on("change", function () {
+            var selectedVendor = vendorSelect.val();
+            categorySelect.empty();
+            categorySelect.append('<option disabled selected value>Select Category</option>');
+
+            {% for i in vend %}
+                if ("{{ i.cust_name }}" === selectedVendor) {
+                    categorySelect.append('<option value="{{ i.price_category }}">{{i.price_category}}</option>');
+                }
+            {% endfor %}
+        });
+    });
+</script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#vend_category, #category1').change(function () {
+                var vendCategoryValue = $('#vend_category').val();
+                var category1Dropdown = $('#category1');
+
+                // Check if both dropdowns have selections
+                if (vendCategoryValue !== null) {
+                    // Disable options that don't match in category1 dropdown
+                    category1Dropdown.find('option').each(function () {
+                        var optionValue = $(this).val();
+                        if (vendCategoryValue !== optionValue) {
+                            $(this).prop('disabled', true);
+                        } else {
+                            $(this).prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+
+
+
+   
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+   <script>
+    var dataCombined = [
+        {% for i in combined_data %}
+            {
+                code: "{{i.code}}",
+                books_name: "{{i.book_name}}",
+                subject: "{{i.subject}}",
+                bitti_pack_size: "{{i.bitti_pack_size}}",
+                selling_price: "{{i.selling_price}}",
+            },
+        {% endfor %}
+    ];
+
+    function updateSubject(selectedValue) {
+        for (var i = 0; i < dataCombined.length; i++) {
+            if (dataCombined[i].code === selectedValue) {
+                $("#subject").val(dataCombined[i].subject);
+                $("#brand_name").val(dataCombined[i].books_name);
+                $("#qty_per_bitti1").val(dataCombined[i].bitti_pack_size);
+                $("#sale_price1").val(dataCombined[i].selling_price);
+                break;
+            }
+        }
+    }
+
+    function updateCategoryDropdown1() {
+        var selectedPlate = document.getElementById("plate_no1").value;
+        var categoryDropdown = document.getElementById("category1");
+
+        // Reset category dropdown to default
+        categoryDropdown.selectedIndex = 0;
+
+        // Loop through options and show/hide based on selected plate_no1
+        for (var i = 0; i < categoryDropdown.options.length; i++) {
+            var option = categoryDropdown.options[i];
+            if (option.dataset.plate === selectedPlate || option.value === "Select") {
+                option.style.display = "block";
+            } else {
+                option.style.display = "none";
+            }
+        }
+
+        // Update subject and other fields based on selected plate_no1
+        updateSubject(selectedPlate);
+    }
+
+    function updateDiscountFields1() {
+        var selectedPlate = document.getElementById("plate_no1").value;
+        var selectedCategory = document.getElementById("category1").value;
+        var discountField = document.getElementById("discount1");
+
+        discountField.selectedIndex = 0;
+
+        // Loop through options and show/hide based on selected plate_no1 and category1
+        for (var i = 0; i < discountField.options.length; i++) {
+            var option = discountField.options[i];
+
+            if (
+                (option.dataset.plate === selectedPlate || option.value === "Select") &&
+                (option.dataset.category === selectedCategory || option.value === "Select")
+            ) {
+                option.style.display = "block";
+            } else {
+                option.style.display = "none";
+            }
+        }
+
+        // Update subject and other fields based on selected plate_no1
+        updateSubject(selectedPlate);
+    }
+
+    function updateMainFields1() {
+        var selectedPlate = document.getElementById("plate_no1").value;
+        var selectedCategory = document.getElementById("category1").value;
+        var selectedDiscount = document.getElementById("discount1").value;
+        var extraDiscountField = document.getElementById("extra_discount1");
+
+        extraDiscountField.selectedIndex = 0;
+
+        // Loop through options and show/hide based on selected plate_no1, category1, and discount1
+        for (var i = 0; i < extraDiscountField.options.length; i++) {
+            var option = extraDiscountField.options[i];
+
+            if (
+                (option.dataset.plate === selectedPlate || option.value === "Select") &&
+                (option.dataset.category === selectedCategory || option.value === "Select") &&
+                (option.dataset.discount === selectedDiscount || option.value === "Select")
+            ) {
+                option.style.display = "block";
+            } else {
+                option.style.display = "none";
+            }
+        }
+
+        // Update subject and other fields based on selected plate_no1
+        updateSubject(selectedPlate);
+
+        // Calculate rate1
+        
+    }
+    function updateRate1() {
+        var discountValue = parseFloat($("#discount1").val()) || 0;
+        var extraDiscountValue = parseFloat($("#extra_discount1").val()) || 0;
+        var quqntity = parseFloat($("#quantity").val()) || 0;
+        var rate1 = (discountValue/100) - (extraDiscountValue/100);
+        $("#rate1").val(rate1);
+        console.log("Rate1:", rate1);
+        var amount = (quqntity) * (rate1);
+        $("#sale_amount1").val(amount);
+        var totalAmount = amount;
+        document.getElementById("totalAmountInput").value = totalAmount;
+
+        
+    }
+
+    // Event listener for the dropdown change for plate_no1
+    $("#plate_no1").change(function () {
+        var selectedValue = $(this).val();
+        updateSubject(selectedValue);
+    });
+
+    $("#quantity").on("input", function () {
+        var saleQuantity = $(this).val();
+        var qtyPerBitti = $("#qty_per_bitti1").val();
+        var noOfBitti = saleQuantity / qtyPerBitti;
+        $("#no_of_bitti1").val(noOfBitti);
+    });
+    $("#extra_discount1").on("input", function () {
+        // When extra_discount1 changes, update rate1
+        updateRate1();
+    });
+</script>
+    
+    <!-- <script>
+        var subjects = [
+            {% for item in data3 %}
+                { "code": "{{ item.code }}", "subject": "{{ item.subject }}", "bitti_pack_size": "{{ item.bitti_pack_size }}", "selling_price": "{{ item.selling_price }}", "main_discount": "{{ item.main_discount }}", "extra_discount": "{{ item.extra_discount }}" }{% if not loop.last %},{% endif %}
+
+            {% endfor %}
+        ];
+    
+        console.log(subjects)
+        function updateSubject() {
+            var enteredCode = document.getElementById("plate_no1").value;
+            var subjectContainer = document.getElementById("subject_container");
+            var subjectInput = document.getElementById("subject");
+            var bittipacksizeInput = document.getElementById("qty_per_bitti1");
+            var salePriceInput = document.getElementById("sale_price1");
+            var discountInput = document.getElementById("discount1");
+            var extraDiscountInput = document.getElementById("extra_discount1");
+
+            //aparna
+            var rate1Input = document.getElementById("midium_1");
+            var amount1Input = document.getElementById("sale_amount1");
+            var quantityInput = parseFloat(document.getElementById("quantity").value) || 0;
+            var qtyPerBitti = parseFloat(document.getElementById("qty_per_bitti1").value) || 0;
+
+            console.log(quantityInput);
+           
+            // Find the subject based on the entered code
+            var foundSubject = subjects.find(function (item) {
+                return item.code === enteredCode;
+            });
+            console.log(foundSubject.main_discount);
+            // Update the subject, bitti_pack_size, selling_price, extraDiscount_1, and mainDiscount_1 fields
+            if (foundSubject) {
+                subjectContainer.style.display = "block";
+                subjectInput.value = foundSubject.subject;
+                bittipacksizeInput.value = foundSubject.bitti_pack_size;
+                salePriceInput.value = foundSubject.selling_price;
+                
+                discountInput.value = foundSubject.main_discount;
+                extraDiscountInput.value = foundSubject.extra_discount;
+            } else {
+                subjectContainer.style.display = "none";
+                subjectInput.value = "";
+                bittipacksizeInput.value = "";
+                salePriceInput.value = "";
+               
+                discountInput.value = ""; 
+                extraDiscountInput.value = ""; // Clear the value if no subject is found
+            }
+            //aparna
+            var rate1 = discountInput.value - extraDiscountInput.value;
+            var no_of_bitti = quantityInput / qtyPerBitti;
+            var amount1I = quantityInput * rate1;
+            var totalAmount = amount1I 
+            //console.log(amount1Input);
+            // Update the relevant fields
+            document.getElementById("midium_1").value = rate1.toFixed(2);
+            document.getElementById("no_of_bitti1").value = no_of_bitti.toFixed(2);
+            document.getElementById("sale_amount1").value = amount1I.toFixed(2);
+            document.getElementById("totalAmountInput").value = totalAmount.toFixed(2);
+        }
+    
+    
+    </script> -->
+    <script>
+    $(document).ready(function () {
+        function handleDropdowns(x) {
+            var vendCategoryValue = $('#vend_category').val();
+            var categoryDropdown = $('#category' + x);
+        
+            // Check if vend_category has a selection
+            if (vendCategoryValue !== null) {
+                // Disable options in category dropdown that don't match vend_category
+                categoryDropdown.find('option').each(function () {
+                    var optionValue = $(this).val();
+                    if (vendCategoryValue !== optionValue) {
+                        $(this).prop('disabled', true);
+                    } else {
+                        $(this).prop('disabled', false);
+                    }
+                });
+            } else {
+                // If vend_category is not selected, enable all options
+                categoryDropdown.find('option').prop('disabled', false);
+            }
+        }
+        
+        function updateDropdowns(x) {
+            handleDropdowns(x); // Assuming x=1 initially
+        }
+        
+        $('#vend_category, select[name^="category"]').on('change', function () {
+            var x = $(this).attr('id').replace('category', ''); // Extract x from the id
+            updateDropdowns(x);
+        });
+        
+        // Add this part to handle initial setup
+        $(document).ready(function () {
+            // Assuming initial x is 1
+            updateDropdowns(1);
+        });
+        
+        var dataCombined = [
+            {% for i in combined_data %}
+                {
+                    code: "{{i.code}}",
+                    books_name: "{{i.book_name}}",
+                    subject: "{{i.subject}}",
+                    bitti_pack_size: "{{i.bitti_pack_size}}",
+                    selling_price: "{{i.selling_price}}",
+                },
+            {% endfor %}
+        ];
+
+        function updateSubject(selectedValue, index) {
+            for (var i = 0; i < dataCombined.length; i++) {
+                if (dataCombined[i].code === selectedValue) {
+                    $("#subject" + index).val(dataCombined[i].subject);
+                    $("#brand_name" + index).val(dataCombined[i].books_name);
+                    $("#qty_per_bitti" + index).val(dataCombined[i].bitti_pack_size);
+                    $("#sale_price" + index).val(dataCombined[i].selling_price);
+                    break;
+                }
+            }
+        }
+
+        // Create a dictionary to store the book data
+        function updateCategoryDropdown(x) {
+            var selectedPlate = document.getElementById("plate_no" + x).value;
+            var categoryDropdown = document.getElementById("category" + x);
+
+            categoryDropdown.selectedIndex = 0;
+
+            for (var i = 0; i < categoryDropdown.options.length; i++) {
+                var option = categoryDropdown.options[i];
+
+                if (option.dataset.plate === selectedPlate || option.value === "Select") {
+                    option.style.display = "block";
+                } else {
+                    option.style.display = "none";
+                }
+            }
+        }
+
+        function updateDiscountFields(x) {
+            var selectedPlate = document.getElementById("plate_no" + x).value;
+            var selectedCategory = document.getElementById("category" + x).value;
+            var discountField = document.getElementById("discount" + x);
+
+            discountField.selectedIndex = 0;
+
+            for (var i = 0; i < discountField.options.length; i++) {
+                var option = discountField.options[i];
+
+                if (
+                    (option.dataset.plate === selectedPlate || option.value === "Select") &&
+                    (option.dataset.category === selectedCategory || option.value === "Select")
+                ) {
+                    option.style.display = "block";
+                } else {
+                    option.style.display = "none";
+                }
+            }
+        }
+        function updateMainFields(x) {
+            var selectedPlate = document.getElementById("plate_no" + x).value;
+            var selectedCategory = document.getElementById("category" + x).value;
+            var selectedDiscount = document.getElementById("discount" + x).value;
+            var extraDiscountField = document.getElementById("extra_discount" + x);
+        
+            extraDiscountField.selectedIndex = 0;
+        
+            for (var i = 0; i < extraDiscountField.options.length; i++) {
+                var option = extraDiscountField.options[i];
+        
+                if (
+                    (option.dataset.plate === selectedPlate || option.value === "Select") &&
+                    (option.dataset.category === selectedCategory || option.value === "Select") &&
+                    (option.dataset.discount === selectedDiscount || option.value === "Select")
+                ) {
+                    option.style.display = "block";
+                } else {
+                    option.style.display = "none";
+                }
+            }
+        }
+        function updateNoOfBitti(x) {
+            var saleQuantity = parseFloat($("#sale_quantity" + x).val()) || 0;
+            var qtyPerBitti = parseFloat($("#qty_per_bitti" + x).val()) || 0;
+            var noOfBitti = saleQuantity / qtyPerBitti;
+        
+            // Set the calculated value in the no_of_bitti field
+            $("#no_of_bitti" + x).val(noOfBitti);
+        }
+        function updateRateField(x) {
+            var selectedDiscount = document.getElementById("discount" + x).value;
+            var selectedExtraDiscount = document.getElementById("extra_discount" + x).value;
+        
+            // Your condition to check if both discount and extra_discount are selected
+            if (selectedDiscount !== "Select" && selectedExtraDiscount !== "Select") {
+                // Calculate the rate based on your formula (e.g., discount - extra_discount)
+                var discountValue = parseFloat(selectedDiscount) || 0;
+                var extraDiscountValue = parseFloat(selectedExtraDiscount) || 0;
+                var calculatedRate =(discountValue/100 )- (extraDiscountValue/100);
+        
+                // Set the calculated rate in the rate field
+                $("#rate" + x).val(calculatedRate);
+            }
+        }
+        function updateSaleAmount(x) {
+            var saleQuantity = parseFloat($("#sale_quantity" + x).val()) || 0;
+            var rate = parseFloat($("#rate" + x).val()) || 0;
+            var saleAmount = saleQuantity * rate;
+        
+            // Set the calculated saleAmount in the sale_amount field
+            $("#sale_amount" + x).val(saleAmount);
+            console.log("Sale Amount for #" + x + ": " + saleAmount);
+            var totalAmount = 0;
+
+            // Iterate through all the "sale_amount" fields and add up their values
+            $('input[name^="sale_amount"]').each(function () {
+                var amountValue = parseFloat($(this).val()) || 0;
+                totalAmount += amountValue;
+                console.log("Sale Amount for this field: " + amountValue);
+            });
+
+            // Display the total amount in the specified input field
+            $('#totalAmountInput').val(totalAmount);
+
+            console.log("Total Amount: " + totalAmount.toFixed(2)); // Chec
+
+
+        }
+        
+        updateSaleAmount(x); // Call updateSaleAmount(x) before calculateTotalAmount()
+        
+
+        
+
+        
+        // Call the updateRateField function when discount or extra_discount dropdown changes
+        $('.input_fields_container').on("change", "select[name^='discount'], select[name^='extra_discount']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('discount')[1] || inputName.split('extra_discount')[1];
+            updateRateField(index);
+            updateSaleAmount(index);
+        });
+        
+        // Call the updateRateField function when discount or extra_discount dropdown changes
+        $('.input_fields_container').on("change", "select[name^='discount'], select[name^='extra_discount']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('discount')[1] || inputName.split('extra_discount')[1];
+            updateRateField(index);
+        });
+        
+        // Additional oninput handler for rate field
+        $('.input_fields_container').on("input", "input[name^='rate']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('rate')[1];
+            subjectUpdate(index);
+        });
+        // Call updateNoOfBitti function when sale_quantity or qty_per_bitti fields change
+        $('.input_fields_container').on("input", "input[name^='sale_quantity'], input[name^='qty_per_bitti']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('sale_quantity')[1] || inputName.split('qty_per_bitti')[1];
+            updateNoOfBitti(index);
+        });
+        
+        // Call updateExtraDiscountField function when discount dropdown changes
+        $('.input_fields_container').on("change", "select[name^='discount']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('discount')[1];
+            updateMainFields(index);
+        });
+
+       
+
+        // Call updateDiscountFields function when category dropdown changes
+        $('.input_fields_container').on("change", "select[name^='category']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('category')[1];
+            updateDiscountFields(index);
+            
+        });
+       
+
+
+        // Update subject and other fields based on selected plate_no1
+        
+   
+        
+        
+
+        var max_fields_limit = 10;
+        var x = 1
+
+        $('#add_more_button').click(function (e) {
+            e.preventDefault();
+            if (x < max_fields_limit) {
+                x++;
+                $('.input_fields_container').append(
+                    '<div class="row d-flex">' +
+                        // ... (existing code)
+
+                        
+                      
+                                
+
+
+                                    '<div class="col" style="width:100px; padding:0;">' +
+
+
+                                   
+                                    '<select class="form-select" name="plate_no' + x.toString() + '" id="plate_no' + x.toString() + '" onchange="updateCategoryDropdown(' + x + '); updateSubject(' + x + ')">' +
+                                        '<option value="" selected disabled>Select</option>' +
+                                        '{% for i in combined_data %}' + 
+                                            '<option value="{{ i.code }}">{{ i.code }}</option>' +
+                                        '{% endfor %}' +
+                                    '</select>' +
+
+                                    '</div>' +
+
+                        '<div class="col"  style="width:100px;padding:0;">' +
+                            
+                            '<input type="text"  style=" width:100%; border-radius:0;" class="form-control" name="subject' + x.toString() + '" id="subject' + x.toString() + '" readonly>' +
+                        '</div>' +
+                        '<div class="col"  style="width:100px;padding:0;">' +
+                            
+                            '<input type="text"  style=" width:100%; border-radius:0;" class="form-control" name="brand_name' + x.toString() + '" id="brand_name' + x.toString() + '" readonly>' +
+                        '</div>' +
+                                
+                           
+                        
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                            
+                            '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="quantity" name="sale_quantity' + x.toString() + '" id="sale_quantity' + x.toString() + '" required  oninput="updateNoOfBitti(' + x + ')">' +
+                        '</div>' +
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                            
+                            '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter quantity Per bitti" name="qty_per_bitti' + x.toString() + '" id="qty_per_bitti' + x.toString() + '" required >' +
+                        '</div>' +
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                       
+                        '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter no of  bitti" name="no_of_bitti' + x.toString() + '" id="no_of_bitti' + x.toString() + '" required  oninput="subjectUpdate(' + x + ')">' +
+                        '</div>' +
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                        
+                        '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter sale price" name="sale_price' + x.toString() + '" id="sale_price' + x.toString() + '" required  oninput="subjectUpdate(' + x + ')">' +
+                        '</div>' +
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                        
+                       
+                        '<select style="border-radius:0;" class="form-select" name="category' + x.toString() + '" id="category' + x.toString() + '"   oninput="updateDiscountFields(' + x + ')">' +
+                            '<option value="" selected disabled>Select</option>' +
+                            '{% for i in combined_data %}' +
+                                 
+                                '{% if i.category   %}'+
+                               ' <option data-plate="{{i.code}}" value="{{i.category}}">{{i.category}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_1  %}'+
+                                '<option data-plate="{{i.code}}" value="{{i.category_1}}">{{i.category_1}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_2   %}'+
+                                '<option data-plate="{{i.code}}" value="{{i.category_2}}">{{i.category_2}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_3 %}'+
+                                '<option data-plate="{{i.code}}" value="{{i.category_3}}">{{i.category_3}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_4 %}'+
+                               ' <option data-plate="{{i.code}}" value="{{i.category_4}}">{{i.category_4}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_5 %}'+
+                               ' <option data-plate="{{i.code}}" value="{{i.category_5}}">{{i.category_5}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_6 %}'+
+                                '<option data-plate="{{i.code}}" value="{{i.category_6}}">{{i.category_6}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_7 %}'+
+                                '<option data-plate="{{i.code}}" value="{{i.category_7}}">{{i.category_7}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_8 %}'+
+                                '<option data-plate="{{i.code}}" value="{{i.category_8}}">{{i.category_8}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.category_9 %}'+
+                                '<option data-plate="{{i.code}}" value="{{i.category_9}}">{{i.category_9}}</option>'+
+                            '{% endif %}'+
+                            '{% endfor %}' +
+                        '</select>' +
+                        '</div>' +
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                       
+                        
+                        '<select style="border-radius:0;" class="form-select" name="discount' + x.toString() + '" id="discount' + x.toString() + '"   required oninput="updateMainFields(' + x + ')">' +
+                           
+                            '<option value="" selected disabled>Select</option>' +
+                            '{% for i in combined_data %}'+
+                                '{% if i.main_discount %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category}}" value="{{i.main_discount}}">{{i.main_discount}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_1 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_1}}" value="{{i.main_discount_1}}">{{i.main_discount_1}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_2 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_2}}" value="{{i.main_discount_2}}">{{i.main_discount_2}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_3 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_3}}" value="{{i.main_discount_3}}">{{i.main_discount_3}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_4 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_4}}" value="{{i.main_discount_4}}">{{i.main_discount_4}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_5 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_5}}" value="{{i.main_discount_5}}">{{i.main_discount_5}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_6 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_6}}" value="{{i.main_discount_6}}">{{i.main_discount_6}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_7 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_7}}" value="{{i.main_discount_7}}">{{i.main_discount_7}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_8 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_8}}" value="{{i.main_discount_8}}">{{i.main_discount_8}}</option>'+
+                                '{% endif %}'+
+                                '{% if i.main_discount_9 %}'+
+                                    '<option data-plate="{{i.code}}" data-category="{{i.category_9}}" value="{{i.main_discount_9}}">{{i.main_discount_9}}</option>'+
+                               '{% endif %}'+
+                               
+                            '{% endfor %}'+
+                        '</select>'+
+                        '</div>' +
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                        
+                       
+                        '<select style="border-radius:0;" class="form-select" name="extra_discount' + x.toString() + '" id="extra_discount' + x.toString() + '"   required >' +
+                           
+                          '<option value="" selected disabled>Select</option>' +
+                       
+                        '{% for i in combined_data %}'+
+                            '{% if i.extra_discount %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category}}" data-discount="{{i.main_discount}}" value="{{i.extra_discount}}">{{i.extra_discount}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_1 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_1}}" data-discount="{{i.main_discount_1}}" value="{{i.extra_discount_1}}">{{i.extra_discount_1}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_2 %}'+
+                               ' <option data-plate="{{i.code}}" data-category="{{i.category_2}}" data-discount="{{i.main_discount_2}}"  value="{{i.extra_discount_2}}">{{i.extra_discount_2}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_3 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_3}}" data-discount="{{i.main_discount_3}}" value="{{i.extra_discount_3}}">{{i.extra_discount_3}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_4 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_4}}" data-discount="{{i.main_discount_4}}" value="{{i.extra_discount_4}}">{{i.extra_discount_4}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_5 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_5}}" data-discount="{{i.main_discount_5}}" value="{{i.extra_discount_5}}">{{i.extra_discount_5}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_6 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_6}}" data-discount="{{i.main_discount_6}}" value="{{i.extra_discount_6}}">{{i.extra_discount_6}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_7 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_7}}" data-discount="{{i.main_discount_7}}" value="{{i.extra_discount_7}}">{{i.extra_discount_7}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_8 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_8}}" data-discount="{{i.main_discount_8}}" value="{{i.extra_discount_8}}">{{i.extra_discount_8}}</option>'+
+                            '{% endif %}'+
+                            '{% if i.extra_discount_9 %}'+
+                                '<option data-plate="{{i.code}}" data-category="{{i.category_9}}" data-discount="{{i.main_discount_9}}" value="{{i.extra_discount_9}}">{{i.extra_discount_9}}</option>'+
+                            '{% endif %} '+
+                            
+                        '{% endfor %}'+
+                       '</select>'+
+                        '</div>' +
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                        
+                        '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter rate" name="rate' + x.toString() + '" id="rate' + x.toString() + '" required oninput="updateRateField(' + x + ')">' +
+                        '</div>' +
+                        
+                        '<div class="col" style="padding: 0; width:100px;">' +
+                       
+                        '<input type="number"  style=" width:100%; border-radius:0;" pattern="[0-9\s]+" class="form-control mobile" name="sale_amount' + x.toString() + '" id="sale_amount' + x.toString() + '" placeholder="amount" value=""  required maxlength="30" readonly oninput="updateSaleAmount(' + x + ')" />' +
+                        '</div>' +
+
+                        // ... (existing code)
+
+                        '<a href="#" class="remove_field col" style="width:120px; padding:0; text-align:center">Remove</a>' +
+                    '</div>'
+                );
+                updateDropdowns(x);
+            }
+        });
+
+        $('.input_fields_container').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+           
+        });
+        
+
+        // Initial setup for the first set
+        $('.input_fields_container').on("change", "select[name^='plate_no']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('plate_no')[1];
+            updateCategoryDropdown(index);
+            updateSubject($(this).val(), index); // Add this line to update the subject field
+            updateDiscountFields(index);
+            updateMainFields(index);
+        });
+
+        $('.input_fields_container').on("input", "input[name^='sale_quantity']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('sale_quantity')[1];
+            subjectUpdate(index);
+            
+        });
+
+       
+    });
+</script>
+    
+    
+    
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Create a dictionary to store the book data
+        const bookData = {
+            {% for i in book %}
+                "{{ i.code }}": {
+                    brand: "{{ i.books_name }}",
+                    class: "{{ i.books_class }}",
+                    medium: "{{ i.medium }}",
+                    subject: "{{ i.subject }}",
+                    pages: "{{ i.binding_rate }}",
+                },
+            {% endfor %}
+        };
+
+        function updateDropdowns(x) {
+            // Existing code for updating dropdowns
+        }
+
+        var subjects = [
+            {% for item in data3 %}
+                { "code": "{{ item.code }}", "subject":"{{ item.subject }}" , "bitti_pack_size": "{{ item.bitti_pack_size }}", "selling_price": "{{ item.selling_price }}" , "main_discount": "{{ item.main_discount }}", "extra_discount": "{{ item.extra_discount }}" }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Function to update the "Subject" input field
+        function subjectUpdate(index) {
+            var enteredCode = document.getElementById("plate_no" + index).value;
+            var subjectContainer = document.getElementById("subject_container_" + index);
+            var subjectInput = document.getElementById("subject" + index);
+            var qtyPerBittiInput = document.getElementById("qty_per_bitti" + index);
+            var salePriceInput = document.getElementById("sale_price" + index);
+            var discountInput = document.getElementById("discount" + index);
+            var extraDiscountInput = document.getElementById("extra_discount" + index);
+            var rate1Input = document.getElementById("rate" + index);
+            var quantityInput = parseFloat(document.getElementById("quantity_" + index).value) || 0;
+
+            var qtyPerBitti = parseFloat(document.getElementById("qty_per_bitti" + index).value) || 1; // Avoid division by zero
+            var discount1 = parseFloat(document.getElementById("discount" + index).value) || 0;
+            var extraDiscount1 = parseFloat(document.getElementById("extra_discount" + index).value) || 0;
+
+            var foundSubject = subjects.find(function (item) {
+                return item.code === enteredCode;
+            });
+
+            if (foundSubject) {
+                subjectContainer.style.display = "block";
+                subjectInput.value = foundSubject.subject;
+                qtyPerBittiInput.value = foundSubject.bitti_pack_size;
+                console.log(qtyPerBittiInput.value)
+                salePriceInput.value = foundSubject.selling_price;
+                discountInput.value = foundSubject.main_discount;
+                extraDiscountInput.value = foundSubject.extra_discount;
+            } else {
+                subjectContainer.style.display = "none";
+                subjectInput.value = "";
+                qtyPerBittiInput.value = "";
+                salePriceInput.value = "";
+                discountInput.value = "";
+                extraDiscountInput.value = "";
+            }
+
+            // Calculate No of Bitti and update relevant fields
+            var no_of_bitti1 = quantityInput / qtyPerBittiInput.value;
+            var rate1 = discountInput.value - extraDiscountInput.value;
+            var amount1I = quantityInput * rate1;
+
+            // Update the relevant fields
+            document.getElementById("rate" + index).value = rate1.toFixed(2);
+            document.getElementById("no_of_bitti" + index).value = no_of_bitti1.toFixed(2);
+            document.getElementById("sale_amount" + index).value = amount1I.toFixed(2);
+            console.log(quantityInput)
+        }
+
+
+        var max_fields_limit = 10;
+        var x = 1;
+
+        $('#add_more_button').click(function (e) {
+            e.preventDefault();
+            if (x < max_fields_limit) {
+                x++;
+                $('.input_fields_container').append(
+                    '<div class="row d-flex">' +
+                    // ... (existing code)
+
+                    '<div class="col-sm-2" style="width:100px; padding:0;">' +
+                    '<select class="form-select" name="plate_no' + x.toString() + '" id="plate_no' + x.toString() + '" onchange="subjectUpdate(' + x + ')">' +
+                    '<option value="" selected disabled>Select</option>' +
+                    '{% for item in data3 %}' +
+                    '<option value="{{ item.code }}">{{ item.code }}</option>' +
+                    '{% endfor %}' +
+                    '</select>' +
+                    '</div>' +
+
+                    '<div class="col-sm-2" id="subject_container_' + x.toString() + '" style="width:100px;padding:0;">' +
+                    '<input type="text"  style=" width:100%; border-radius:0;" class="form-control" name="plate_no' + x.toString() + '" id="subject' + x.toString() + '" readonly>' +
+                    '</div>' +
+
+                    '<div class="col" style="padding: 0; width:100px;">' +
+                    '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="quantity" name="sale_quantity' + x.toString() + '" id="quantity_' + x.toString() + '" required  oninput="subjectUpdate(' + x + ')">' +
+                    '</div>' +
+                    '<div class="col" style="padding: 0; width:100px;">' +
+                    '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter quantity Per bitti" name="qty_per_bitti' + x.toString() + '" id="qty_per_bitti' + x.toString() + '" required >' +
+                    '</div>' +
+                    '<div class="col" style="padding: 0; width:100px;">' +
+                    '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter no of  bitti" name="no_of_bitti' + x.toString() + '" id="no_of_bitti' + x.toString() + '" required  oninput="subjectUpdate(' + x + ')">' +
+                    '</div>' +
+                    '<div class="col" style="padding: 0; width:100px;">' +
+                    '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter sale price" name="sale_price' + x.toString() + '" id="sale_price' + x.toString() + '" required  oninput="subjectUpdate(' + x + ')">' +
+                    '</div>' +
+                    '<div class="col" style="padding: 0; width:100px;">' +
+                    '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter discount" name="discount' + x.toString() + '" id="discount' + x.toString() + '" required oninput="subjectUpdate(' + x + ')">' +
+                    '</div>' +
+                    '<div class="co" style="padding: 0; width:100px;">' +
+                    '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter extra discount" name="extra_discount' + x.toString() + '" id="extra_discount' + x.toString() + '" required  oninput="subjectUpdate(' + x + ')">' +
+                    '</div>' +
+                    '<div class="col" style="padding: 0; width:100px;">' +
+                    '<input class="form-control mobile" style=" width:100%; border-radius:0;" placeholder="enter rate" name="rate' + x.toString() + '" id="rate' + x.toString() + '" required oninput="subjectUpdate(' + x + ')">' +
+                    '</div>' +
+                    '<div class="col" style="padding: 0; width:100px;">' +
+                    '<input type="number"  style=" width:100%; border-radius:0;" pattern="[0-9\s]+" class="form-control mobile" name="sale_amount' + x.toString() + '" id="sale_amount' + x.toString() + '" placeholder="amount" value=""  required maxlength="30" readonly oninput="subjectUpdate(' + x + ')" />' +
+                    '</div>' +
+
+                    // ... (existing code)
+
+                    '<a href="#" class="remove_field col" style="width:120px; text-align:center">Remove</a>' +
+                    '</div>'
+                );
+                updateDropdowns(x);
+            }
+        });
+
+        $('.input_fields_container').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+            calculateTotalAmount(); // Call the function to update the total amount when removing a field
+        });
+
+        function calculateTotalAmount() {
+            var totalAmount = 0;
+
+            // Iterate through all the "sale_amount" fields and add up their values
+            $('input[name^="sale_amount"]').each(function () {
+                var amountValue = parseFloat($(this).val()) || 0;
+                totalAmount += amountValue;
+            });
+
+            // Display the total amount in the specified input field
+            $('#totalAmountInput').val(totalAmount.toFixed(2));
+        }
+
+        // Initial setup for the first set
+        updateDropdowns(1);
+
+        // Add an event listener for the code fields to update other fields
+        $('.input_fields_container').on("change", "select[name^='plate_no']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('plate_no')[1];
+            updateDropdowns(index);
+            subjectUpdate(index); // Call the function to update the "Subject" and "Qty Per Bitti" fields
+        });
+
+        // Add an event listener for quantity fields to update forms-per-set
+        $('.input_fields_container').on("input", "input[name^='sale_quantity']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('sale_quantity')[1];
+
+            subjectUpdate(index);
+            calculateTotalAmount(); // Call the function to update the total amount
+        });
+
+        // Trigger the initial total calculation once the document is ready
+        calculateTotalAmount();
+    });
+</script> -->
+
+<input type="text"   id="totalAmountInput" readonly />
+
+
+
+        <script>
+            // Get the modal
+            var modal = document.getElementById("myModal");
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+        </script>
+
+         <script>
+        function calculateBitti() {
+            var saleQuantity = parseFloat(document.getElementById('quantity').value) || 0;
+            var qtyPerBitti = parseFloat(document.getElementById('qty_per_bitti1').value) || 1;
+    
+            var calculatedNoOfBitti = saleQuantity / qtyPerBitti;
+            document.getElementById('no_of_bitti1').value = calculatedNoOfBitti.toFixed(2);
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            var sundriesCount = 1; // Initial count for sundries fields
+            var maxSundries = 5;  // Maximum number of sundries fields
+    
+            // Function to add bill sundries fields
+            $("#add_sundries_link").click(function () {
+                if (sundriesCount <= maxSundries) {
+                    var cloneFields = `
+                        <div class="sundries_fields">
+                            <div class="row d-flex">
+                                <div  class="col-md-2" style="padding:0">
+                                    <label for="bill_sundries_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Bill Sundries<span style="color:red;">*</span></b></label>
+                                    <select class="form-select" id="bill_sundries_${sundriesCount}" name="bill_sundries_${sundriesCount}" style="border-radius: 0px;">
+                                    <option value="additive">Additive</option>
+                                    <option value="subtractive">Subtractive</option>
+                                    </select>
+                                </div>
+    
+                                <div class="col-md-2" style="padding:0">
+                                    <label for="narration_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Narration<span style="color:red;">*</span></b></label>
+                                    <input class="form-control" id="narration_${sundriesCount}" name="narration_${sundriesCount}" style="border-radius: 0px;">
+                                </div>
+
+
+                                <div class="col-md-2" style="padding:0">
+                                    <label for="percent_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Percentage<span style="color:red;">*</span></b></label>
+                                    <input class="form-control percent-field" id="percent_${sundriesCount}" name="percent_${sundriesCount}" style="border-radius: 0px;" oninput="calculateTotalAmount()">
+                                </div>
+    
+                                <div class="col-md-2" style="padding:0">
+                                    <label for="amount_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Amount<span style="color:red;">*</span></b></label>
+                                    <input class="form-control" id="amount_${sundriesCount}" name="amount_${sundriesCount}" style="border-radius: 0px;">
+                                </div>
+
+
+    
+                            <a href="#" class="remove_field col-md-2" style="width:120px; padding:20px; text-align:center">Remove</a>
+                        </div>
+                        </div>
+                    `;
+    
+                    $(".input_fields_container2").append(cloneFields);
+                sundriesCount++;
+
+                // Disable button if maximum fields reached
+                if (sundriesCount > maxSundries) {
+                    $("#add_sundries_link").prop("disabled", true);
+                }
+            } else {
+                alert("You can't add more than 5 bill sundries.");
+            }
+        });
+
+        // Event listener for removing fields
+        $('.input_fields_container2').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            sundriesCount--;
+
+            // Enable "Add Sundries" button when removing a field
+            $("#add_sundries_link").prop("disabled", false);
+        });
+
+        // Event listener for calculating total amount dynamically
+        $('.input_fields_container2').on("input", "input[name^='amount_'], select[name^='bill_sundries_'], input[name^='percent_']", function () {
+            calculateTotalAmount();
+        });
+        function calculateTotalAmount() {
+            var totalAmount = 0;
+
+            // Iterate through all the "sale_amount" fields and add up their values
+            $('input[name^="sale_amount"]').each(function () {
+                var amountValue = parseFloat($(this).val()) || 0;
+                console.log("11111111111",amountValue)
+                totalSaleAmount += amountValue;
+            });
+
+            // Display the total amount in the specified input field
+            $('#totalAmountInput').val(totalAmount.toFixed(2));
+            console.log("11111111111",totalAmount)
+        
+        
+            $('input[name^="percent_"]').each(function () {
+                var sundriesCount = $(this).attr('name').split('_')[1];
+                var percentValue = parseFloat($(this).val()) || 0;
+
+                // Calculate the corresponding amount field based on the percentage
+                var totalAmount = parseFloat($('#totalAmountInput').val()) || 0;
+                var calculatedAmount = (totalAmount * percentValue) / 100;
+
+                // Update the amount field
+                $('#amount_' + sundriesCount).val(calculatedAmount.toFixed(2));
+                console.log("2222222222",calculatedAmount)
+            });
+        }
+
+        // Function to calculate total amount
+       
+        // Function to round total amount based on the selected operation
+        function roundTotalAmount(totalAmount, selectedSundries) {
+            if (selectedSundries === 'additive') {
+                return Math.ceil(totalAmount);
+            } else if (selectedSundries === 'subtractive') {
+                return Math.floor(totalAmount);
+            }
+            return totalAmount;
+            console.log("Total :", totalAmount);
+        }
+
+        // Function to apply percentage adjustment to the total amount
+        
+    });
+</script>
+    
+    
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
+
+{% endblock %}

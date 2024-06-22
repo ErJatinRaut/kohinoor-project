@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <style>
+        * {
+            font-family: Georgia;
+        }
+        .scroll-box-vertical {
+    overflow-y: auto;
+    min-height: 700px; /* Adjust the max height as needed */
+  }
+        </style>
+</head>
+<body>
+          <div class="page-wrapper">
+                    <div class="page-content " style="background-color: lightcyan;height:auto; ">
+                        <div class="page-breadcrumb w-50 p-3" style="background-color: lightcyan; text-align: center;">
+                              <h5 style="color:white; background-color:rgb(98, 21, 21); float: center;" class="p-1">Add Item Master</h5>
+                        </div>
+                        <div class="container" style="display: flex; font-size: 80%;">
+                              <div style="width:45%;">
+                                  <div style="width: auto; height: auto;">
+                                    <div style="display:flex">
+                                        <div style="width:20%;">
+                                             <label>Name</label><br>
+                                             <label>Alias</label><br>
+                                             <label>Print Name</label><br>
+                                              <label>Group</label>
+
+                                        </div>
+                                        <div style="width:80%;">
+                                            <input type="text" name="item_name" value=""  style="background-color: lightcyan; border:none;"/><br>
+                                        <input type="text" name="item_alias" value=""  style="background-color: lightcyan; border:none;"/><br>
+
+                                        <input type="text" name="item_print_name" value="" style="background-color: lightcyan; border:none;"/><br><br>
+                                       <input type="text" name="item_group" value="" style="background-color: lightcyan;border:none;"/>
+                                        </div>
+                                    </div>
+                                       
+                                        
+                                        <div style="display:flex">
+                                                  <div style="border:1px solid black; width:50%;" class="m-1 p-1"> <span style="font-size:medium;font-family: Arial;"><b>Main Unit Details</b></span><br>
+                                                            <span>Unit</span><br>
+                                                             <span style="padding-right: 80px;">Op.Stock(Qty.)</span><span><b>0.000</b></span><br>
+                                                             <span>Op.Stock(Value)</span>       
+                                                  </div> 
+                                                         <div style="border:1px solid black; width:50%;" class="m-1 p-1">
+                                                            <span style="font-size:medium;font-family: Arial;"><b>Alternate Unit Details</b></span><br>
+                                                              <span>Alternate Unit</span><br>
+                                                              
+                                                              <span style="padding-right: 70px;">Con Factor</span><span><b>0.000</b></span><br>
+                                                              <span>Con Type</span><br>
+                                                              <span style="padding-right: 45px;">Op. Stock(Qty)</span> <span><b>0.000</b></span>
+
+                                                          </div>
+                                        </div>
+                                        <div style="display: flex;" class="m-1 p-1">
+                                                  <div style="width:50%;">
+                                                            <span style="margin-right: 15px;">Tax Category</span><b>Exempt</b><br>
+                                                            <span>HSN/SAC Code for GST</span>
+                                                  </div>
+                                                  <div style="width:50%;">
+                                                             <br>
+                                                            <span> <button style="" class="bg-white">_</button></span>
+                                                           <span> <button style="float: right;" class=" w-25 p-1 bg-white">Validate</button></span>
+                                                  </div>
+                                               
+                                        </div>
+                                        <div style="border:1px solid black;" class="m-1 p-1"><span style="font-size:medium;font-family: Arial;"> <b>Item Price Info</b></span>
+                                         <div style="display:flex;">
+                                                 
+                                                  <div style="width:50%;">
+                                                            <span>
+                                                                      <span>Sales Price applied on</span> <span style="float:right"><b>Main Unit</b></span><br>
+                                                                      <span style="padding-right:100px;">Sales Price</span> <span ><b>0.00</b></span><br>
+                                                                      <span style="padding-right:100px;">Purc Price</span> <span ><b>0.00</b></span><br>
+                                                                      <span style="padding-right:120px;">M.R.P.</span> <span><b>0.00</b></span><br>
+                                                                      <span style="padding-right:80px;">Min Sales Price<span style="padding-right:80px;"><b>0.00</b></span><br>(Exclusive of Taxes)</span><br>
+                                                                      <span style="padding-right:80px;">Self-Val. Price</span> <span><b>0.00</b></span>
+                                                                     
+                                                            </span>
+                                                   </div>&nbsp;&nbsp;&nbsp;
+                                                  <div style="width:50%;">
+                                                            <span>
+                                                            <span>Purc. Price applied on <b>Main Unit</b></span><br> 
+                                                            <span>Sales Price</span><br> 
+                                                            <span>Purc price</span> <br><br>
+                                                            <span>Min Sales Price</span> 
+                                                          </span>
+                                                   </div>
+                                         </div>
+                                        </div>
+                                        <div style="border:1px solid black;" class="m-1 p-1">
+                                                  <span style="font-size:medium;font-family: Arial;"><b>Packaging Unit Details</b></span><br>
+                                                  <div style="display:flex">
+                                                  <div style="width:50%;">
+                                                            <span>
+                                                               <span>Packaging Unit</span><br>
+                                                               <span  style="padding-right:80px;">Sales Price</span><span ><b>0.00</b></span>
+                                                           </span>
+                                                  </div>
+                                                  <div style="width:50%;">
+                                                         <span>
+                                                            <span style="padding-right:70px;">Con Factor </span><span ><b>0.00</b></span><br>
+                                                             <span style="padding-right:80px;">Purc Price</span><span ><b>0.00</b></span>
+                                                         </span>
+                                                  </div>
+                                           </div>
+                                        </div>
+                                        <div class="d-flex m-1">
+                                               <div>
+                                                  <label>Defalt Unit for Sales</label>
+                                                  <label>Tax Inclusive Sale Price <span><b>N</b></span></label>
+                                                  <label>Specify Sales Acc <span><b>Not Reqd</b></span></label>
+                                                  <label>Specify Purc Acc <span><b>Not Reqd</b></span></label>
+                                               </div> 
+                                               <div>
+                                                  <span>Default Unit for purc.</span>
+                                                  <label class="fw-bold">Tax Inclusive Purchase <span><b>N</b></span></label>
+                                               </div>  
+                                        </div>
+                                        <div>
+                                                  <button class="m-1 w-50 p-1 bg-white "><b>Second Language</b></button><br>
+                                                  <button class="w-25 p-1 bg-white "><b>Notes</b></button>
+                                                  <button  class="w-25 p-1 bg-white "><b>Opt. Fields</b></button>
+                                                  <button class="p-1 w-25 p-1 bg-white "><b>Multiple Ailas</b></button>
+                                                  <span class="bg-secondary p-1 ">Item Image</span>
+                                        </div>
+                              </div>
+                              </div>
+                              <div style="width:45%; " >
+                                        <div style="border: 1px solid rgb(56, 53, 53);" class="m-1 p-1">
+                                        <span style="font-size:medium;font-family: Arial;"><b>Discount & Markup Det</b></span>
+                                <div class="m-1">
+                                       
+                                        <div style="display: flex;" >
+                                            <div style="width: 50%;">
+                                                 <span style="padding-right:70px;" >Sale Discount</span><sapn><b>0.000</b></sapn><br>
+                                                 <span>Sale Compound Disc</span>
+                                                 <span>Specify Sales Disc Structure</span><span><b>N</b></span>
+
+                                            </div>
+                                            <div style="width: 50%;">
+                                                  <span style="padding-right:70px;">Purc Discount</span><sapn><b>0.000</b></sapn><br>
+                                                 <span>Purc Compound Disc</span>
+                                                 <span style="padding-right:70px;">Specify Sales Disc Structure</span><span><b>N</b></span>
+                                            </div>
+                                        </div>
+                                </div><hr>
+                                <div  class="m-1">
+
+                                        <div style="display: flex;" >
+                                                  <div style="width: 50%;">
+                                                       <span style="padding-right:70px;">Sale Markup</span><sapn><b>0.000</b></sapn><br>
+                                                       <span>Sale Comp Markup</span>
+                                                       <span style="padding-right:70px;">Specify Sales Markup Structure</span><span><b>N</b></span>
+      
+                                                  </div>
+                                                  <div style="width: 50%;" class="m-1">
+                                                        <span style="padding-right:70px;">Purc Markup</span><sapn><b>0.000</b></sapn><br>
+                                                       <span>Purc Comp Markup</span>
+                                                       <span style="padding-right:70px;">Specify Purc Markup Structure</span><span><b>N</b></span>
+                                                  </div>
+                                              </div>  
+                                </div>
+                              </div>
+                              <!---------Item Description------------->
+                              <div style="border: 1px solid black;min-height: 180px;" class="m-1 p-1">
+                                        <span style="font-size:medium;font-family: Arial;"><b>Item Description</b></span>
+                                       
+                                        
+                              </div>
+                              <!--------------------last block-------------->
+                              <div style="display:flex;" class="m-1 p-1">
+                                  <div style="width:50%;">
+                                       <span>Set Critical Level(Y/N)</span><br><br>
+                                       <span>Maintain RG-23D</span><br>
+                                       <span>Serial No- Waise Details</span><br>
+                                       <span>Parameterized Details</span><br>
+                                       <span><b>MRP-wise Details</b></span><br>
+                                       <span>Exp/Mfg Date Required</span><br><br>
+                                       <span>Specify Default MC</span><br>
+                                       <span>Freeze MC for Item</span><br>
+                                       <span>Total No of Authors</span><br>
+                                       <span>Pick Item Sizing Info from Item Description</span><br>
+                                       <span><b>Specify Default Vendor</b></span>
+                                       
+                                  </div>
+                                  <div style="width:50%;">
+                                        <span style="padding-right: 100px;"><b>Y</b></span><span><button>_</button></span><br><br>
+                                        <span style="padding-right: 125px;"></span><span>Tariff Heading </span><br><br>
+                                        <span style="padding-right: 125px;"></span><span>Maintain BCN </span><br>
+                                       
+                                        <span style="padding-right: 113px;"><b>Y</b></span><span>Batch-wise Details</span><br>
+                                        <span style="padding-right: 122px;"></span><span>Expiry Days</span><br><br><br>
+                                       
+                                        <span >Skip In GST Reports </span><span style="padding-right: 105px;" ><b>N</b></span><br>
+                                        <span>(Max 10)</span><br><br><br>
+                                        <span><b>N</b></span>
+ 
+                                  </div>
+                                  
+                              </div>
+                              <div class="col-sm-12"style="text-align:right;" >
+                                  <button class="m-1 w-25 p-1 bg-white "><b>Save</b></button><button class=" w-25 p-1 bg-white"><b>Quit</b></button>
+                              </div>
+
+                              </div>
+                              <div style="width:10%">
+                                
+                                     <div style="overflow: auto; border: 1px solid black;min-height: 700px; " >
+                                        <space style="font-size:medium;font-family: Arial;"><b>Extra Info</b></space>
+                                       
+                                     </div>
+                                    
+                              </div>
+
+                       
+
+
+                     </div> 
+           </div> 
+</body>
+{% endblock %}
+               
+                   
+                  
+               
+                   
+                   
+                        
+                 
+                    
+
+                     
+                    
+                

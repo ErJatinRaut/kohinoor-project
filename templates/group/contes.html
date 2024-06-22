@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+    * {
+        font-family: Georgia;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .box {
+        width: 40%;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 35px;
+        border: 2px solid #fff;
+        border-radius: 20px/50px;
+        background-clip: padding-box;
+        text-align: center;
+    }
+
+    .button {
+        font-size: 1em;
+        padding: 10px;
+        color: #fff;
+        border: 2px solid #06D85F;
+        border-radius: 20px/50px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+    }
+
+    .button:hover {
+        background: #06D85F;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        transition: opacity 500ms;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .overlay:target {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .popup {
+        margin: 70px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        width: 30%;
+        position: relative;
+        transition: all 5s ease-in-out;
+    }
+
+    .popup h4 {
+        margin-top: 0;
+        color: #333;
+        /* font-family: Tahoma, Arial, sans-serif; */
+    }
+
+    .popup .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        transition: all 200ms;
+        font-size: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .popup .close:hover {
+        color: #06D85F;
+    }
+
+    .popup .content {
+        max-height: 30%;
+        overflow: auto;
+    }
+
+    @media screen and (max-width: 700px) {
+        .box {
+            width: 70%;
+        }
+
+        .popup {
+            width: 70%;
+        }
+    }
+</style>
+<style type="text/css">
+    .select-style {
+        border-radius: 0.25rem;
+        border-color: black;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+        border-color: black;
+    }
+</style>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Other Voucher</div>
+            <hr>
+            <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                <button class="btn btn-primary me-md-2" id="myBtn" type="button"
+                    style="background-color: mediumaquamarine;"><i class="fa fa-plus"></i>&nbsp;Create Other
+                    Voucher</button>
+
+            </div>
+            <!-- create -->
+            <div id="myModal" class="modal">
+
+                <div class="modal-content" style="background-color: lightcyan;">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"
+                            style="color:black; background-color:mediumaquamarine;text-align:center;">
+                            <h4 style="color:white ;">Create Other Voucher</h4>
+                        </div>
+                        <hr style="color:black">
+                        <form method="POST" id="profile-form1">
+                            {% csrf_token %}
+                            <div class="panel-body" align="left">
+                                <div class="row">
+                                    <div class="d-grid gap-2 col-sm-6 ">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Contes<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <select class="form-control" name="contes" id="contes" required>
+                                                    <option value="" selected disabled>Select Contes</option>
+                                                    <option value="receipt">Receipt</option>
+                                                    <option value="payment">Payment</option>
+                                                    <option value="journal">Journal</option>
+                                                    <option value="dr note">Dr.Note</option>
+                                                    <option value="cr note">Cr.Note</option>
+
+                                                    <!-- Add more options as needed -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 col-sm-6">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Account<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <label style="color:black ;">Dr.<span
+                                                        style="color: red;">*</span></label>
+                                                <input style="color: black;" width="50" type="text" min="0"
+                                                    placeholder="Dr." name="account_dr" id="account_dr"
+                                                    class="form-control" maxlength="" value="">
+                                                <label style="color:black ;" class="ms-2">Cr.<span
+                                                        style="color: red;">*</span></label>
+                                                <input style="color: black;" width="50" type="text" min="0"
+                                                    placeholder="Cr." name="account_cr" id="account_cr"
+                                                    class="form-control" maxlength="" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2 col-sm-6">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Debit/Credit<span
+                                                    style="color: red;">*</span></label>
+                                            <select class="form-control" name="Debit_credit" id="Debit_credit">
+                                                <option value="" selected disabled>Select Dr/Cr</option>
+                                                <option value="dr">Dr.</option>
+                                                <option value="cr">Cr.</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 col-sm-6">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Account<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input style="color: black;" width="50" type="text" min="0"
+                                                    placeholder="Account" name="account" id="account"
+                                                    class="form-control" maxlength="" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 col-sm-6">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Debit<span style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input style="color: black;" width="50" type="text" min="0"
+                                                    placeholder="Debit" name="debit" id="debit" class="form-control"
+                                                    maxlength="" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2 col-sm-6">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Credit<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input style="color: black;" width="50" type="text" min="0"
+                                                    placeholder="Credit" name="credit" id="credit" class="form-control"
+                                                    maxlength="" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-grid gap-2 col-sm-6">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Inst Type<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input style="color: black;" width="50" type="number" min="0"
+                                                    placeholder="Inst Type" name="inst_type" id="inst_type"
+                                                    class="form-control" maxlength="" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2 col-sm-6">
+                                        <div class="mb-3">
+                                            <label style="color:black ;">Inst No.<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input style="color: black;" width="50" type="number" min="0"
+                                                    placeholder="Inst No." name="inst_no" id="inst_no"
+                                                    class="form-control" maxlength="" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- <div class="col-md-8 text-center"></div> -->
+                                    <div class="col-md-12"style="padding-left:270px;">
+                                         <a href="{{ form.get_cancel_link }}" >
+                                                      <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                                                  </a>
+                                        <input type="submit" class="btn btn-primary"
+                                            style="background-color:mediumaquamarine ; color:white;"
+                                            onsubmit="submitForm()" value="Save">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- table -->
+        <div class="card-body" style="margin-left: 20px;">
+            <div class="row" style="text-align: center;">
+                <div class="col-md-11">
+                    <div class="table-responsive">
+                        <table class="display table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr style="text-align: center; background-color: lightcyan;">
+                                            
+                                    <th align="center">Sr. No</th>
+                                    <th align="center">Contes</th>
+                                    <th align="center">Dr.</th>
+                                    <th align="center">Cr.</th>
+                                    <th align="center">Debit/Credit</th>
+                                    <th align="center">Account</th>
+                                    <th align="center">Debit</th>
+                                    <th align="center">Credit</th>
+                                    <th align="center">Inst Type</th>
+                                    <th align="center">Inst No.</th>
+                                    <th align="center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data25 %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <td>
+                                        {{ i.contes }}
+                                    </td>
+                                    <td>
+                                        {{ i.account_dr }}
+                                    </td>
+                                    <td>
+                                        {{ i.account_cr }}
+                                    </td>
+                                    <td>
+                                        {{ i.Debit_credit }}
+                                    </td>
+                                    <td>
+                                        {{ i.account }}
+                                    </td>
+                                    <td>
+                                        {{ i.debit }}
+                                    </td>
+                                    <td>
+                                        {{ i.credit }}
+                                    </td>
+                                    <td>
+                                        {{ i.inst_type }}
+                                    </td>
+                                    <td>
+                                        {{ i.inst_no }}
+                                    </td>
+                                    
+                                    <td>
+
+                    </div>
+                    {% if request.user.is_authenticated and request.user.is_superuser   %} 
+                    <a href="/edit_other_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_printing and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_other_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_other_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_binding and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_other_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_other_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_packing and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_other_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_sale and request.user.is_voucher_listing and request.user.is_voucher  %}
+                    <a href="/edit_other_voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                    {% endif %}
+
+                    
+                    {% if request.user.is_authenticated and request.user.is_superuser   %} 
+                    <a href="/delete_other_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_printing and request.user.is_voucher_listing and request.user.voucher_deletion %}
+                    <a href="/delete_other_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.user.voucher_deletion %}
+                    <a href="/delete_other_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_binding and request.user.is_voucher_listing and request.user.voucher_deletion %}
+                    <a href="/delete_other_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_voucher_listing and request.user.voucher_deletion %}
+                    <a href="/delete_other_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_packing and request.user.is_voucher_listing and request.user.voucher_deletion %}
+                    <a href="/delete_other_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_sale and request.user.is_voucher_listing and request.user.voucher_deletion %}
+                    <a href="/delete_other_voucher/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                    {% endif %}
+                    
+
+                </div>
+                </td>
+                {% endfor %}
+                </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addMoreButton = document.getElementById('addMoreButton');
+        const form = document.getElementById('profile-form1');
+
+        addMoreButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Clone the form elements you want to add
+            const cloneElement = document.querySelector('#cloneFormSection').cloneNode(true);
+
+            // Assign unique IDs to the cloned elements
+            const uniqueId = new Date().getTime();
+            cloneElement.querySelector('input[name="cover_subject"]').id = `cover_subject_${uniqueId}`;
+            cloneElement.querySelector('input[name="tehsil"]').id = `tehsil_${uniqueId}`;
+            cloneElement.querySelector('input[name="town"]').id = `town_${uniqueId}`;
+
+            cloneElement.querySelector('input[name="cover_subject"]').value = '';
+            cloneElement.querySelector('input[name="tehsil"]').value = '';
+            cloneElement.querySelector('input[name="town"]').value = '';
+
+            // Append the cloned elements to the form
+            form.appendChild(cloneElement);
+        });
+    });
+</script>
+
+
+
+
+
+
+
+</body>
+
+{% endblock %}

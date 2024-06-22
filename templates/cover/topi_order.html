@@ -1,0 +1,872 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>orders</title>
+    <style>
+        * {
+            font-family: Georgia;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 50px;
+            border: 1px solid #888;
+            width: 60%;
+            
+        }
+
+
+        .select-style {
+            border-radius: 0.25rem;
+            border-color: black;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+            border-color: black;
+            padding-left: 10%;
+        }
+
+        .title h3 {
+
+            border-bottom: 2px solid blueviolet;
+            display: inline-block;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .title h5 {
+
+            display: inline-block;
+
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Topi Order Info</div>
+                <hr>
+
+
+                
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn" type="button"
+                        style="background-color: mediumaquamarine;"><i class="fa fa-plus"></i>&nbsp;Create
+                        Topi Order</button>
+                </div>
+                <br>
+                
+                <div id="myModal" class="modal">
+                    <div class="modal-content" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading"
+                                style="color:black; background-color:mediumaquamarine;text-align:center;">
+                                <h4 style="color:white;">Topi Order Now</h4>
+                            </div>
+                            <hr style="color:black">
+                            <form method="POST" onsubmit="return myfun()">
+                                {% csrf_token %}
+                                <div class="panel-body">
+                                    
+                                    <div class="title">
+                                                                <div class="row" style="text-align: right;">
+                                                                    <div class="col-md-8"></div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <div class="input-group">
+                                                                                <input type="text" class="form-control mobile" name="date"
+                                                                                    id="ord_date" placeholder="{% now 'Y-m-d' %}" value=""
+                                                                                    required max="{% now 'Y-m-d' %}" readonly />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                            <div class="row">
+
+                                                <div class="col-md-4" style="padding:0;">
+                                    
+                                
+                                                    <label><b style="font-size: 15px;">Material Center<span style="color:red;"></span></b></label>
+                                                    <select class="form-control" name="material_center" id="material_center"
+                                                        style="width:100%; border-radius: 0px;"  >
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in data3 %}
+                                                        <option>{{i.centre_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class ="col-md-4">
+                                                <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label for="name" class="control-label"><b>Company Name<span
+                                                                style="color:red;">*</span></b></label>
+                                                
+
+                                                    <select class="form-control" name="company_binding" id=""
+                                                        style="width:100%;" required>
+                                                        <option disabled selected value>Select Company</option>
+                                                        {% for i in comp %}
+                                                        <option>{{i.company_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                </div>
+                                                </div>
+                                                
+                                                <div class="col-md-4 mb-5">
+                                                    <div class="col-md-12">
+                                                        <div class="mb-3">
+                                                            <label for="name" class="control-label"><b>Vendor Name<span
+                                                            style="color:red;">*</span></b></label>
+                                                            <select class="form-control" name="ord_vendor" id="vender_name"
+                                                            style="width:100%;">
+                                                            <option disabled selected value>Select Vendor</option>
+                                                            {% for i in vend %}
+                                                            <option>{{i.organization_name1}}</option>
+                                                            {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row d-flex">
+                                                    <div class="col" style="padding:0; width:200px">
+                                                    <div class="mb-0">
+                                                        
+                                                            <label style="font-weight: bold;">Plate No<span style="color:red;">*</span></label>
+                                                            <select style="border-radius:0;" class="form-control" name="ord_plate_no1" id="ord_plate_no1"
+                                                                style="width:100%;" required>
+                                                                <option disabled selected value>Select Plate</option>
+                                                                {% for i in obj3 %}
+                                                                <option>{{i.t_plate_no}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        
+                                                    </div>
+                                                    </div>
+                                                     <div class="col" style="padding:0; width:200px">
+                                                        <div class="mb-0">
+        
+                                                        <label for="name" class="control-label"><b>Plate Rate<span
+                                                                    style="color:red;">*</span></b></label>
+                                                        <!-- <input  style="border-radius:0;" class="form-control" id="print_rate1" name="print_rate1" required> -->
+                                                        <select style="border-radius:0;" class="form-control" name="print_rate1" id="print_rate1"
+                                                                style="width:100%;" required>
+                                                                <!-- <option disabled selected value>Select Plate</option>
+                                                                {% for i in obj3 %}
+                                                                <option>{{i.t_plate_rate}}</option>
+                                                                {% endfor %} -->
+                                                            </select>
+        
+                                                    </div>
+                                                    </div>
+                                                    <div class="col" style="padding:0; width:200px">
+                                                        <div class="mb-0">
+        
+                                                        <label for="name" class="control-label"><b>Printing Rate<span
+                                                                    style="color:red;">*</span></b></label>
+                                                        
+                                                         <select style="border-radius:0;" class="form-control" name="printing_rate1" id="printing_rate1"
+                                                                style="width:100%;" required>
+                                                                <option disabled selected value>Select Plate</option>
+                                                                {% for i in obj3 %}
+                                                                <option>{{i.t_printing_rate}}</option>
+                                                                {% endfor %}
+                                                            </select>
+        
+                                                    </div>
+                                                    </div>
+                                                   
+        
+                                                    <div class="col" style="padding:0; width:200px">
+                                                        <div class="mb-0">
+        
+                                                        <label for="name" class="control-label"><b>Unit<span
+                                                                    style="color:red;">*</span></b></label>
+                                                        <input  style="border-radius:0;" class="form-control" id="class_name_1" name="ord_unit1" required>
+        
+                                                    </div>
+                                                    </div>
+        
+        
+                                                    
+        
+                                                    <div class="col" style="padding:0; width:200px">
+                                                        <div class="mb-0">
+                                                        <label for="name" class="control-label"><b> Rate<span
+                                                                    style="color:red;">*</span></b></label>
+                                                        <input style="border-radius:0;" class="form-control" id="midium_1" name="ord_rate1" required
+                                                            >
+                                                    </div>
+                                                    </div>
+        
+                                                        <div class="col" style="padding:0; width:200px">
+                                                            <div class="mb-0">
+                                                            <label for="name" class="control-label"><b>Quantity<span
+                                                                        style="color:red;">*</span></b></label>
+                                                            <input style="border-radius:0;" type="number" class="form-control mobile" name="ord_quantity1"
+                                                                id="quantity" oninput="calculateAmount(1)" />
+                                                        </div>
+                                                        </div>
+        
+                                                        <div class="col" style="padding:0; width:200px">
+                                                            <div class="mb-0">
+                                                            <label  for="name" class="control-label"><b>Amount<span
+                                                                        style="color:red;">*</span></b></label>
+                                                            <input style="border-radius:0;" class="form-control" id="pages_1" name="ord_amount1" required
+                                                               readonly />
+            
+                                                        </div>
+                                                        </div>
+
+                                                        <div class="col" style="padding:0; width:200px">
+                                                            <a href="#" style="text-align:left; color:transparent; cursor-pointer:none ;">Remove</a>
+                                                        </div>
+        
+                                                 </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                                        
+                                       
+                                       
+                                                        <div class="input_fields_container ">
+                                                            <!-- Newly added items will be appended here -->
+                                                        </div>
+
+
+                                                        <div class="row d-flex">
+                                                                                                                    <div class="col-md-8 p-0"></div>
+                                                        <div class="col p-0" style="width:200px; margin-left: 102px;">
+                                                            <input type="text" id="totalAmount" name="totalAmount" placeholder="Total Amount" readonly>
+                                                        </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 mt-3 mb-3" style="text-align: center;">
+                                                            <button class="btn btn-primary btn-sm " id="add_more_button"
+                                                                style="background-color:mediumaquamarine;">Add New
+                                                                Items</button>
+                                                        </div>
+
+                                                        <div class="input_fields_container2">
+                                                            <!-- Newly added items will be appended here -->
+                                                        </div>
+                                                        <div class="col-md-12 mt-3" style="text-align: center;">
+                                                            <a href="#" style="background-color: mediumaquamarine;padding: 8px;border-radius: 5px;font-size: 14px;text-decoration: none;color: white" id="add_sundries_link">Add bill sundries</a>
+                                                        </div>
+                                    
+                                
+
+                                    <!-- <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-primary" onclick="addNewField()">Add New Item</button>
+                                        </div>
+                                    </div> -->
+
+                                    {% comment %} <div id="additionalFieldsContainer"></div> {% endcomment %}
+
+                                                                        <div class="col-md-12">
+                                                                            <div class="text-center mt-3 mb-3">
+                                                                                <button type="submit" class="btn btn-primary" name="create_form_btn"
+                                                                                    value="save_cashmemo_btn"
+                                                                                    style="background-color:mediumaquamarine;">Create</button>
+                                                                                <button class="btn btn-primary" style="background-color: mediumaquamarine;">
+                                                                                    <a href="{{ form.get_cancel_link }}"
+                                                                                        style="color:white; text-decoration: none; ">Back</a>
+                                                                                </button>
+                                                                                <!-- <button type="button" class="btn btn-primary close" data-dismiss="modal" style="background-color:mediumaquamarine;">Close</button> -->
+                                                                            </div>
+                                                                        </div>
+                                       
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+       
+
+            <!-- uper vali new add kiya hai  -->
+            <div class="card-body">
+                <div class="row" style="text-align: center;">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="display table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr style="text-align: center; background-color: lightcyan;">
+                                        <th align="center">Sr.No</th>
+                                        <th align="center">Plate No</th>
+                                        <th align="center">Material Center</th>
+                                        <th align="center">Date</th>
+                                        <th align="center">Vendor Name</th>
+
+                                        <th align="center">Rate</th>
+                                        <th align="center">Quantity</th>
+                                        <!-- <th align="center">Binding Rate</th> -->
+                                        <th align="center">Amount </th>
+                                        <th align="center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in data %}
+
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{i.ord_plate_no1}}</td>
+                                        <td>{{i.material_center}}</td>
+                                        <td>{{i.ord_date}}</td>
+                                        <td>{{i.ord_vendor}}</td>
+                                        <td>{{ i.ord_quantity1 }}</td>
+                                        <td>{{ i.ord_rate1 }}</td>
+                                        <td>{{ i.ord_amount1 }}</td>
+
+                                        {% comment %} <td>
+                                            <input type="number" value="{{ i.quantity }}" min="0" step="1" name="quantity">
+                                        </td> {% endcomment %}
+                                        <!-- <td >{{ i.rate_binding }}</td>  -->
+                                        {% comment %} <td>{{ i.total_form }}</td> {% endcomment %}
+                                        <td>
+                                            <div>
+                                                <a href="{{i.id}}"><i class="bi bi-eye"></i></a>
+                                                <a href="/delete_topi_order/{{i.id}}/"><i class="bi bi-archive"></i></a></i></a>
+                                                <!-- <div id="popup1 {{i.id}}" class="overlay">
+                                                </div> -->
+                                                <!-- <a  href="/edit_binding/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a> -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+           
+
+    
+    <script>
+    $(document).ready(function () {
+        var plateNoSelect = $("#ord_plate_no1");
+        var rateSelect = $("#print_rate1");
+        var printingRateSelect = $("#printing_rate1");
+        var quantityInput = $("#quantity");
+        var amountInput = $("#pages_1");
+
+        plateNoSelect.on("change", function () {
+            var selectedPlateNo = plateNoSelect.val();
+            rateSelect.empty();
+            printingRateSelect.empty();
+
+            
+            {% for i in obj3 %}
+                if ("{{ i.t_plate_no }}" === selectedPlateNo) {
+                    rateSelect.append('<option value="{{ i.t_plate_rate }}">{{ i.t_plate_rate }}</option>');
+                    printingRateSelect.append('<option value="{{ i.t_printing_rate }}">{{ i.t_printing_rate }}</option>');
+                }
+            {% endfor %}
+        });
+
+        // Initial population of "Printing Rate" dropdown based on the first option of "Plate No" dropdown
+        plateNoSelect.trigger("change");
+
+        // Event listener for Quantity input field
+        quantityInput.on("input", function () {
+            calculateAmount();
+        });
+
+        // Function to calculate amount
+        function calculateAmount() {
+            var quantity = parseInt(quantityInput.val());
+            var plateRate = parseFloat(rateSelect.val());
+            var printingRate = parseFloat(printingRateSelect.val());
+
+            if (!isNaN(quantity) && !isNaN(plateRate) && !isNaN(printingRate)) {
+                var amount = (quantity * plateRate) + printingRate;
+                amountInput.val(amount.toFixed(2));
+            } else {
+                amountInput.val('');
+            }
+        }
+    });
+</script>
+
+
+
+   
+
+        <!--script of dependency and add new item button ,remove button with correct position of buttons  -->
+
+        <script>
+
+            // Get references to the dropdown elements
+            const codeDropdown = document.getElementById('code_1');
+            const brandDropdown = document.getElementById('brand_name_1');
+            const classDropdown = document.getElementById('class_name_1');
+            const mediumDropdown = document.getElementById('medium_1');
+            const subjectDropdown = document.getElementById('subject_1');
+            const pagesDropdown = document.getElementById('pages_1');
+
+            // Get the dynamic input boxes container
+
+            // Create a dictionary to store the book data
+            const bookData = {
+                    // Populate this object with book data from your backend
+                    {% for i in book %}
+            "{{ i.code }}": {
+                brand: "{{ i.books_name }}",
+                    class: "{{ i.books_class }}",
+                        medium: "{{ i.medium }}",
+                            subject: "{{ i.subject }}",
+                                pages: "{{ i.binding_rate }}",
+                        
+                    },
+            {% endfor %}
+                };
+
+            // Function to update input boxes based on "pages_1" value
+
+
+            // Add a change event listener to the "code" dropdown
+            codeDropdown.addEventListener('change', function () {
+                const selectedCode = this.value;
+                // Populate other dropdowns with data based on the selected "code"
+                brandDropdown.value = bookData[selectedCode].brand;
+                classDropdown.value = bookData[selectedCode].class;
+                mediumDropdown.value = bookData[selectedCode].medium;
+                subjectDropdown.value = bookData[selectedCode].subject;
+                pagesDropdown.value = bookData[selectedCode].pages;
+
+
+                // You might also need to trigger the "calculateFormsPerSet()" function here
+                calculateFormsPerSet();
+            });
+
+            // Add an event listener to handle "pages_1" value changes
+
+
+            // Trigger the initial calls
+            codeDropdown.dispatchEvent(new Event('change'));
+            updateInputBoxes(); // Initial call
+        </script>
+
+
+        <!--script of dependency and add new item button ,remove button with correct position of buttons  -->
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var max_fields_limit = 51;
+        var x = 1;
+
+        $('#add_more_button').click(function (e) {
+            e.preventDefault();
+            if (x < max_fields_limit) {
+                x++;
+                $('.input_fields_container').append(
+                    '<div class="row">' +
+                    '<div class="col description" style="padding:0; width: 200px;">' +
+                    '<select style="border-radius:0;" class="form-control mobile" name="ord_plate_no' + x.toString() + '" id="code_' + x.toString() + '"  required>' +
+                    '<option disabled selected value>Select Plate</option>' +
+                    '{% for i in obj3 %}' +
+                    '<option>{{i.t_plate_no}}</option>' +
+                    '{% endfor %}' +
+                    '</select>' +
+                    '</div>' +
+                    '<div class="col description" style="padding:0; width: 200px;">' +
+                    '<select style="border-radius:0;" class="form-control mobile" name="print_rate' + x.toString() + '" id="print_rate' + x.toString() + '"  required>' +
+                    '<option disabled selected value></option>' +
+                    '{% for i in obj3 %}' +
+                    '<option>{{i.t_plate_rate}}</option>' +
+                    '{% endfor %}' +
+                    '</select>' +
+                    '</div>' +
+                    '<div class="col description" style="padding:0; width: 200px;">' +
+                    '<select style="border-radius:0;" class="form-control mobile" name="printing_rate' + x.toString() + '" id="printing_rate' + x.toString() + '"  required>' +
+                    '<option disabled selected value></option>' +
+                    '{% for i in obj3 %}' +
+                    '<option>{{i.t_printing_rate}}</option>' +
+                    '{% endfor %}' +
+                    '</select>' +
+                    '</div>' +
+                    '<div class="col description" style="padding:0; width: 200px;">' +
+                    '<input style="border-radius:0;" class="form-control mobile" placeholder="enter unit" name="ord_unit' + x.toString() + '" id="brand_name_' + x.toString() + '" required>' +
+                    '</div>' +
+                    '<div class="col" style="padding:0; width: 200px;">' +
+                    '<input style="border-radius:0;" class="form-control mobile" placeholder="enter rate" name="ord_rate' + x.toString() + '" id="class_name_' + x.toString() + '" required oninput="calculateAmount(' + x + ')">' +
+                    '</div>' +
+                    '<div class="col description" style="padding:0; width: 200px;">' +
+                    '<input style="border-radius:0;" class="form-control mobile" placeholder="quantity" name="ord_quantity' + x.toString() + '" id="quantity_' + x.toString() + '" required oninput="calculateAmount(' + x + ')">' +
+                    '</div>' +
+                    '<div class="col quantity" style="padding:0; width: 200px;">' +
+                    '<input style="border-radius:0;" type="number" pattern="[0-9\s]+" class="form-control mobile" name="ord_amount' + x.toString() + '" id="pages_' + x.toString() + '" placeholder="amount" value="" required maxlength="30"  readonly />' +
+                    '</div>' +
+                    '<a href="#" class="remove_field col" style="text-align:left;">Remove</a>' +
+                    '</div>'
+                );
+                updateDropdowns(x);
+            }
+        });
+
+        $('.input_fields_container').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+            calculateTotalAmount(); // Recalculate total amount after removing a field
+        });
+
+        $('.input_fields_container').on("input", "input[name^='ord_quantity']", function () {
+            var index = $(this).attr('name').match(/\d+/)[0];
+            calculateAmount(index);
+        });
+
+        function updateDropdowns(x) {
+            const codeDropdown = document.getElementById('code_' + x.toString());
+            const printRateDropdown = document.getElementById('print_rate' + x.toString());
+            const printingRateDropdown = document.getElementById('printing_rate' + x.toString());
+
+            // Add a change event listener to the "code" dropdown
+            codeDropdown.addEventListener('change', function () {
+                const selectedCode = this.value;
+
+                const plateRate = plateData[selectedCode].plateRate;
+                const printingRate = plateData[selectedCode].printingRate;
+
+                // Set the values of the corresponding dropdowns
+                printRateDropdown.value = plateRate;
+                printingRateDropdown.value = printingRate;
+
+                // Trigger the calculation of amount
+                calculateAmount(x);
+            });
+
+            // Trigger the initial calls
+            codeDropdown.dispatchEvent(new Event('change'));
+        }
+
+        // You need to replace this with your actual plate data from the server
+        const plateData = {
+            // Populate this object with plate rate and printing rate data from your backend
+            // For example:
+            {% for i in obj3 %}
+                "{{ i.t_plate_no }}": {
+                    plateRate: "{{ i.t_plate_rate }}",
+                    printingRate: "{{ i.t_printing_rate }}"
+                },
+            {% endfor %}
+        };
+
+        // Initial setup for the first set
+        updateDropdowns(1);
+
+        function calculateAmount(index) {
+            var quantityInput = $('input[name="ord_quantity' + index + '"]');
+            var quantity = parseInt(quantityInput.val()) || 0;
+
+            var plateRate = parseFloat($('select[name="print_rate' + index + '"]').val()) || 0;
+            var printingRate = parseFloat($('select[name="printing_rate' + index + '"]').val()) || 0;
+
+            var amount = (quantity * plateRate) + printingRate;
+
+            $('input[name="ord_amount' + index + '"]').val(amount.toFixed(2));
+            calculateTotalAmount(); // Recalculate total amount after individual amount calculation
+        }
+
+        function calculateTotalAmount() {
+            var totalAmount = 0;
+
+            // Iterate through all the "ord_amount" fields and add up their values
+            $('input[name^="ord_amount"]').each(function () {
+                var amountValue = parseFloat($(this).val()) || 0;
+                totalAmount += amountValue;
+            });
+
+            // Display the total amount in the specified input field
+            $('#totalAmount').val(totalAmount.toFixed(2));
+        }
+
+        // Call the initial calculation when the document is ready
+        calculateTotalAmount();
+
+
+        $('.input_fields_container').on("change", "input[name^='code_']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('_')[1];
+            updateDropdowns(index);
+        });
+
+        // Add an event listener for quantity fields to update forms-per-set
+        $('.input_fields_container').on("input", "input[name^='ord_quantity'], input[name^='ord_rate']", function () {
+            var index = $(this).attr('name').match(/\d+/)[0];
+            calculateAmount(index);
+        });
+    });
+</script>
+
+
+
+
+        <!-- script without proper position but it is working all conditions  -->
+        <!-- 
+
+<script>
+    var counter = 0;
+
+    function addNewField() {
+        if (counter < 51) {
+            var container = document.getElementById("additionalFieldsContainer");
+            var fieldHTML = `
+            <div id="field_${counter}">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Subject<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-4">
+                        <select type="text" class="form-control mobile" name="subject_${counter}" id="subject_${counter}" onchange="updateBindingRate(${counter})">
+                            <option disabled selected value>Select Subject</option>
+                            {% for i in book %}
+                            <option value="{{ i.subject }}">{{i.subject}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Quantity<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control mobile" name="quantity_${counter}" id="quantity_${counter}" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="name" class="control-label"><b>Binding Rate<span style="color:red;">*</span></b></label>
+                    </div>
+                    <div class="col-md-4">
+                        <select type="number" class="form-control mobile" name="rate_binding_${counter}" id="rate_binding_${counter}">
+                            <option disabled selected value>Select Rate</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger" onclick="removeField(${counter})">Remove</button>
+                    </div>
+                </div>
+            </div>
+            `;
+            container.insertAdjacentHTML("beforeend", fieldHTML);
+            counter++;
+        }
+    }
+
+    function removeField(fieldId) {
+        var fieldToRemove = document.getElementById("field_" + fieldId);
+        fieldToRemove.remove();
+    }
+
+    function updateBindingRate(fieldId) {
+        var subjectField = document.getElementById("subject_" + fieldId);
+        var rateBindingField = document.getElementById("rate_binding_" + fieldId);
+
+        // Clear previous options
+        rateBindingField.innerHTML = '<option disabled selected value>Select Rate</option>';
+
+        // Get the selected subject
+        var selectedSubject = subjectField.value;
+
+        // Add options based on the selected subject
+        {% for i in book %}
+        if ("{{i.subject}}" === selectedSubject) {
+            var option = document.createElement("option");
+            option.text = "{{i.binding_rate}}";
+            rateBindingField.add(option);
+        }
+        {% endfor %}
+    }
+</script>
+ -->
+
+        <!-- script working for 1 item dependency  -->
+
+        <script>
+            $(document).ready(function () {
+                // When the subject is changed
+                $('#subject').change(function () {
+                    var selectedSubject = $(this).val();
+
+                    // Clear existing options in the binding rate dropdown
+                    $('#rate_binding').empty();
+
+                    // Add default option
+                    $('#rate_binding').append('<option disabled selected value>Select Rate</option>');
+
+                    // Filter and add options based on the selected subject
+                    {% for i in book %}
+                    if ("{{ i.subject }}" === selectedSubject) {
+                        $('#rate_binding').append('<option value="{{ i.binding_rate }}">{{ i.binding_rate }}</option>');
+                    }
+                    {% endfor %}
+                });
+            });
+        </script>
+
+
+        <script>
+            // Get the modal
+            var modal = document.getElementById("myModal");
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+        </script>
+
+        <script>
+        $(document).ready(function () {
+            var sundriesCount = 1; // Initial count for sundries fields
+            var maxSundries = 5;  // Maximum number of sundries fields
+
+            // Function to add bill sundries fields
+            $("#add_sundries_link").click(function () {
+                if (sundriesCount <= maxSundries) {
+                    var cloneFields = `
+                        <div class="sundries_fields">
+                            <div class="row d-flex">
+                                <div class="col-md-2" style="padding:0">
+                                    <label for="bill_sundries_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Bill Sundries<span style="color:red;">*</span></b></label>
+                                    <select class="form-select" id="bill_sundries_${sundriesCount}" name="bill_sundries_${sundriesCount}" style="border-radius: 0px;">
+                                        <option value="additive">Additive</option>
+                                        <option value="subtractive">Subtractive</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2" style="padding:0">
+                                    <label for="narration_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Narration<span style="color:red;">*</span></b></label>
+                                    <input class="form-control" id="narration_${sundriesCount}" name="narration_${sundriesCount}" style="border-radius: 0px;">
+                                </div>
+
+                                <div class="col-md-2" style="padding:0">
+                                    <label for="percent_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Percentage<span style="color:red;">*</span></b></label>
+                                    <input class="form-control percent-field" id="percent_${sundriesCount}" name="percent_${sundriesCount}" style="border-radius: 0px;">
+                                </div>
+
+                                <div class="col-md-2" style="padding:0">
+                                    <label for="amount_${sundriesCount}" class="control-label"><b style="font-size: 75%;">Amount<span style="color:red;">*</span></b></label>
+                                    <input class="form-control amount-field" id="amount_${sundriesCount}" name="amount_${sundriesCount}" style="border-radius: 0px;">
+                                </div>
+
+                                <a href="#" class="remove_field col-md-2" style="width:120px; padding:20px; text-align:center">Remove</a>
+                            </div>
+                        </div>
+                    `;
+
+                    $(".input_fields_container2").append(cloneFields);
+                    sundriesCount++;
+
+                    // Disable button if maximum fields reached
+                    if (sundriesCount > maxSundries) {
+                        $("#add_sundries_link").prop("disabled", true);
+                    }
+                } else {
+                    alert("You can't add more than 5 bill sundries.");
+                }
+            });
+
+            // Event listener for removing fields
+            $('.input_fields_container2').on("click", ".remove_field", function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                sundriesCount--;
+
+                // Enable "Add Sundries" button when removing a field
+                $("#add_sundries_link").prop("disabled", false);
+
+                // Recalculate total amount after removing a field
+                calculateTotalAmount();
+            });
+
+            // Event listener for calculating total amount dynamically
+            $('.input_fields_container2').on("input", "input[name^='amount_'], select[name^='bill_sundries_'], input[name^='percent_']", function () {
+                calculateTotalAmount();
+            });
+
+            function calculateTotalAmount() {
+                var totalAmount = 0;
+
+                // Iterate through all the "amount" fields and add up their values
+                $('input[name^="amount_"]').each(function () {
+                    var amountValue = parseFloat($(this).val()) || 0;
+                    totalAmount += amountValue;
+                });
+
+                // Display the total amount in the specified input field
+                $('#totalAmountInput').val(totalAmount.toFixed(2));
+            }
+        });
+    </script>
+
+
+
+        <!-- <script>
+  flatpickr("#date", {
+    dateFormat: "d-m-Y",
+    altInput: true,
+    altFormat: "d-m-Y",
+    allowInput: true,
+    maxDate: "today"
+  });
+</script> -->
+
+
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
+
+{% endblock %}

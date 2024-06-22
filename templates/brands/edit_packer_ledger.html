@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+    /* Style the page wrapper */
+.page-wrapper {
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+/* Style the page content */
+.page-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 900px; /* Adjust the max-width as needed */
+    margin-top: 55px auto; /* Center the container horizontally */
+}
+
+/* Style the breadcrumb section */
+.page-breadcrumb {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: lightcyan;
+    border-radius: 5px;
+}
+
+/* Style the breadcrumb title */
+.breadcrumb-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Style the form elements */
+.form-label {
+    font-weight: bold;
+}
+
+.form-control {
+
+    border-radius: 5px;
+}
+
+/* Style the buttons */
+.btn {
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+/* Style the Back button */
+.btn-back {
+    background-color: #3498db;
+    color: #fff;
+}
+
+/* Style the Save button */
+.btn-save {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+/* Center align elements */
+.text-center {
+    text-align: center;
+}
+
+/* Responsive layout for small screens */
+@media (max-width: 768px) {
+    .d-grid {
+        display: block;
+    }
+    
+    .col-sm-6 {
+        width: 100%;
+    }
+}
+
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-6">Update Data</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <!-- Pack Name -->
+
+
+                    <div class="col-md-6">
+                       
+                        
+                        <div class="mb-3">
+                        <div class="form-group">
+                          <label style="color: black;">Name<span style="color: red;">*</span></label>
+                          <div class="input-group mb-4">
+                            <input style="color: black;" width="50" type="text" min="0" placeholder="Prefix"
+                              name="pack_prefix" id="" class="form-control" maxlength="" value="{{data.pack_prefix}}" required="">
+                          
+                            <input style="color: black;" width="50" type="text" placeholder="Enter Name" name="pack_name" id=""
+                              class="form-control" step="any" maxlength=""
+                              oninput="this.value = this.value.replace(/[^a-zA-Z ]/g, '');" value="{{data.pack_name}}" required>
+                          </div>
+                        </div>
+                      </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Alias</label>
+                            <input type="text" class="form-control radius-10" name="pack_alias" value="{{data.pack_alias}}" required="">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control radius-10" name="pack_adress" value="{{data.pack_adress}}" required="">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Contact No</label>
+                            <input type="tel" name="pack_contact_no" minlength="10" class="form-control" value="{{data.pack_contact_no}}" required="">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Whatsapp No</label>
+                            <input type="tel" name="pack_whatsapp" minlength="10" class="form-control" value="{{data.pack_whatsapp}}" required="">
+                        </div>
+                       
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="pack_email" minlength="" class="form-control"
+                                value="{{data.pack_email}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                        
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Group</label>
+                            
+                                <select name="pack_vender_group" id="pack_vender_group"  required class="form-control radius-10">
+                                    <option disabled selected value>Select </option>
+                                    {% for object in data2 %}
+                                    <option value="{{ object.group_name }}" {% if object.group_name == data.pack_vender_group %}selected{% endif %}>{{ object.group_name }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                       
+                        <div class="mb-3">
+                            <label class="form-label">GSTIN No.</label>
+                            <input type="text" name="pack_vender_gst" minlength="" class="form-control"
+                                value="{{data.pack_vender_gst}}" id="gstin_input" placeholder="" maxlength="" >
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label class="form-label">Opening Balance(Dr/Cr)</label>
+                             <div class="input-group mb-3">
+                            <input type="tel" name="pack_opening_balence" minlength="" class="form-control"
+                                value="{{data.pack_opening_balence}}" id="" placeholder="" maxlength="" required="">
+                            <div class="input-group-append">
+                                <select class="custom-select" name="debit_packer">
+                                   
+                                    <option value="Dr" {% if data.debit_packer == 'Dr' %}selected{% endif %}>Dr</option>
+                                    <option value="Cr" {% if data.debit_packer == 'Cr' %}selected{% endif %}>Cr</option>
+                                    <!-- <option value="sheet">sheet</option> -->
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Shrink Rate</label>
+                            <input type="tel" name="packing_rate" class="form-control" value="{{data.packing_rate}}" required="">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Bitti Rate</label>
+                            <input type="tel" name="bitti_rate" class="form-control" value="{{data.bitti_rate}}" required="">
+                        </div>
+                    
+                    </div>
+                
+                        <div class="col-md-12" style="text-align: center;">
+                            <button class="btn btn-primary" style="background-color: mediumaquamarine; "><a href="{% url 'packer_ledger' %}" style="color: white;">Back</a></button>
+                            <button type="submit" class="btn btn-primary" style="background-color: mediumaquamarine; color: white;">Save</button>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        const packingRateInput = document.getElementById('packing_rate_input');
+        const bittiRateInput = document.getElementById('bitti_rate_input');
+    
+        packingRateInput.addEventListener('input', function() {
+            bittiRateInput.classList.add('hide-input');
+            packingRateInput.classList.remove('hide-input');
+        });
+    
+        bittiRateInput.addEventListener('input', function() {
+            packingRateInput.classList.add('hide-input');
+            bittiRateInput.classList.remove('hide-input');
+        });
+    </script>
+    {% endblock %}

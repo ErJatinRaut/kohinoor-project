@@ -1,0 +1,595 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Item Creation</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color: mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Create item</button>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Item Creation</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" id="profile-form1">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        
+                                            <div class="row">
+                                                
+                                                
+                                                 <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Brand Trade Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <select class="form-control" name="brand_trade_name" id="brand_trade_name" style="width:100%;" required>
+                                                              <option disabled selected value>Select Brand Trade Name</option>
+                                                              {% for i in data56 %}
+                                                                  <option>{{i.brand_name}}</option>
+                                                              {% endfor %}
+                                                              </select>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                
+                                                 <!-- <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Brand Subtitle<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                          <select class="form-control" name="brand_subtitle" id="brand_subtitle" style="width:100%;" required>
+                                                              <option disabled selected value>Select Brand Subtitle</option>
+                                                              {% for i in data56 %}
+                                                                  <option>{{i.brand_subtitle}}</option>
+                                                              {% endfor %}
+                                                              </select>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                 <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">class</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                    <select class="form-control" name="class1" id="class1" style="width:100%;" required>
+                                                              <option disabled selected value>Select class</option>
+                                                              {% for i in data57 %}
+                                                                  <option>{{i.class_name}}</option>
+                                                              {% endfor %}
+                                                              </select>
+                                                      
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Size</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <select class="form-control" name="size" id="size" style="width:100%;" required>
+                                                              <option disabled selected value>Select Size</option>
+                                                              {% for i in data56 %}
+                                                                  <option>{{i.size}}</option>
+                                                              {% endfor %}
+                                                              </select>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6"> 
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Subject Name Author</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="text" min="1" placeholder="Enter Subject Name Author"
+                                                          name="subject_name_author" id="" class="form-control" maxlength="" value="" 
+                                                          >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Code</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter Code"
+                                                          name="code" id="" class="form-control" maxlength="" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                          >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Printing Form Size</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input type="text" name="from_size" class="form-control" value="64" id="from_size" style="width: 200px; padding: 6px;"  oninput="calculateAmount(1)" readonly/>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Binding Form Size</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input type="text" name="item_binding_form_size" class="form-control" id="item_binding_form_size" value="32" style="width: 200px; padding: 6px;"  oninput="calculateAmount(1)" readonly/>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6"> 
+                                                <div class="form-group">
+                                                  <label style="color:black ;">No of Pages</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter No of pages"
+                                                          name="no_of_pages" id="" class="form-control" maxlength="" value="" 
+                                                          oninput="calculateAmount(1)">
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6"> 
+                                              <div class="form-group">
+                                                  <label style="color:black;">Printing No of Forms<span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter no of forms"
+                                                          name="no_of_forms" id="no_of_forms" class="form-control" maxlength=""
+                                                          onselect="calculateFormsPerSet()"
+                                                      >
+                                                  </div>
+                                              </div>
+                                             </div>
+                                              
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                              <div class="form-group">
+                                                  <label style="color:black;">Binding No of Forms<span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter no of forms"
+                                                          name="binding_no_of_form" id="binding_no_of_form" class="form-control" maxlength=""
+                                                          onselect="calculateFormsPerSet()"
+                                                      >
+                                                  </div>
+                                              </div>
+                                             </div>
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Unit</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="text" placeholder="Enter Unit" name="unit" class="form-control" value="Kg" readonly>
+                                                  </div>
+                                                </div>
+                                              </div> 
+                                             
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Binding Rate</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter Binding Rate"
+                                                          name="binding_rate" id="" class="form-control" maxlength="" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                          >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">opening Stock(QTY)</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter opening Stock"
+                                                          name="opening_stock_qty" id="" class="form-control" maxlength="" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                         >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">opening Stock(Value)</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter opening stock value"
+                                                          name="opening_stock_value" id="" class="form-control" maxlength="" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                          >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6">
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Bundle Pack</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter bundle pack"
+                                                          name="bundle_pack" id="" class="form-control" maxlength="" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                          >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Tax Information Rate of Tax (local)</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter tax rate"
+                                                          name="tax_information_rate" id="" class="form-control" maxlength="" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                          >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                               <div class="d-grid gap-2 col-sm-6">  
+                                                <div class="form-group">
+                                                  <label style="color:black ;">Tax Information Rate of Tax (Central)</Main><span style="color: red;">*</span></label>
+                                                  <div class="input-group mb-4">
+                                                      <input style="color: black;" width="50" type="number" min="1" placeholder="Enter tax rate central"
+                                                          name="tax_information_rate_central" id="" class="form-control" maxlength="" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                                          >
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="d-grid gap-2 col-sm-6">
+                                                
+                                                  <div class="form-group">
+                                                    <label style="color:black ; margin-right: 210px;">Material Name<span style="color: red;">*</span></label>
+                                                    <div class="input-group mb-4">
+                                                        <select class="form-control" name="item_material_center" id="item_material_center" style="width:100%;" required>
+                                                            <option disabled selected value>Select Material Center</option>
+                                                            {% for i in data59 %}
+                                                                <option>{{i.centre_name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                  </div>
+                                                
+                                            </div>
+                                               
+                                               
+                                               
+                                               
+
+
+                                                    <div class="col-md-12">
+                                                      <a href="{{ form.get_cancel_link }}" >
+                                                      <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                                                  </a>
+                                                      <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;" onsubmit="submitForm()" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;>
+                                            
+
+                                            "cent<!--  -->
+                                            <th align="center">Sr. No</th>
+                                            <th align="center">Brand Trade Name</th>
+                                            <!-- <th align="center">Brand Subtitle</th> -->
+                                            <th align="center">Class</th>
+                                            <th align="center">Size</th> 
+                                            <th align="center">Author Name</th> 
+                                            <th align="center">Code</th> 
+                                            <th align="center">From Size</th> 
+                                            <th align="center">No of Pages</th> 
+                                            <th align="center">unit</th> 
+                                            <th align="center">No of Forms</th> 
+                                            <th align="center">Binding Rate</th> 
+                                            <th align="center">Opening Stock Qty</th> 
+                                            <th align="center">Opening Stock  Value</th> 
+                                            <th align="center">Bundle Pack</th> 
+                                            <th align="center">Tax Information </th> 
+                                            <th align="center">Tax Information Central</th> 
+                                            <th align="center">Material Center</th>
+                                            <th align="center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data55 %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                             <td >
+                                                {{ i.brand_trade_name }}
+                                            </td> 
+                                            <!-- <td>
+                                                {{ i.brand_subtitle }}
+                                            </td> -->
+                                             <td>
+                                              {{ i.class1 }}
+                                          </td>
+                                            <td >
+                                                {{ i.size }}
+                                            </td> 
+                                             <td >
+                                                {{ i.subject_name_author }}
+                                            </td>
+                                            <td >
+                                              {{ i.code }}
+                                          </td> 
+                                          <td>
+                                              {{ i.from_size }}
+                                          </td>
+                                           <td>
+                                            {{ i.no_of_pages }}
+                                          </td>
+                                          <td >
+                                              {{ i.unit }}
+                                           </td>   
+                                           <td>
+                                            {{ i.no_of_forms }}
+                                        </td>
+                                         <td>
+                                          {{ i.binding_rate }}
+                                        </td>
+                                        <td >
+                                            {{ i.opening_stock_qty }}
+                                         </td>   
+                                         <td >
+                                          {{ i.opening_stock_value }}
+                                         </td>  
+                                         <td >
+                                           {{ i.bundle_pack }}
+                                         </td>  
+                                         <td >
+                                           {{ i.tax_information_rate }}
+                                         </td>  
+                                         <td >
+                                          {{ i.tax_information_rate_central }}
+                                         </td>  
+                                          <td >
+                                          {{ i.item_material_center }}
+                                         </td>                                                                                         
+                                             <td>
+                                                
+                                                    </div>
+                                                    <a  href="/edit_item_creation/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a> 
+                                                    <a  href="/delete_item_creation/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                     
+                                                </div>
+                                            </td> 
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
+    
+<script>
+  function submitForm() {
+    // Submit the form using AJAX
+    $.ajax({
+      url: $('#profile-form1').attr('action'),
+      type: 'POST',
+      data: $('#profile-form1').serialize(),
+      success: function(response) {
+        // Show a success message using SweetAlert
+        Swal.fire({
+          title: "Success!",
+          text: "Group Added Successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      },
+      error: function(response) {
+        // Show an error message using SweetAlert
+        Swal.fire({
+          title: "Error!",
+          text: response.responseText,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    });
+  }
+</script>
+
+<!-- <script>
+    function calculateForms() {
+        // Get values from input fields
+        const noOfPages = parseFloat(document.getElementById('no_of_pages').value);
+        const printingFormSize = parseFloat(document.getElementById('from_size').value);
+
+        // Calculate no of forms
+        const result = Math.ceil(noOfPages / printingFormSize);
+
+        // Update the 'No of Forms' input field with the calculated result
+        document.getElementById('no_of_forms').value = isNaN(result) ? '' : result;
+    }
+</script> -->
+<script>
+                function calculateAmount(index) {
+                    var no_of_pages = parseFloat(document.getElementsByName('no_of_pages' )[0].value) || 0;
+                    var from_size = parseInt(document.getElementsByName('from_size')[0].value) || 0;
+                    var item_binding_form_size = parseInt(document.getElementsByName('item_binding_form_size')[0].value) || 0;
+                    
+
+                    var no_of_forms = no_of_pages / from_size;
+                    var binding_no_of_form= no_of_pages / item_binding_form_size;
+                    
+        
+                    document.getElementsByName('no_of_forms' )[0].value = no_of_forms.toFixed(0);
+                    document.getElementsByName('binding_no_of_form' )[0].value = binding_no_of_form.toFixed(0);
+                    
+
+                }
+        
+                function calculateFormsPerSet() {
+                    // Add any additional calculation logic if needed
+                }
+            </script>
+
+
+</body>  
+
+{% endblock %}

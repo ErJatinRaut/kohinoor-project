@@ -1,0 +1,939 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 100%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: lightcyan;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 850px){
+    .modal-content-mobile{
+        width : 90%;
+    }
+  }
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Transactions</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color:mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;create Transactions</button>
+                    
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content modal-content-mobile" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Sale Voucher</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" id="profile-form1">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+        
+                                    <div class="row">
+                                    <div class = "col-md-6">
+                                        
+                                            <div class="d-grid gap-2 col-md-12">
+                                                <div class="mb-0">
+                                                
+                                                    <label style="color:black ;">Select Company Type<span
+                                                            style="color: red;"></span></label>
+                                                    <div class="input-group ">
+                                                        <select name="company_type" class="form-control select-style" required >
+                                                            <option value="">Select</option>
+                                                            <option value="Self company">Self Company</option>
+                                                            <!-- <option value="Seller Company">Seller Company</option> -->
+                                                        </select>
+                                                    
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="d-grid gap-2 col-md-12">
+                                                <div class="mb-0">
+                                                
+                                                    <label style="color:black ;">Series<span
+                                                            style="color: red;"></span></label>
+                                                    <div class="input-group ">
+                                                        <input style="color: black;" width="50" type="text" min="0"
+                                                            placeholder="Enter Series" name="t_series" id="t_series"
+                                                            class="form-control" maxlength="" value="">
+                                                    </div>
+                                                
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class = "col-md-6">
+        
+                                           <div class="d-grid gap-2 col-md-12">
+                                                <div class="mb-0">
+                                                
+                                                    <label style="color:black ;">Party<span
+                                                            style="color: red;"></span></label>
+                                                    <div class="input-group ">
+                                                        <select style="color: black;" name="party" id="party" class="form-control">
+                                                            <option value="" selected disabled>Select Party</option>
+                                                            <option value="Sundry_creditor">Sundry Creditor</option>
+                                                            <option value="Vendor">Vendor</option>
+                                                            <!-- <option value="party3">Party 3</option> -->
+                                                            <!-- Add more options as needed -->
+                                                        </select>
+                                                    
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <div class="d-grid gap-2 col-md-12">
+                                                <div class="mb-0">
+                                                
+                                                    <label style="color:black ;">Veh .No<span
+                                                            style="color: red;"></span></label>
+                                                    <div class="input-group ">
+                                                        <input style="color: black;" width="50" type="text" min="0"
+                                                            placeholder="Enter Veh No" name="vehno" id="vehno"
+                                                            class="form-control" maxlength="" value="">
+                                                    </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class = "col-md-6">
+                                        <div class="col-md-12">
+                                            <div class="mb-0">
+                                                
+                                                    <label style="color:black;">Material Centre(delivered at)<span style="color: red;"></span></label>
+                                                    <div class="input-group ">
+                                                        <select style="color: black;" name="delivered_at" id="delivered_at" class="form-control">
+                                                            <option value="">Select Material Centre</option>
+                                                                {% for i in data53 %}
+                                                                <option value="{{ i.centre_name }}">{{ i.centre_name }}</option>
+                                                                {% endfor %}
+                                                        </select>
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div class = "col-md-6 mb-5"> 
+
+                                        <div class="col">
+                                            <div class="mb-0">
+                                                
+                                                    <label style="color:black ;">Narration<span style="color: red;"></span></label>
+                                                        <div class="input-group ">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Narration" name="narration" id="narration" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    
+
+
+
+
+
+
+
+
+
+
+                                            <!-- <div class="col-md-4 m-auto"></div> -->
+                                        <div class="col" style = "padding:0; margin-left:26px">
+                                            <div class="mb-0">
+                                                
+                                                    <label style="color:black;">Particular<span style="color: red;"></span></label>
+                                                        <div class="input-group ">
+                                                            <select style="color: black; border-radius: 0; width:125px;" name="Particular_1" id="Particular_1" class="form-control">
+                                                                <option value="">Select Material Centre</option>
+                                                                    {% for i in data55 %}
+                                                                <option value="{{ i.rmname }}">{{ i.rmname }}</option>
+                                                                    {% endfor %}
+                                                            </select>
+                                                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                            
+                                                <label style="color:black;">Quantity<span style="color: red;"></span></label>
+                                                <div class="input-group ">
+                                                    <input style="color: black; border-radius: 0; width:125px;" type="number" min="0" placeholder="Enter Paper Quantity"
+                                                        name="roll_quantity_1" id="roll_quantity_1" class="form-control" maxlength="" value=""
+                                                        oninput="calculateAmount()">
+                                              
+                                            </div>
+                                            </div>
+                                        </div>
+                                            
+                                           <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                            
+                                                <label style="color: black;">Unit<span style="color: red;">*</span></label>
+                                                <div class="input-group ">
+                                                    <select name="roll_unit_1" id="roll_unit_1" class="form-control" style="color: black; border-radius: 0; width:125px;">
+                                                        <option disabled selected value>Select Unit</option>
+                                                        <option value="kg">kg</option>
+                                                        <option value="rim">rim</option>
+                                                    </select>
+                                                
+                                            </div>
+                                        </div>
+                                        </div>
+                                            <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                                
+                                                    <label style="color:black ;">Rate<span style="color: red;">*</span></label>
+                                                    <div class="input-group ">
+                                                        <input style="color: black; border-radius: 0; width:125px;" width="50" type="number" min="0" placeholder="Enter Roll rate"
+                                                            name="roll_rate_1" id="roll_rate_1" class="form-control" maxlength="" value=""
+                                                            oninput="calculateAmount()">
+                                                    </div>
+                                                
+                                                </div>
+                                            </div>
+                                            <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                                
+                                                    <label style="color:black ;">Amount<span style="color: red;">*</span></label>
+                                                    <div class="input-group ">
+                                                        <input style="color: black; border-radius: 0; width:125px;" width="50" type="number" min="0" placeholder="Enter Amount"
+                                                            name="roll_amount_1" id="roll_amount_1" class="form-control" maxlength="" value=""
+                                                            readonly>
+                                                    
+                                                </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                                    <label style="color:black ;">Ex. No.<span style="color: red;">*</span></label>
+                                                    <div class="input-group ">
+                                                        <input type="text" name="ex_no_1" id="ex_no_1" class="form-control" placeholder="Enter Ex. No." style="color: black; border-radius: 0; width:125px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                                    <label style="color:black ;">weight<span style="color: red;">*</span></label>
+                                                    <div class="input-group ">
+                                                        <input type="text" name="weight_1" id="weight_1" class="form-control" placeholder="Enter weight" style="color: black; border-radius: 0; width:125px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                                    <label style="color:black ;">P. Weight<span style="color: red;">*</span></label>
+                                                    <div class="input-group ">
+                                                        <input type="text" name="p_weight_1" id="p_weight_1" class="form-control" placeholder="Enter Amount" style="color: black; border-radius: 0; width:125px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col" style = "padding:0;">
+                                                <div class="mb-0">
+                                                    <label style="color:black ;">rim<span style="color: red;">*</span></label>
+                                                    <div class="input-group ">
+                                                        <input type="text" name="rim_1"  id="rim_1" class="form-control" placeholder="Enter rim" style="color: black; border-radius: 0; width:125px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col" style = "padding:0; margin-right:26px">
+                                                <div class="mb-0">
+                                                    <label style="color:black ;">Sheet<span style="color: red;">*</span></label>
+                                                    <div class="input-group ">
+                                                        <input type="text" name="sheet_1" id="sheet_1" class="form-control" placeholder="Enter sheet"style="color: black; border-radius: 0; width:125px;" >
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col" >
+                                                <a href="#" style="margin-left:10px; text-align:right; color:white; select:none">Remove</a>
+                                            </div>
+
+                                            
+
+
+                                            <div class="input_fields_container"></div>
+
+
+
+
+
+
+                                            
+        
+                                     <!-- clone fields for item generated display none fields clone able fields -->
+                                            <div id="template" class="clonable-field" style=display:none;>
+                                            <div class = "row d-flex mx-3">
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                    
+                                                        {% comment %} <label style="color:black;">Particular<span style="color: red;"></span></label> {% endcomment %}
+                                                        <div class="input-group" style = "border-radius: 0;">
+                                                            <select style="color: black; border-radius: 0; width:125px;" name="Particular" id="Particular" class="form-control">
+                                                                <option value="">Select Material Centre</option>
+                                                                {% for i in data55 %}
+                                                                    <option value="{{ i.rmname }}">{{ i.rmname }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        
+                                                    </div>
+                                                </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">Qty<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group p-0">
+                                                            <input style="color: black; border-radius: 0; width:125px; opacity:1" type="number" min="0" placeholder="Enter Quantity"
+                                                        name="roll_quantity" id="roll_quantity" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color: black;">Unit<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                        <select name="roll_unit_1" id="roll_unit_1" class="form-control" style="color: black; border-radius: 0; width:125px;">
+                                                            <option disabled selected value>Select Unit</option>
+                                                            <option value="kg">kg</option>
+                                                            <option value="rim">rim</option>
+                                                        </select>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">Rate<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                            <input style="color: black; border-radius: 0; width:125px;" type="number" min="0" placeholder="Enter rate"
+                                                            name="roll_rate" id="roll_rate" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">Amount<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                            <input style="color: black; border-radius: 0; width:125px;"  type="number" min="0" placeholder="Enter Amount"
+                                                            name="roll_amount" id="roll_amount" class="form-control" maxlength="" value=""
+                                                            readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            
+
+                                            
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">Ex. No.<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                            <input type="text" name="ex_no" id="ex_no" class="form-control" placeholder="Enter Ex. No."  style = "border-radius: 0; width:125px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">weight<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                            <input type="text" name="weight" id="weight" class="form-control" placeholder="Enter weight" style = "border-radius: 0; width:125px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">P. Weight<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                            <input type="text" name="p_weight" id="p_weight" class="form-control" placeholder="Enter Amount" style = "border-radius: 0; width:125px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">rim<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                            <input type="text" name="rim" id="rim" class="form-control" placeholder="Enter rim" style = "border-radius: 0; width:125px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col" style = "padding:0;">
+                                                    <div class="mb-0">
+                                                        {% comment %} <label style="color:black ;">Sheet<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group">
+                                                            <input type="text" name="sheet" id="sheet" class="form-control" placeholder="Enter sheet" style = "border-radius: 0; width:125px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+
+                                        
+
+                            
+                                                <div class="col" >
+                                                    <a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="mt-5">
+                                            <button class="btn btn-primary" id="add_more_button" style="background-color:mediumaquamarine;">Add New Items</button>
+                                                
+                                        </div>
+
+                                            <!-- end of item generated fields  -->
+
+                                   <!-- input filds for item consumed -->
+                                            {% comment %} <div class="form-group">
+                                                <h5><label style="color:black ;">Item Consumed<span style="color: red;"></span></label></h5>
+                                                <div class="input-group mb-4">  
+                                                </div>
+                                            </div>
+
+                                           
+
+                                            <div class="d-grid gap-2 col-sm-6">
+                                                <div class="mb-3">
+                                                    <label style="color:black ;">Bill Sundries<span style="color: red;">*</span></label>
+                                                    <div class="input-group mb-4">
+                                                        <input type="text" name="sl_bill_sundries_1" id="sl_bill_sundries_1"class="form-control" placeholder="Enter Qty"   oninput="calculateAmount()">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-grid gap-2 col-sm-6">
+                                                <div class="mb-3">
+                                                    <label style="color:black ;">Narration<span style="color: red;">*</span></label>
+                                                    <div class="input-group mb-4">
+                                                        <input type="text" name="sl_narration_1" id="sl_narration_1" class="form-control" placeholder="Enter Unit" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-grid gap-2 col-sm-6">
+                                                <div class="mb-3">
+                                                    <label style="color:black ;">0<span style="color: red;">*</span></label>
+                                                    <div class="input-group mb-4">
+                                                        <input type="text" name="sl_zero_1" id="sl_zero_1" class="form-control" placeholder="Enter Price"   oninput="calculateAmount()">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-grid gap-2 col-sm-6">
+                                                <div class="mb-3">
+                                                    <label style="color:black ;">Amount<span style="color: red;">*</span></label>
+                                                    <div class="input-group mb-4">
+                                                        <input type="text" name="sl_ammount_1"  id="sl_ammount_1"class="form-control" placeholder="Enter Amount" >
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                       <!-- display none for item consumed and clone fields for add more button -->
+                                            <div id="template1" class="clonable-field1" style=display:none;>
+                                                
+
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Bill Sundries<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input type="text" name="sl_bill_sundries" class="form-control" placeholder="Enter Qty" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Narration<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input type="text" name="sl_narration" class="form-control" placeholder="Enter Unit" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">0<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input type="text" name="sl_zero" class="form-control" placeholder="Enter Price" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Amount<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input type="text" name="sl_ammount" class="form-control" placeholder="Enter Amount" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6" >
+                                                    <a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a>
+                                                </div>
+                                            </div>
+                                            <div> 
+
+                                            <button class="btn btn-primary" id="add_more_button1" style="background-color:mediumaquamarine;">Add New Items</button>
+                                            <div class="input_fields_container1"></div>
+                                            </div><br><br> {% endcomment %}
+                                        <!-- end of item consumed clone fields display none --> 
+
+                                                    <div class="text-center mt-5"></div>
+                                                    <div class="col-md-12">
+                                                      <button class="btn btn-primary" style="background-color: mediumaquamarine; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                          {% comment %} <button type="button" class="btn btn-success" style="background-color: mediumaquamarine; color:white;" onclick="submitForm()" >Save</button> {% endcomment %}
+                                                    <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+               <!-- table -->
+        <div class="card-body" style="">
+            <div class="row" style="text-align: center;">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="display table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr style="text-align: center; background-color: lightcyan;">
+                                    <th>Sr. No</th>
+                                    <th>Select Company Type</th>
+                                    <th>Series</th>
+                                    <th>Veh .No</th>
+                                    <th>Material Centre(delivered at)</th>
+                                    <th>Narration</th>
+                                    {% comment %} <th>Paper Roll Quantity</th>
+                                    <!-- <th>unit</th> -->
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                    <th>Paper Rim Qty</th>
+                                    <!-- <th>unit</th> -->
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                    <th>Cover Paper Qty</th>
+                                    <!-- <th>unit</th> -->
+                                    <th>Rate</th>
+                                    <th>Amount</th> {% endcomment %}
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data52 %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <!-- <td >
+                                                {{ i.brand_code }}
+                                            </td> -->
+                                    <td>
+                                        {{ i.company_type }}
+                                    </td>
+                                    <td>
+                                        {{ i.t_series }}
+                                    </td>
+                                    <td>
+                                        {{ i.vehno }}
+                                    </td>
+                                    <td>
+                                        {{ i.delivered_at }}
+                                    </td>
+                                    <td>
+                                        {{ i.narration }}
+                                    </td>
+                                    {% comment %} <td>
+                                        {{ i.roll_quantity }} {{ i.roll_unit }}
+                                    </td> {% endcomment %}
+                                   <!--  <td>
+                                        {{ i.roll_unit }}
+                                    </td> -->
+                                    {% comment %} <td>
+                                        {{ i.roll_rate }}
+                                    </td>
+                                    <td>
+                                        {{ i.roll_amount }}
+                                    </td>
+                                    <td>
+                                        {{ i.paper_rim_qty }} {{ i.rim_unit }}
+                                    </td> {% endcomment %}
+                                    <!-- <td>
+                                        {{ i.rim_unit }}
+                                    </td> -->
+                                    {% comment %} <td>
+                                        {{ i.rim_rate }}
+                                    </td>
+                                    <td>
+                                        {{ i.rim_amount }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_paper_qty }} {{ i.cover_paper_unit }}
+                                    </td> {% endcomment %}
+                                    <!-- <td>
+                                        {{ i.cover_paper_unit }}
+                                    </td> -->
+                                    {% comment %} <td>
+                                        {{ i.cover_paper_rate }}
+                                    </td>
+                                    <td>
+                                        {{ i.cover_paper_amount }}
+                                    </td> {% endcomment %}
+                                    
+                                    <td>
+
+                    </div>
+                    {% comment %} <a href="/edit_transaction/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a> {% endcomment %}
+                    <a  href="/transaction_view/{{i.id}}/"> <i class="bi bi-eye"></i></a>
+
+                    <a href="/delete_transaction/{{i.id}}/"><i class="bi bi-archive"></i></a>
+
+                </div>
+                </td>
+                {% endfor %}
+                </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+    <script>
+        function calculateAmount() {
+            var qty = parseFloat(document.getElementById('roll_quantity_1').value) || 0;
+            var rate = parseFloat(document.getElementById('roll_rate_1').value) || 0;
+            
+
+            var amount = qty * rate;
+            
+            document.getElementById('roll_amount_1').value = amount.toFixed(2);
+            
+
+        }
+    </script>
+    
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+
+
+        </script>
+
+        <script>
+          function submitForm() {
+            // Submit the form using AJAX
+            $.ajax({
+              url: $('#profile-form').attr('action'),
+              type: 'POST',
+              data: $('#profile-form').serialize(),
+              success: function(response) {
+                // Show a success message using SweetAlert
+                swal({
+                  title: "Success!",
+                  text: "Vouchers created Successfully",
+                  icon: "success",
+                  button: "OK",
+                });
+              },
+              error: function(response) {
+                // Show an error message using SweetAlert
+                swal({
+                  title: "Error!",
+                  text: response.responseText,
+                  icon: "error",
+                  button: "OK",
+                });
+              }
+            });
+          }
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                var max_fields_limit = 10;
+                var x = 1;
+        
+                $('#add_more_button').click(function (e) {
+                    e.preventDefault();
+                    if (x < max_fields_limit) {
+                        x++;
+        
+                        // Clone the template div
+                        var newField = $('#template').clone();
+        
+                        // Update attributes and content with new values
+                        newField.find('[name^="Particular"]').attr('id', 'Particular' + x).attr('name', 'Particular' + x);
+                        newField.find('[name^="roll_quantity"]').attr('id', 'roll_quantity' + x).attr('name', 'roll_quantity' + x);
+                        newField.find('[name^="roll_unit"]').attr('id', 'roll_unit' + x).attr('name', 'roll_unit' + x);
+                        newField.find('[name^="roll_rate"]').attr('id', 'roll_rate' + x).attr('name', 'roll_rate' + x);
+                        newField.find('[name^="roll_amount"]').attr('id', 'roll_amount' + x).attr('name', 'roll_amount' + x);
+                        newField.find('[name^="ex_no"]').attr('id', 'ex_no' + x).attr('name', 'ex_no' + x);
+                        newField.find('[name^="weight"]').attr('id', 'weight' + x).attr('name', 'weight' + x);
+                        newField.find('[name^="p_weight"]').attr('id', 'p_weight' + x).attr('name', 'p_weight' + x);
+                        newField.find('[name^="rim"]').attr('id', 'rim' + x).attr('name', 'rim' + x);
+                        newField.find('[name^="sheet"]').attr('id', 'sheet' + x).attr('name', 'sheet' + x);
+        
+        
+                        // Append the cloned field to the container
+                        $('.input_fields_container').append(newField.show());
+                    }
+                });
+        
+                $('.input_fields_container').on("click", ".remove_field", function (e) {
+                    e.preventDefault();
+                    $(this).closest('.clonable-field').remove();
+                    x--;
+                });
+                $('.input_fields_container').on('input', '[name^="roll_quantity"], [name^="roll_rate"]', function () {
+                    var qty = parseFloat($(this).closest('.clonable-field').find('[name^="roll_quantity"]').val()) || 0;
+                    var price = parseFloat($(this).closest('.clonable-field').find('[name^="roll_rate"]').val()) || 0;
+                    var amount = qty * price;
+        
+                    $(this).closest('.clonable-field').find('[name^="roll_amount"]').val(amount.toFixed(2));
+                });
+            });
+        </script>
+
+
+        <script>
+            $(document).ready(function () {
+                var max_fields_limit = 10;
+                var x = 1;
+        
+                $('#add_more_button1').click(function (e) {
+                    e.preventDefault();
+                    if (x < max_fields_limit) {
+                        x++;
+        
+                        // Clone the template div
+                        var newField = $('#template1').clone();
+        
+                        // Update attributes and content with new values
+                        
+                        newField.find('[name^="sl_bill_sundries"]').attr('id', 'sl_bill_sundries' + x).attr('name', 'sl_bill_sundries' + x);
+                        newField.find('[name^="sl_narration"]').attr('id', 'sl_narration' + x).attr('name', 'sl_narration' + x);
+                        newField.find('[name^="sl_zero"]').attr('id', 'sl_zero' + x).attr('name', 'sl_zero' + x);
+                        newField.find('[name^="sl_ammount"]').attr('id', 'sl_ammount' + x).attr('name', 'sl_ammount' + x);
+        
+                        // Append the cloned field to the container
+                        $('.input_fields_container1').append(newField.show());
+                    }
+                });
+        
+                $('.input_fields_container1').on("click", ".remove_field", function (e) {
+                    e.preventDefault();
+                    $(this).closest('.clonable-field1').remove();
+                    x--;
+                });
+                $('.input_fields_container1').on('input', '[name^="consumed_voucher_qty"], [name^="consumed_voucher_price"]', function () {
+                    var qty = parseFloat($(this).closest('.clonable-field1').find('[name^="consumed_voucher_qty"]').val()) || 0;
+                    var price = parseFloat($(this).closest('.clonable-field1').find('[name^="consumed_voucher_price"]').val()) || 0;
+                    var amount = qty * price;
+        
+                    $(this).closest('.clonable-field1').find('[name^="sl_ammount"]').val(amount.toFixed(2));
+                });
+            });
+        </script>
+        
+
+</body>  
+
+{% endblock %}

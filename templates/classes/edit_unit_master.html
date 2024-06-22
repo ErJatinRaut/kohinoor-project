@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Medium{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+
+    .container {
+        max-width: 705px;
+        margin: 0 auto;
+        box-shadow: 1px 0 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+    }
+
+    .form-control {
+        width: 70%;
+    }
+
+    .text-center {
+        text-align: left;
+    }
+
+    .page-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        margin-top: 80px;
+        margin-left: 292px;
+    }
+
+    /* Add your other styles here */
+
+    .form-label {
+        color: #000;
+        /* Change the color as needed */
+    }
+    .btn-no-underline {
+    text-decoration: none !important;
+}
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3 p-3" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">Unit name</label>
+                            <input type="text" class="form-control " id="unit_name_master" name="unit_name_master" value="{{data.unit_name_master}}" maxlength="50" oninput="updatePrintName()" style="width: 230px;">
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                            <label class="form-label">Alias</label>
+                            <input type="text" class="form-control " id="unit_Alias" name="unit_Alias" value="{{data.unit_Alias}}" maxlength="50"  style="width: 230px;">
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                            <label class="form-label">unit print name </label>
+                            <input type="tel" name="unit_print_name" class="form-control" value="{{data.unit_print_name}}" id="unit_print_name" placeholder="" maxlength="50"  style="width: 230px;">
+                        </div>
+                        </div>
+                    
+                    <div class="col-md-12" style="text-align: center;">
+                                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                                    href="{% url 'unit_master' %}" style="color:white;" class="btn-no-underline">Back</a></button>
+
+                                            <button type="submit" class="btn btn-primary"
+                                                style="background-color:mediumaquamarine; color:white;">Save</button>
+                                        </div>
+                                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function updatePrintName() {
+        // Get the value of Unit Name
+        var unitName = document.getElementById('unit_name_master').value;
+
+        // Update the value of Print Name with the Unit Name
+        document.getElementById('unit_print_name').value = unitName;
+    }
+</script>
+
+    {% endblock %}

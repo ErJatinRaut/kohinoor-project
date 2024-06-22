@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    * {
+        font-family: Georgia;
+    }
+    .btn-no-underline {
+    text-decoration: none !important;
+}
+</style>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb mb-3 p-5" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Update Database Data</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Tehsil</label>
+                                {% comment %} <input type="text" class="form-control radius-10" id="" name="tehsil"
+                                    value="{{data.tehsil}}" required=""> {% endcomment %}
+                                    <select type="text" class="form-control mobile" name="tehsil" value="{{data.tehsil}}" id="tehsil" />
+                                                        <option disabled selected value>Select Tehsil</option>
+                                                        {% for i in data1 %}
+                                                        <option value="{{ i.tehsil_master }}" {% if data.tehsil == i.tehsil_master %}selected{% endif %}>{{ i.tehsil_master }}</option>
+                                                        {% endfor %}
+                                                       </select>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">District</label>
+                                {% comment %} <input type="text" class="form-control radius-10" id="" name="district"
+                                    value="{{data.district}}" maxlength="30" required=""> {% endcomment %}
+                                    <select type="text" class="form-control mobile" name="district_d" value="{{data.district}}"  id="district_d"  />
+                                    <option disabled selected value>Select District</option>
+                                    {% for i in data1 %}
+                                    <option value="{{ i.district_master }}" {% if data.district_d == i.district_master %}selected{% endif %}>{{ i.district_master }}</option>
+                                    {% endfor %}
+                                   </select>
+                            </div>
+                        </div>   
+                        
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Town/village </label>
+                                <input type="tel" name="town" minlength="" class="form-control" value="{{data.town}}"
+                                    id="" placeholder="" maxlength="" required="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Pincode</label>
+                                <input type="tel" name="pincode" minlength="" class="form-control"
+                                    value="{{data.pincode}}" id="" placeholder="" maxlength="" required="">
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-12" style="text-align: center;">
+                            
+                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'database' %}" style="color:white;" class="btn-no-underline">Back</a></button>
+
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color:mediumaquamarine; color:white;">Save</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var districtSelect = $("#district_d");
+            var tehsilSelect = $("#tehsil");
+    
+            tehsilSelect.on("change", function () {
+                var selectedTehsil = tehsilSelect.val();
+                districtSelect.empty();
+                districtSelect.append('<option disabled selected value>Select District</option>');
+    
+                {% for i in data1 %}
+                    if ("{{ i.tehsil_master }}" === selectedTehsil) {
+                        districtSelect.append('<option value="{{ i.district_master }}">{{i.district_master}}</option>');
+                    }
+                {% endfor %}
+            });
+        });
+    </script>
+    {% endblock %}

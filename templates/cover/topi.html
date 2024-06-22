@@ -1,0 +1,1196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+    * {
+        font-family: Georgia;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 40%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .box {
+        width: 40%;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 35px;
+        border: 2px solid #fff;
+        border-radius: 20px/50px;
+        background-clip: padding-box;
+        text-align: center;
+    }
+
+    .button {
+        font-size: 1em;
+        padding: 10px;
+        color: #fff;
+        border: 2px solid #06D85F;
+        border-radius: 20px/50px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+    }
+
+    .button:hover {
+        background: #06D85F;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        transition: opacity 500ms;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .overlay:target {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .popup {
+        margin: 70px auto;
+        padding: 20px;
+        background: lightcyan;
+        border-radius: 5px;
+        width: 30%;
+        position: relative;
+        transition: all 5s ease-in-out;
+    }
+
+    .popup h4 {
+        margin-top: 0;
+        color: #333;
+        /* font-family: Tahoma, Arial, sans-serif; */
+    }
+
+    .popup .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        transition: all 200ms;
+        font-size: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .popup .close:hover {
+        color: #06D85F;
+    }
+
+    .popup .content {
+        max-height: 30%;
+        overflow: auto;
+    }
+
+    @media screen and (max-width: 700px) {
+        .box {
+            width: 70%;
+        }
+
+        .popup {
+            width: 70%;
+        }
+    }
+</style>
+<style type="text/css">
+    .select-style {
+        border-radius: 0.25rem;
+        border-color: black;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+        border-color: black;
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Topi Info</div>
+            <hr>
+            <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                <button class="btn btn-primary me-md-2" id="myBtn" type="button"
+                    style="background-color:mediumaquamarine;"><i class="fa fa-plus"></i>&nbsp;Create Topi</button>
+
+            </div>
+            <!-- create -->
+            <div id="myModal" class="modal">
+
+                <div class="modal-content" style="background-color:lightcyan;">
+                    <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading"
+                            style="color:black; background-color:mediumaquamarine;text-align:center;">
+                            <h4 style="color:white ;">Create Topi</h4>
+                        </div>
+                        <hr style="color:black">
+                        <form method="POST" id="profile-form1">
+                            {% csrf_token %}
+                            <div class="panel-body" align="left">
+                                <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label style="color:black ;">Plate No<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input width="50" type="number" min="0" name="t_plate_no" id=""
+                                                    class="form-control" value="" placeholder="Enter plate No"
+                                                    required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label style="color:black ;">Topi Plate Making Paper To Used<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+
+                                                <select style="color: black;" width="50" type="text" min="0"
+                                                    name="t_paper_to_be_used" id="" class="form-control" maxlength=""
+                                                    value="">
+                                                    <option disabled selected value>Select</option>
+                                                    {% for i in obj2 %}
+                                                    <option value="{{i.rmname}}">{{i.rmname}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label style="color:black ;">No Of Ups<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input width="50" type="number" min="0" name="t_no_of_ups"
+                                                    id="t_no_of_ups" class="form-control" value=""
+                                                    placeholder="Enter No Of Ups " required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label style="color:black ;">Quantity<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input width="50" type="number" min="0" name="t_quantity" id=""
+                                                    class="form-control" value="" placeholder="" required />
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div id="subjectFieldsContainer" class="row">
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;" id="subject1">Subject1<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject1" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.code}}*{{i.books_class}}*{{i.subject}}">{{i.code}}*{{i.books_class}}*{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject2<span
+                                                        style="color: red;">*</span></label>
+                                               
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject2" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject3<span
+                                                        style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject3" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject4<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject4" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject5<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject5" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject6<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject6" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject7<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject7" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject8<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject8" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject9<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject9" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject10<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject10" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject11<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject11" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject12<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject12" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject13<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject13" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject14<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject14" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject15<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject15" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject16<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject16" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject17<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject17" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject18<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject18" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject19<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject19" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject20<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject20" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;" id="subject21">Subject21<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject21" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject22<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject22" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject23<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject23" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject24<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject24" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject25<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject25" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject26<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject26" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject27<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject27" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject28<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject28" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject29<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject29" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject30<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject10" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject31<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        name="t_subject31" id="subject" class="form-control"
+                                                        maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid gap-2 col-sm-6">
+                                            <div class="mb-3">
+                                                <label style="color:black ;">Subject32<span
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <select style="color: black;" width="50" type="text" min="0"
+                                                        placeholder="Enter Group" name="t_subject32" id="subject"
+                                                        class="form-control" maxlength="" value="">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in obj %}
+                                                        <option value="{{i.subject}}">{{i.subject}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+
+                                    </div>
+                                     <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label style="color:black ;">Plate Rate<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input width="50" type="number" min="0" name="t_plate_rate" id=""
+                                                    class="form-control" value="" placeholder="Enter plate Rate"
+                                                    required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label style="color:black ;">Printing Rate<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="input-group mb-4">
+                                                <input width="50" type="number" min="0" name="t_printing_rate" id=""
+                                                    class="form-control" value="" placeholder="Enter Printing Rate"
+                                                    required />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div class="col-md-8 text-center" ></div>
+                                    <div class="col-md-12" style="text-align: center;" >
+                                        <a href="{{ form.get_cancel_link }}" >
+                                                      <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                                                  </a>
+                                        {% comment %} <button type="button" class="btn btn-success"
+                                            style="background-color: mediumaquamarine; color:white;"
+                                            onclick="submitForm()">Save</button> {% endcomment %}
+                                        <input type="submit" class="btn btn-primary"
+                                            style="background-color: mediumaquamarine; color:white;"
+                                            onclick="submitForm()" value="Save">
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- table -->
+        <div class="card-body" style="margin-left: 20px;">
+            <div class="row" style="text-align: center;">
+                <div class="col-md-11">
+                    <div class="table-responsive">
+                        <table class="display table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr style="text-align: center; background-color: lightcyan;">
+                                    <th align="center">Sr.No</th>
+                                    <th align="center">Plate No</th>
+                                    <th align="center">Paper To Be Used </th>
+
+                                    <th align="center">No Of Ups</th>
+                                    <th align="center">Plate Rate</th> 
+                                    <th align="center">Printing Rate</th> 
+
+                                    <th align="center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <td>
+                                        {{ i.t_plate_no }}
+                                    </td>
+                                    <td>
+                                        {{ i.t_paper_to_be_used }}
+                                    </td>
+
+                                    <td>
+                                        {{ i.t_no_of_ups }}
+                                    </td>
+
+                                    <td>
+                                        {{ i.t_plate_rate }}
+                                    </td> 
+                                    <td>
+                                        {{ i.t_printing_rate }}
+                                    </td> 
+                                    <td>
+                                        <div>
+                                            {% comment %} {% if not i.cover_transfer%} {% endcomment %}
+                                            <a href="/edit_topi/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                            {% comment %} {% if not i.cover_transfer%} {% endcomment %}
+                                            <a href="/delete_topi/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                            <a href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a>
+                                            <div id="popup1 {{i.id}}" class="overlay">
+                                                <div class="popup">
+                                                    <h4
+                                                        style="background-color :mediumaquamarine;padding : 10px; color:white;">
+                                                        View Details</h4>
+                                                    <a class="close" href="#">&times;</a>
+                                                    <br><br>
+                                                    <div style="color: black; font-size: 15px;" class="content">
+
+                                                        {% if i.t_subject1 %}
+                                                        <span><b>Subject1</b> = {{ i.t_subject1 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject2 %}
+                                                        <span><b>Subject2</b> = {{ i.t_subject2 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject3 %}
+                                                        <span><b>Subject3</b> = {{ i.t_subject3 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject4 %}
+                                                        <span><b>Subject4</b> = {{ i.t_subject4 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject5 %}
+                                                        <span><b>Subject5</b> = {{ i.t_subject5 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject6 %}
+                                                        <span><b>Subject6</b> = {{ i.t_subject6 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject7 %}
+                                                        <span><b>Subject7</b> = {{ i.t_subject7 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject8 %}
+                                                        <span><b>Subject8</b> = {{ i.t_subject8 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject9 %}
+                                                        <span><b>Subject9</b> = {{ i.t_subject9 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject10 %}
+                                                        <span><b>Subject10</b> = {{ i.t_subject10 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject11 %}
+                                                        <span><b>Subject11</b> = {{ i.t_subject11 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject12 %}
+                                                        <span><b>Subject12</b> = {{ i.t_subject12 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject13 %}
+                                                        <span><b>Subject13</b> = {{ i.t_subject13 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject14 %}
+                                                        <span><b>Subject14</b> = {{ i.t_subject14 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject15 %}
+                                                        <span><b>Subject15</b> = {{ i.t_subject15 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject16 %}
+                                                        <span><b>Subject16</b> = {{ i.t_subject16 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject17 %}
+                                                        <span><b>Subject17</b> = {{ i.t_subject17 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject18 %}
+                                                        <span><b>Subject18</b> = {{ i.t_subject18 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject19 %}
+                                                        <span><b>Subject19</b> = {{ i.t_subject19 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject20 %}
+                                                        <span><b>Subject20</b> = {{ i.t_subject20 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject21 %}
+                                                        <span><b>Subject21</b> = {{ i.t_subject21 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject22 %}
+                                                        <span><b>Subject22</b> = {{ i.t_subject22 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject23 %}
+                                                        <span><b>Subject23</b> = {{ i.t_subject23 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject24 %}
+                                                        <span><b>Subject24</b> = {{ i.t_subject24 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject25 %}
+                                                        <span><b>Subject25</b> = {{ i.t_subject25 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject26 %}
+                                                        <span><b>Subject26</b> = {{ i.t_subject26 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject27 %}
+                                                        <span><b>Subject27</b> = {{ i.t_subject27 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject28 %}
+                                                        <span><b>Subject28</b> = {{ i.t_subject28 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject29 %}
+                                                        <span><b>Subject29</b> = {{ i.t_subject29 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject30 %}
+                                                        <span><b>Subject30</b> = {{ i.t_subject30 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject31 %}
+                                                        <span><b>Subject31</b> = {{ i.t_subject31 }}</span><br><br>
+                                                        {% endif %}
+                                                        {% if i.t_subject32 %}
+                                                        <span><b>Subject32</b> = {{ i.t_subject32 }}</span><br><br>
+                                                        {% endif %}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {% comment %} {% endif %} {% endcomment %}
+                                        </div>
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    function updateSubjectFields() {
+        const noOfUpsValue = parseInt(document.getElementById('t_no_of_ups').value);
+        const subjectFieldsContainer = document.getElementById('subjectFieldsContainer');
+
+        // Clear the existing subject fields
+        subjectFieldsContainer.innerHTML = '';
+
+        // Create and append subject fields based on the "No of Ups" value
+        for (let i = 1; i <= noOfUpsValue; i++) {
+            const subjectField = document.createElement('div');
+            subjectField.className = 'd-grid gap-2 col-md-6';
+            subjectField.innerHTML = `
+                    <div class="form-group">
+                        <label style="color:black;">Subject${i}<span style="color: red;">*</span></label>
+                        <div class="input-group mb-4">
+                            <select style="color: black;" width="50" type="text" min="0" placeholder="Enter Group"
+                                name="t_subject${i}" class="form-control" maxlength="" value="" required>
+                                <option disabled selected value>Select</option>
+                                {% for i in obj %}
+                                <option value="{{i.code}}*{{i.books_class}}*{{i.subject}}">{{i.code}}*{{i.books_class}}*{{i.subject}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                `;
+            subjectFieldsContainer.appendChild(subjectField);
+        }
+    }
+
+    // Call the function initially and whenever the "No of Ups" value changes
+    updateSubjectFields();
+    document.getElementById('t_no_of_ups').addEventListener('change', updateSubjectFields);
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const noOfUpsField = document.getElementById("t_no_of_ups");
+        const subjectFields = document.querySelectorAll('[id^="subject"]');
+
+        // Initially hide all the subject fields
+        subjectFields.forEach(function (subjectField) {
+            subjectField.style.display = "none";
+        });
+
+        noOfUpsField.addEventListener("change", function () {
+            const noOfUpsValue = parseInt(noOfUpsField.value);
+
+            // Show the required number of subject fields based on no_of_upsValue
+            subjectFields.forEach(function (subjectField, index) {
+                if (index < noOfUpsValue) {
+                    subjectField.style.display = "flex";
+                } else {
+                    subjectField.style.display = "none";
+                }
+            });
+
+            // Add condition to show only one subject field when no_of_ups is 1
+            if (noOfUpsValue === 5) {
+                subjectFields[0].style.display = "flex";
+            }
+        });
+    });
+</script>
+
+
+<script>
+    function showRate2Field(selectedValue) {
+        var rate2FieldDiv = document.getElementById("rate2FieldDiv");
+        var rate2Field = document.getElementById("rate2Field");
+
+        if (selectedValue === "Yes") {
+            rate2FieldDiv.style.display = "block";
+            rate2Field.style.display = "block"; // Show the rate2 field and its label
+            rate2Field.required = true; // Make the rate2 field required
+        } else {
+            rate2FieldDiv.style.display = "none";
+            rate2Field.style.display = "none";// Hide the rate2 field and its label
+            rate2Field.required = false; // Make the rate2 field not required
+        }
+    }
+</script>
+
+<script>
+    function showRateField(selectedValue) {
+        var rateLabel = document.querySelector("label[for='rateField']");
+        var rateField = document.getElementById("rateField");
+
+        if (selectedValue === "Yes") {
+            rateLabel.style.display = "block"; // Show the label
+            rateField.style.display = "block"; // Show the rate field
+            rateField.required = true; // Make the rate field required
+        } else {
+            rateLabel.style.display = "none"; // Hide the label
+            rateField.style.display = "none"; // Hide the rate field
+            rateField.required = false; // Make the rate field not required
+        }
+    }
+</script>
+<script>
+    const inputElement = document.getElementById('gstin_input');
+
+    inputElement.addEventListener('input', function () {
+        const gstinPattern = /^[A-Z]{3}[0-9]{12}$/;
+        const validInput = inputElement.value.match(gstinPattern);
+        if (!validInput) {
+            inputElement.setCustomValidity('Please enter a valid GSTIN with three uppercase alphabets followed by twelve numbers.');
+        } else {
+            inputElement.setCustomValidity('');
+        }
+    });
+</script>
+<script>
+    // Add an event listener to the input field
+    document.getElementById('company_contact').addEventListener('input', function () {
+        // Get the input value and remove any non-digit characters
+        let inputValue = this.value.replace(/\D/g, '');
+
+        // Limit the input to a maximum of 10 characters
+        if (inputValue.length > 10) {
+            inputValue = inputValue.slice(0, 10);
+        }
+
+        // Update the input value
+        this.value = inputValue;
+    });
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        // Get the select element by its ID
+        const stateDropdown = document.getElementById('stateDropdown');
+
+        // Set the default option to "Maharashtra"
+        const defaultState = 'Maharashtra';
+
+        // Loop through all options in the select element
+        for (let i = 0; i < stateDropdown.options.length; i++) {
+            const option = stateDropdown.options[i];
+
+            // Check if the option's value matches the default state
+            if (option.value === defaultState) {
+                // Set the option as selected
+                option.selected = true;
+                break; // Exit the loop once found
+            }
+        }
+    });
+</script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        // Get the select element by its ID
+        const countryDropdown = document.getElementById('countryDropdown');
+
+        // Set the default option to "India"
+        const defaultCountry = 'India';
+
+        // Loop through all options in the select element
+        for (let i = 0; i < countryDropdown.options.length; i++) {
+            const option = countryDropdown.options[i];
+
+            // Check if the option's value matches the default country
+            if (option.value === defaultCountry) {
+                // Set the option as selected
+                option.selected = true;
+                break; // Exit the loop once found
+            }
+        }
+    });
+</script>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+
+
+</script>
+
+<!-- <script>
+          function submitForm() {
+            // Submit the form using AJAX
+            $.ajax({
+              url: $('#profile-form1').attr('action'),
+              type: 'POST',
+              data: $('#profile-form1').serialize(),
+              success: function(response) {
+                // Show a success message using SweetAlert
+                swal({
+                  title: "Success!",
+                  text: "Company Added Successfully",
+                  icon: "success",
+                  button: "OK",
+                });
+              },
+              error: function(response) {
+                // Show an error message using SweetAlert
+                swal({
+                  title: "Error!",
+                  text: response.responseText,
+                  icon: "error",
+                  button: "OK",
+                });
+              }
+            });
+          }
+        </script> -->
+
+</body>
+{% endblock %}

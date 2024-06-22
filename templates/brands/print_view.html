@@ -1,0 +1,1013 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!doctype html>
+<html lang="en"> 
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Edit Data{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <style>
+        * {
+            font-family: Georgia;
+        }
+
+        .container1 {
+            margin-top: 60px
+        }
+
+        .input-demo{
+            width: 80% !important;
+        }
+            /* Style the page wrapper */
+    .page-wrapper {
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    /* Style the page content */
+    .page-content {
+        background-color: lightcyan;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 1069px;
+        /* Adjust the max-width as needed */
+        margin-top: 1px;
+        /* Center the container horizontally */
+    }
+
+    /* Style the breadcrumb section */
+    .page-breadcrumb {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: lightcyan;
+        border-radius: 5px;
+    }
+
+    /* Style the breadcrumb title */
+    .breadcrumb-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Style the form elements */
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+
+        border-radius: 5px;
+    }
+
+    /* Style the buttons */
+    .btn {
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-right: 10px;
+    }
+
+    /* Style the Back button */
+    .btn-back {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    /* Style the Save button */
+    .btn-save {
+        background-color: #2ecc71;
+        color: #fff;
+    }
+
+    /* Center align elements */
+    .text-center {
+        text-align: center;
+    }
+
+    /* Responsive layout for small screens */
+    @media (max-width: 768px) {
+        .d-grid {
+            display: block;
+        }
+
+        .col-sm-6 {
+            width: 100%;
+        }
+    }
+    </style>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+    
+            #print-container, #print-container * {
+                visibility: visible;
+            }
+    
+            #print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+    
+            /* Hide buttons during printing */
+            button {
+                display: none !important;
+            }
+            
+        }
+    </style>
+</head>
+
+<body>
+    <!-- kkkkkkkkkkkkkkkkkkkkk -->
+    
+
+    <div id="print-container" class="container-fluid container1">
+       
+        <div class="page-wrapper">
+           
+                {% comment %} <button id="pdf-button" onclick="savePage()" style="padding: 8px; border-radius: 20px; font-size: 18px;">Download as PDF</button> {% endcomment %}
+               
+             
+            <div class="page-content">
+                <div class="breadcrumb-title pe-3">Transfer Form</div>
+                <hr>
+                
+                <form method="post" id="transferForm" style="background-color:lightcyan;" onsubmit="return myfun()">
+                    {% csrf_token %}
+            
+                    <!-- date -->
+                  
+
+                    <div class="row">
+                       
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                               <div style="text-align: right;" >
+                                <div class="input-group" >
+                                    <input type="date" class="form-control mobile" name="p_print_date" id="date"
+                                        placeholder="{% now 'Y-m-d' %}" value="{% now 'd-m-Y' %}" required max="{% now 'Y-m-d' %}" readonly/>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- vender name address mob no -->
+                    <div>
+                        <div class="mt-3 ">
+                           <div class="row ">
+                            <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="name" class="control-label" disabled><b>Vender Name<span
+                                                     style="color:red;">*</span></b></label>
+                                    
+                                        <input class="form-control" name="p_vender_name"  value="{{data.p_vender_name}}" type="text"
+                                              readonly >
+                                    </div>
+                           </div>
+                       
+                        <!-- <div class="mt-3 ">
+                            <div class="row ">
+                                    <div class="col-md-2">
+                                        <label for="name" class="control-label" disabled><b>Transfer From<span style="color:red;">*</span></b></label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input class="form-control" name="tra_from_1"  value="{{data.tra_from_1}}" type="text">
+                                    </div>
+                            </div>
+                        </div> -->
+                            <div class="d-grid gap-2 col-sm-6">
+                             <div class="mb-3">
+                                <label for="name" class="control-label" disabled><b>Material Centre<span style="color:red;">*</span></b></label>
+                           
+                                <select class="form-control" name="Material_center" id="Material_center" style="width:100%;" required>
+                                                    <option disabled selected value>Select Material centre</option>
+                                                    {% for i in data5 %}
+                                                        
+                                                        <option value="{{ i.centre_name }}" {% if i.centre_name == data.Material_center %}selected{% endif %}>{{ i.centre_name }}</option>
+                                                    {% endfor %}
+                                    </select>
+                            </div>
+                        </div>
+                      
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label for="name" class="control-label" disabled><b>To</b></label>
+                                
+                                    <select class="form-control" name="to_1" id="to_1" style="width:100%;" required>
+                                                    <option disabled selected value>Select Vendor</option>
+                                                    {% for i in data3 %}
+                                                        
+                                                        <option value="{{ i.organization_name1 }}" {% if i.organization_name1 == data.to_1 %}selected{% endif %}>{{ i.organization_name1 }}</option>
+                                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                       
+
+                        <!--{% comment %} <div class="row my-3">
+                            <div class="col-md-2">
+                                <label for="name" class="control-label" disabled><b>Voucher<span
+                                            style="color:red;">*</span></b></label>
+                            </div>
+                            <div class="col-md-10">
+                                <input class="form-control" name="voucher_1"  value="{{data.voucher_1}}" type="text" >
+
+                            </div>
+                            
+                        </div> {% endcomment %}-->
+                    
+
+                    <!-- brand names -->
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                                    <label>Book Code<span style="color:red;">*</span></label>
+                                    <input class="form-control" name="p_code" value="{{data.p_code}}" readonly>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label>Brand<span style="color:red;">*</span></label>
+                                     <input class="form-control " name="p_brand_name_1" value="{{data.p_brand_name_1}}" readonly>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label>Class<span style="color:red;">*</span></label>
+                                    <input class="form-control" name="p_class_name_1" value="{{data.p_class_name_1}} "readonly>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label>Medium<span style="color:red;">*</span></label>
+                                    <input class="form-control " name="p_medium_1" value="{{data.p_medium_1}}"readonly >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label>Subject<span style="color:red;">*</span></label>
+                                    <input class="form-control " name="p_subject_1" value="{{data.p_subject_1}}" readonly>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label>Pages<span style="color:red;">*</span></label>
+                                    <input class="form-control " name="p_pages_1" value="{{data.p_pages_1}}" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                            <label>Pending Transfer<span style="color:red;">*</span></label>
+                                            <input class="form-control " name= "data.transfer_pending" value="{{data.transfer_pending}}" readonly >
+                                        </div> 
+                             </div>
+                                
+                            
+                            
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label>Total Recived<span style="color:red;">*</span></label>
+                                    <input class="form-control " name= "data.total_received_forms" value="{{data.total_received_forms}}" readonly >
+                                </div> 
+                            </div>
+                            
+                            <div class="d-grid gap-2 col-sm-6">
+                                <div class="mb-3">
+                                    <label>Total Transfer<span style="color:red;">*</span></label>
+                                    <input class="form-control " name= "data.transfer" value="{{data.transfer}}" readonly >
+                                </div> 
+                            </div>
+                           
+                        
+                        
+                            <div class="d-grid gap-2 col-sm-6">
+                                {% if data.p_printing_received_form_1 is not None and data.p_printing_received_form_1|stringformat:"s" != "0" %}
+                                <div class="mb-3">
+                                        <label>Received Form1<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="p_printing_received_form_1" value="{{data.p_printing_received_form_1}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                     {% if data.p_printing_received_form_2 is not None and data.p_printing_received_form_2|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                         <label>Received Form2<span style="color:red;">*</span></label>
+                                          <input class="form-control " name="p_printing_received_form_2" value="{{data.p_printing_received_form_2}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_3 is not None and data.p_printing_received_form_3|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received Form3<span style="color:red;">*</span></label>
+                                         <input class="form-control " name="p_printing_received_form_3" value="{{data.p_printing_received_form_3}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_4 is not None and data.p_printing_received_form_4|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received Form4<span style="color:red;">*</span></label>
+                                        <input class="form-control " name= "p_printing_received_form_4"value="{{data.p_printing_received_form_4}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_5 is not None and data.p_printing_received_form_5|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received form5<span style="color:red;">*</span></label>
+                                         <input class="form-control " name="p_printing_received_form_5" value="{{data.p_printing_received_form_5}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_6 is not None and data.p_printing_received_form_6|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received Form6<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="p_printing_received_form_6" value="{{data.p_printing_received_form_6}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_7 is not None and data.p_printing_received_form_7|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received Form7<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="p_printing_received_form_7" value="{{data.p_printing_received_form_7}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_8 is not None and data.p_printing_received_form_8|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received Form8<span style="color:red;">*</span></label>
+                                        <input class="form-control " name= "p_printing_received_form_8"value="{{data.p_printing_received_form_8}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_9 is not None and data.p_printing_received_form_9|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received Form9<span style="color:red;">*</span></label>
+                                         <input class="form-control " name="p_printing_received_form_9" value="{{data.p_printing_received_form_9}}" >
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="d-grid gap-2 col-sm-6">
+                                    {% if data.p_printing_received_form_10 is not None and data.p_printing_received_form_10|stringformat:"s" != "0" %}
+                                    <div class="mb-3">
+                                        <label>Received form10<span style="color:red;">*</span></label>
+                                        <input class="form-control " name= "p_printing_received_form_10" value="{{data.p_printing_received_form_10}}" >
+                                    </div> 
+                                    {% endif %}
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer1">Transfer form1<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer1"value="{{data.transfer1}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer2">Transfer form2<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer2"value="{{data.transfer2}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer3">Transfer form3<span style="color:red;">*</span></label>
+                                         <input class="form-control" name= "transfer3"value="{{data.transfer3}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer4">Transfer form4<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer4"value="{{data.transfer4}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer5">Transfer form5<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer5"value="{{data.transfer5}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer6">Transfer form6<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer6"value="{{data.transfer6}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer7">Transfer form7<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer7"value="{{data.transfer7}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer8">Transfer form8<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer8"value="{{data.transfer8}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer9">Transfer form9<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer9"value="{{data.transfer9}}" >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer10">Transfer form10<span style="color:red;">*</span></label>
+                                         <input class="form-control " name= "transfer10"value="{{data.transfer10}}" >
+                                    </div> 
+                                </div>
+                               
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending1">Pending Transfer form1<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="data.transfer_pending1"value="{{ data.transfer_pending1 }}" readonly >
+                                    </div> 
+                                </div>
+                                
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending2">Pending Transfer form2<span style="color:red;">*</span></label>
+                                        
+                                        <input class="form-control " name="data.transfer_pending2"value="{{ data.transfer_pending2 }}" readonly >
+                                        
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending3">Pending Transfer form3<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="data.transfer_pending3"value="{{ data.transfer_pending3 }}" readonly >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending4">Pending Transfer form4<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="transfer_pending4"value="{{ data.transfer_pending4 }}" readonly >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending5">Pending Transfer form5<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="transfer_pending5"value="{{ data.transfer_pending5 }}" readonly >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending6">Pending Transfer form6<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="transfer_pending6"value="{{ data.transfer_pending6 }}" readonly >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending7">Pending Transfer form7<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="transfer_pending7"value="{{ data.transfer_pending7 }}" readonly >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending8">Pending Transfer form8<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="transfer_pending8"value="{{ data.transfer_pending8 }}" readonly >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending9">Pending Transfer form9<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="transfer_pending9"value="{{ data.transfer_pending9 }}" readonly >
+                                    </div> 
+                                </div>
+                                <div class="d-grid gap-2 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="transfer_pending10">Pending Transfer form10<span style="color:red;">*</span></label>
+                                        <input class="form-control " name="transfer_pending10"value="{{ data.transfer_pending10 }}" readonly >
+                                    </div> 
+                                </div>
+                                
+                               
+                            </div>
+                            
+                        </div>
+                    </div>  
+                        
+                    
+                    <!-- end values -->
+                
+                    
+                    <!-- order 1 -->                    
+                     {% if data.print_approved_1 %}
+                     <button type="submit" class="btn btn-success btn-round ml-auto" data-toggle="modal" style="background-color: mediumaquamarine;" >Printing Transfer</button>
+                     {% else %}
+                     <div style="text-align: center;">
+                     <button type="submit" name="print_approval" value="approval_button"  class="btn btn-primary" style="background-color:mediumaquamarine; color:white;">Transfer Print</button>
+                     <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine; color:white;">DONE</button> 
+                    </div>
+                     {% endif %}
+                </form>
+                <button id="print-button" class="btn btn-primary" style="background-color: mediumaquamarine; color: white;">Print</button>
+            </div>
+        </div>
+        
+    </div>
+   
+    
+    <!-- JavaScript to handle printing -->
+    <script>
+        document.getElementById('print-button').addEventListener('click', function() {
+            printForm();
+        });
+    
+        function printForm() {
+            var form = document.getElementById('transferForm');
+            if (form) {
+                form.style.backgroundColor = 'white'; // Optional: Set background color to white before printing
+                window.print();
+                form.style.backgroundColor = 'lightcyan'; // Optional: Restore original background color after printing
+            } else {
+                alert('Form not found.');
+            }
+        }
+    </script>
+   
+   <script>
+$(document).ready(function() {
+    // Function to show/hide fields based on the value of data.p_pages_1
+    function showHideFields() {
+        var pagesValue = parseInt($("[name='p_pages_1']").val());
+
+        // Hide all transfer and pending transfer fields and their labels
+        for (var i = 1; i <= 10; i++) {
+            $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").hide();
+        }
+
+        // Show fields based on the value of pages
+        if (pagesValue === 128) {
+            for (var i = 1; i <= 4; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        } else if (pagesValue === 64) {
+            $("[name='transfer1'], [name='transfer_pending1'], label[for='transfer1'], label[for='transfer_pending1'], [name='transfer2'], [name='transfer_pending2'], label[for='transfer2'], label[for='transfer_pending2']").show();
+        } else if (pagesValue === 96) {
+            for (var i = 1; i <= 3; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        }
+        else if (pagesValue === 160) {
+            for (var i = 1; i <= 5; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        }
+        else if (pagesValue === 192) {
+            for (var i = 1; i <= 6; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        }
+         else if (pagesValue === 224) {
+            for (var i = 1; i <= 7; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        } else if (pagesValue === 256) {
+            for (var i = 1; i <= 8; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        } else if (pagesValue === 288) {
+            for (var i = 1; i <= 9; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        } else if (pagesValue === 320) {
+            for (var i = 1; i <= 10; i++) {
+                $("[name='transfer" + i + "'], [name='transfer_pending" + i + "'], label[for='transfer" + i + "'], label[for='transfer_pending" + i + "']").show();
+            }
+        }
+
+
+    }
+
+    // Call the function on page load and whenever the value of data.p_pages_1 changes
+    showHideFields();
+    $("[name='p_pages_1']").change(showHideFields);
+});
+</script>
+  
+    <script>
+     function updateFormsBasedOnPages() {
+        const pagesValue = parseInt(document.querySelector('[name="p_pages_1"]').value);
+    
+        // Update printing_received_form inputs
+        const printingReceivedForms = document.querySelectorAll('[name^="p_printing_received_form_"]');
+        printingReceivedForms.forEach((input, index) => {
+            const requiredBoxes = Math.ceil(pagesValue / 32);
+    
+            if (index < requiredBoxes) {
+                input.closest('.col-md-2').style.display = 'block';
+            } else {
+                input.closest('.col-md-2').style.display = 'none';
+                input.value = requiredBoxes === 0 ? "0" : "";
+            }
+        });
+    
+        // Update transfer inputs
+        const transferForms = document.querySelectorAll('[name^="transfer"]');
+        transferForms.forEach((input, index) => {
+            const requiredBoxes = Math.ceil(pagesValue / 32);
+            if (index < requiredBoxes) {
+                input.closest('.col-md-2').style.display = 'block';
+            } else {
+                input.closest('.col-md-2').style.display = 'none';
+                input.value = requiredBoxes === 0 ? "0" : "";
+            }
+        });
+    
+        // Update transfer_pending inputs
+       // Update transfer_pending inputs
+// Update transfer_pending inputs
+        const transferPendingForms = document.querySelectorAll('[name^="data.transfer_pending"]');
+        transferPendingForms.forEach((input, index) => {
+            const inputName = input.getAttribute('name').replace(/[^\d]/g, ''); // Extract numeric part of the name
+            const requiredBoxes = Math.ceil(pagesValue / 32);
+
+            if (inputName >= 1 && inputName <= 10) {
+                if (inputName <= requiredBoxes) {
+                    input.closest('.col-md-2').style.display = 'block';
+                } else {
+                    input.closest('.col-md-2').style.display = 'none';
+                    input.value = requiredBoxes === 0 ? "0" : "";
+                }
+            } else {
+                input.closest('.col-md-2').style.display = 'none';
+                input.value = "";
+            }
+        });
+
+
+    }
+    
+    // Call the function initially and whenever the pages value changes
+    updateFormsBasedOnPages();
+    document.querySelector('[name="p_pages_1"]').addEventListener('change', updateFormsBasedOnPages);
+    
+    </script>
+    
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+        </script>
+
+    <script>
+        $(document).ready(function () {
+            var max_fields_limit = 11;
+            var x = 1;
+            $('.add_more_button').click(function (e) {
+                e.preventDefault();
+                $('#myDiv').show();
+                if (x < max_fields_limit) {
+                    x++;
+                    $('.input_fields_container').append(
+
+                        '<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description"><input type="text" pattern="[a-z A-Z 0-9\s]+" class="form-control mobile" name="brand_name_' + x.toString() + '" id="brand_name_' + x.toString() + '" placeholder="brand name" value="" required maxlength="30" /></div><div class="col-md-2 form-group "><input type="text" class="form-control mobile" name="class_name_' + x.toString() + '" id="class_name_' + x.toString() + '" maxlength="30" placeholder="Class Name" min=""  pattern="^[a-z A-Z 0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;"  name="medium_' + x.toString() + '" id="medium_' + x.toString() + '" type="text" maxlength="30" placeholder=" Medium" min=""  pattern="^[a-zA-Z0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;" name="subject_' + x.toString() + '" id="subject_' + x.toString() + '" placeholder="Subject" value="" required maxlength="30"></div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_' + x.toString() + '" id="quantity_' + x.toString() + '" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_' + x.toString() + '" id="rim_' + x.toString() + '" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+                    // <input type="text" class="form-control mobile" name="amount_'+x.toString()+'" id="amount_'+x.toString()+'" placeholder="Amount" value="" required />
+                }
+            });
+            $('.input_fields_container').on("click", ".remove_field", function (e) { //user click on remove text links
+                e.preventDefault(); $(this).parent('div').remove(); x--;
+
+            })
+        });
+        function restrictMinus(e) {
+            var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+            if (inputKeyCode != null) {
+                if (inputKeyCode == 45) e.preventDefault();
+            }
+        }
+    </script>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal 
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        document.getElementById("from_date").onchange = function () {
+            var input = document.getElementById("to_date");
+            input.setAttribute("min", this.value);
+        }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+
+    <script type="text/javascript">
+        var rad = document.cash_memo_add.stamp_type;
+        var prev = null;
+        for (var i = 0; i < rad.length; i++) {
+            rad[i].addEventListener('change', function () {
+                (prev) ? console.log(prev.value) : null;
+                if (this !== prev) {
+                    prev = this;
+                }
+                if (this.value == 'merchant_stamp') {
+                    document.getElementById('default_stmaps').style.display = 'block';
+                    document.getElementById('own_stamps').style.display = 'none';
+                }
+                else if (this.value == 'own_stamp') {
+                    // document.getElementById('messageError').innerHTML = "";
+                    document.getElementById('default_stmaps').style.display = 'none';
+                    document.getElementById('own_stamps').style.display = 'block';
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        jQuery.validator.addMethod("greaterStart", function (value, element, params) {
+            return this.optional(element) || new Date(value) >= new Date($(params).val());
+        }, 'Must be greater than from date.');
+
+        $("#add_merchant_form").validate({
+            rules: {
+                chk: {
+                    required: true,
+                },
+            },
+
+        });
+        $("#stamp_image_form").validate({
+            rules: {
+                chkcashmeo: {
+                    required: true,
+                },
+            },
+
+        });
+        $("#bill_info_filter_form").validate({
+            rules: {
+                from_date: {
+                    required: true,
+                },
+                to_date: {
+                    required: true,
+                    greaterStart: "#from_date",
+                },
+            },
+
+        });
+        $(document).ready(function () {
+            // $('input[name=to_date]').change(function() {
+            //         var to_date = $('#to_date').val();
+            //         document.getElementById('from_date').setAttribute("max", to_date);
+            // })
+
+            // $('input[name=from_date]').change(function() {
+            //   var from_date = $('#from_date').val();
+            //     document.getElementById('to_date').setAttribute("min", from_date);
+            // })
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#add-row').DataTable({
+                dom: 'lBfrtip',
+                "ordering": false,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                buttons: [
+                    'excel', 'pdf', 'print'
+                ],
+                initComplete: function () {
+                    this.api().columns([2, 3]).every(function () {
+                        var column = this;
+                        var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+
+                            .appendTo($("#type_filter_" + column[0][0]).empty())
+
+                            .on('change', function () {
+
+                                var val = $(':selected', select).map(function (index, element) {
+                                    return $.fn.dataTable.util.escapeRegex($(this).val());
+                                }).toArray().join('|');
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                }
+            });
+
+            $("#column_id_2").select2({
+                placeholder: " Select Date",
+                closeOnSelect: true,
+                width: '90%',
+            })
+
+            $("#column_id_3").select2({
+                placeholder: " Select Number",
+                closeOnSelect: true,
+                width: '80%',
+            })
+
+        });
+    </script>
+
+    <script>
+        var today = new Date();
+
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        // today = yyyy + '/' + mm + '/' + dd;
+        today = yyyy + '-' + mm + '-' + dd;
+
+        console.log(today);
+        document.getElementById('date').value = today;
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#id_venderlist").on('change', function () {
+
+                var state = $("#id_venderlist").val();
+                // alert(state);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Orderlist/" + state,
+                    data: {
+                        csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                        'organization_name': state
+                    },
+                    success: function (result) {
+
+                        $("#id_courselist").empty();
+                        var empty = ""
+                        $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Address *" + "</option>");
+                        $.each(result.data, function (key, value) {
+                            $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                        });
+                    }
+                });
+
+            })
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#id_courselist").on('change', function () {
+
+                var state = $("#id_courselist").val();
+                // alert(state);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Addresslist/" + maha,
+                    data: {
+                        csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                        'medium': maha
+                    },
+                    success: function (result) {
+
+                        $("#id_offervalue").empty();
+                        var empty = ""
+                        $('#id_offervalue').append("<option value='" + empty + "' disabled selected value>" + "Select special offer*" + "</option>");
+                        $.each(result.data, function (key, value) {
+                            $('#id_offervalue').append("<option value='" + value + "'>" + value + "</option>");
+                        });
+                    }
+                });
+
+            })
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#id_brand").on('change', function () {
+
+                var state = $("#id_brand").val();
+                // alert(state);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Brandlist/" + city,
+                    data: {
+                        csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                        'books_name': city
+                    },
+                    success: function (result) {
+
+                        $("#id_classname").empty();
+                        var empty = ""
+                        $('#id_classname').append("<option value='" + empty + "' disabled selected value>" + "Select classname *" + "</option>");
+                        $.each(result.data, function (key, value) {
+                            $('#id_classname').append("<option value='" + value + "'>" + value + "</option>");
+                        });
+                    }
+                });
+
+            })
+        })
+    </script>
+
+    <script>
+        const pagesInput = document.getElementById('pages_1');
+        const quantityInput = document.getElementById('quantity_1');
+        const brandSelect = document.getElementById('brand_name_1');
+        const formsPerSetInput = document.getElementById('forms-per-set');
+        function calculateFormsPerSet() {
+            const pages = parseInt(pagesInput.value);
+            const quantity = parseInt(quantityInput.value);
+            const brand = brandSelect.value;
+            let pagesPerForm = 0;
+            if (brand === 'Kohinoor') {
+                pagesPerForm = 64;
+            } else if (brand === 'Spark') {
+                pagesPerForm = 128;
+            } else if (brand === 'Vidhya Mitra') {
+                pagesPerForm = 32;
+            } else if (brand === 'Abhiyashika') {
+                pagesPerForm = 16;
+            }
+            const forms = Math.ceil(pages / pagesPerForm * quantity);
+            const totalSet = Math.ceil(pages / 32);
+            const formsPerSet = Math.ceil(forms / totalSet);
+            formsPerSetInput.value = formsPerSet;
+        }
+
+        pagesInput.addEventListener('input', calculateFormsPerSet);
+        quantityInput.addEventListener('input', calculateFormsPerSet);
+        brandSelect.addEventListener('change', calculateFormsPerSet);
+    </script>
+
+
+
+    
+</body>
+
+</html>
+
+{% endblock %}

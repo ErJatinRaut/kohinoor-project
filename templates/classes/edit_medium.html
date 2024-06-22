@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Medium{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+
+    .container {
+        max-width: 705px;
+        margin: 0 auto;
+        box-shadow: 1px 0 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+    }
+
+    .form-control {
+        width: 70%;
+    }
+
+    .text-center {
+        text-align: left;
+    }
+
+    .page-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 446px;
+        margin-top: 80px;
+        margin-left: 292px;
+    }
+
+    /* Add your other styles here */
+
+    .form-label {
+        color: #000;
+        /* Change the color as needed */
+    }
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3 p-3" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 col-sm-6">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                        
+                        <div class="mb-3">
+                            <label  class="form-label">Edit Medium</label>
+                            <input type="text" class="form-control " id="" name = "medium" value = "{{data.medium}}" maxlength="30" required="" style="width:300px;">
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label  class="form-label">Books Pages</label>
+                            <input type="text" class="form-control radius-10" id="" name ="no_of_pages" value="{{data.no_of_pages}}">
+                        </div> -->
+                         <!-- <div class="mb-3">
+                            <label class="form-label">Subject </label>
+                            <input type="tel" name="subject" minlength="" class="form-control" value="{{data.subject}}" id="" placeholder="" maxlength="" >
+                        </div>
+                         -->
+                    
+                    <div class="col-md-14" style="text-align: left;">
+                        <button class="btn btn-primary" style="background-color: mediumaquamarine;color:white;" ></a>Back</button>
+                                          <button type="submit" class="btn btn-primary" style="background-color: mediumaquamarine; color:white;">Save</button>
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+    {% endblock %}

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+   <style type="text/css">
+    *
+    {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    } 
+
+
+      table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 90%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  /*background-color: #dddddd;*/
+}
+.div1
+{
+   
+  width: 800px;
+  height: 453px;
+  border: 1px solid black;
+   border-radius: 15px 50px;
+  box-shadow: 10px 11px 5px  lightgreen inset;
+   /*border-radius: 15px 50px;
+*/
+}
+
+.div2 {
+  width: 800px;
+  height: 900px;  
+  padding: 0px;
+  padding-right: 0%;
+  
+}
+ 
+   </style>
+
+</head>
+<body>
+<center>
+   <div class="btn-class">
+      <button class="btn btn-primary" style="padding: 6px; border-radius: 20px; font-size: 18px; "><a href="{% url 'topi_order' %}"  style="color:black;" >Back</a></button>
+      <button id="pdf-button" onclick="savePage()" style="padding: 8px; border-radius: 20px; font-size: 18px;">Download PDF</button>
+      <button id="print-button"  onclick="window.print()" style="padding: 8px; border-radius: 20px; font-size: 18px;">Print</button>
+
+    </div>
+   <div class="div1">
+   <h1 style="padding-left: 5%;">WINWINGS PUBLICATIONS</h1>
+   <img src="images/logo2 kohinoor.png"style="width: 5%;height: 5%;"><span style="padding-right: 3%;color: purple; font-size:400%;">KOHINOOR</span>
+  <h4>776, GULGULWAR NIWAS, GOLIBAR CHOWK, NAGPUR</h4>
+  
+  <h4>GOLIBAR CHOWK, NAGPUR</h4>
+  <h4>GST NO.: 27AAYPA2006L2ZL</h4>
+  <!-- <h4 style="padding-left: 70%;">DATE: {{data.date}}</h4> -->
+   <h4> PARTY:SHARPINDUSTRIES, NAGPUR</h4>
+   <h4>LOT</h4>
+   <!-- <span style="padding-left: 15%;">Binding Order No.</span>{{data.border_id}} -->
+
+   <div style="float:left; margin-left: 12px; display: flex; justify-content: space-evenly; font-weight: bold;">
+      <span>Binding Order:</span><span>{{data.id}}</span>
+      <h4 style="margin-left: 365px;">DATE: {{data.ord_date}}</h4>
+   </div>
+
+
+<div class="div2">
+   <table >
+   <tr>
+      <th style='text-align:center;'>SR. </th>
+      <!-- <th style='text-align:center;'>BRAND </th>
+      <th style='text-align:center;'>STD. </th>
+      <th style='text-align:center;'>MEDIUM. </th> -->
+      <th style='text-align:center;'>PLATE NO</th>
+      <th style='text-align:center;'>PLATE RATE</th>
+      <th style='text-align:center;'>PRINTING RATE</th>
+      <th style='text-align:center;'>QUANTITY</th>
+      <th style='text-align:center;'>UNITS</th>
+      <th style='text-align:center;'>RATE</th>
+      <th style='text-align:center;'>AMOUNT </th>
+      {% comment %} <th style='text-align:center;'>QUANTITY</th>
+      <th style='text-align:center;'>BINDING RATE</th> {% endcomment %}
+      <!-- <th style='text-align:center;'>RIM</th> -->
+   </tr>
+  
+
+  {% if data.ord_plate_no1 %}
+   <tr>
+      <td style='text-align:center;'>1.</td>
+      <td style='text-align:center;'>{{data.ord_plate_no1}}</td>
+      <td style='text-align:center;'>{{data.print_rate1}}</td>
+      <td style='text-align:center;'>{{data.printing_rate1}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity1}}</td>
+      <td style='text-align:center;'>{{data.ord_unit1}}</td>
+      <td style='text-align:center;'>{{data.ord_rate1}}</td>
+     
+      <td style='text-align:center;'>{{data.ord_amount1}}</td>
+      
+   {% endif %}
+   </tr>
+  
+   {% if data.ord_plate_no2  %}
+  <tr>
+      <td style='text-align:center;'>2.</td>
+      <td style='text-align:center;'>{{data.ord_plate_no2}}</td>
+      <td style='text-align:center;'>{{data.print_rate2}}</td>
+      <td style='text-align:center;'>{{data.printing_rate2}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity2}}</td>
+      <td style='text-align:center;'>{{data.ord_unit2}}</td>
+      <td style='text-align:center;'>{{data.ord_rate2}}</td>
+      <td style='text-align:center;'>{{data.ord_amount2}}</td>
+      
+   {% endif %}
+   </tr>
+   {% if data.ord_plate_no3  %}
+   <tr>
+    <td style='text-align:center;'>3.</td>
+    <td style='text-align:center;'>{{data.ord_plate_no3}}</td>
+    <td style='text-align:center;'>{{data.print_rate3}}</td>
+    <td style='text-align:center;'>{{data.printing_rate3}}</td>
+    <td style='text-align:center;'>{{data.ord_quantity3}}</td>
+    <td style='text-align:center;'>{{data.ord_unit3}}</td>
+    <td style='text-align:center;'>{{data.ord_rate3}}</td>
+    <td style='text-align:center;'>{{data.ord_amount3}}</td>
+   {% endif %}
+   </tr>
+   {% if data.ord_plate_no4  %}
+   <tr>
+      <td style='text-align:center;'>4.</td>
+      <td style='text-align:center;'>{{data.ord_plate_no4}}</td>
+      <td style='text-align:center;'>{{data.print_rate4}}</td>
+      <td style='text-align:center;'>{{data.printing_rate4}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity4}}</td>
+      <td style='text-align:center;'>{{data.ord_unit4}}</td>
+      <td style='text-align:center;'>{{data.ord_rate4}}</td>
+      <td style='text-align:center;'>{{data.ord_amount4}}</td>
+   {% endif %}
+   </tr>
+   {% if data.ord_plate_no5  %}
+   <tr>
+      <td style='text-align:center;'>5.</td>
+      
+      <td style='text-align:center;'>{{data.ord_plate_no5}}</td>
+      <td style='text-align:center;'>{{data.print_rate5}}</td>
+      <td style='text-align:center;'>{{data.printing_rate5}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity5}}</td>
+      <td style='text-align:center;'>{{data.ord_unit5}}</td>
+      <td style='text-align:center;'>{{data.ord_rate5}}</td>
+      <td style='text-align:center;'>{{data.ord_amount5}}</td>
+   {% endif %}
+   </tr>
+
+   {% if data.ord_plate_no6  %}
+   <tr>
+      <td style='text-align:center;'>6.</td>
+      
+      <td style='text-align:center;'>{{data.ord_plate_no6}}</td>
+      <td style='text-align:center;'>{{data.print_rate6}}</td>
+      <td style='text-align:center;'>{{data.printing_rate6}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity6}}</td>
+      <td style='text-align:center;'>{{data.ord_unit6}}</td>
+      <td style='text-align:center;'>{{data.ord_rate6}}</td>
+      <td style='text-align:center;'>{{data.ord_amount6}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.ord_plate_no7  %}
+   <tr>
+      <td style='text-align:center;'>7.</td>
+      <td style='text-align:center;'>{{data.ord_plate_no7}}</td>
+      <td style='text-align:center;'>{{data.print_rate7}}</td>
+      <td style='text-align:center;'>{{data.printing_rate7}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity7}}</td>
+      <td style='text-align:center;'>{{data.ord_unit7}}</td>
+      <td style='text-align:center;'>{{data.ord_rate7}}</td>
+      <td style='text-align:center;'>{{data.ord_amount7}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.ord_plate_no8  %}
+   <tr>
+      <td style='text-align:center;'>8.</td>
+      <td style='text-align:center;'>{{data.ord_plate_no8}}</td>
+      <td style='text-align:center;'>{{data.print_rate8}}</td>
+      <td style='text-align:center;'>{{data.printing_rate8}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity8}}</td>
+      <td style='text-align:center;'>{{data.ord_unit8}}</td>
+      <td style='text-align:center;'>{{data.ord_rate8}}</td>
+      <td style='text-align:center;'>{{data.ord_amount8}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.ord_plate_no9  %}
+   <tr>
+      <td style='text-align:center;'>9.</td>
+      <td style='text-align:center;'>{{data.ord_plate_no9}}</td>
+      <td style='text-align:center;'>{{data.print_rate9}}</td>
+      <td style='text-align:center;'>{{data.printing_rate9}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity9}}</td>
+      <td style='text-align:center;'>{{data.ord_unit9}}</td>
+      <td style='text-align:center;'>{{data.ord_rate9}}</td>
+      <td style='text-align:center;'>{{data.ord_amount9}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.ord_plate_no10  %}
+   <tr>
+      <td style='text-align:center;'>10.</td>
+      <td style='text-align:center;'>{{data.ord_plate_no10}}</td>
+      <td style='text-align:center;'>{{data.print_rate10}}</td>
+      <td style='text-align:center;'>{{data.printing_rate10}}</td>
+      <td style='text-align:center;'>{{data.ord_quantity10}}</td>
+      <td style='text-align:center;'>{{data.ord_unit10}}</td>
+      <td style='text-align:center;'>{{data.ord_rate10}}</td>
+      <td style='text-align:center;'>{{data.ord_amount10}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_10  %}
+   <tr>
+      <td style='text-align:center;'>11.</td>
+      <td style='text-align:center;'>{{data.code_10}}</td>
+      <td style='text-align:center;'>{{data.brand_10}}</td>
+      <td style='text-align:center;'>{{data.midium_10}}</td>
+      <td style='text-align:center;'>{{data.class_10}}</td>
+      <td style='text-align:center;'>{{data.bsubject_10}}</td>
+      <td style='text-align:center;'>{{data.bquantity_10}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_10}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_11  %}
+   <tr>
+      <td style='text-align:center;'>12.</td>
+      <td style='text-align:center;'>{{data.code_11}}</td>
+      <td style='text-align:center;'>{{data.brand_11}}</td>
+      <td style='text-align:center;'>{{data.midium_11}}</td>
+      <td style='text-align:center;'>{{data.class_11}}</td>
+      <td style='text-align:center;'>{{data.bsubject_11}}</td>
+      <td style='text-align:center;'>{{data.bquantity_11}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_11}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_12  %}
+   <tr>
+      <td style='text-align:center;'>13.</td>
+      <td style='text-align:center;'>{{data.code_12}}</td>
+      <td style='text-align:center;'>{{data.brand_12}}</td>
+      <td style='text-align:center;'>{{data.midium_12}}</td>
+      <td style='text-align:center;'>{{data.class_12}}</td>
+      <td style='text-align:center;'>{{data.bsubject_12}}</td>
+      <td style='text-align:center;'>{{data.bquantity_12}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_12}}</td>
+   {% endif %}
+   </tr>
+<!-- $-->
+
+
+   {% if data.bsubject_13 %}
+   <tr>
+      <td style='text-align:center;'>14.</td>
+      <td style='text-align:center;'>{{data.code_14}}</td>
+      <td style='text-align:center;'>{{data.brand_14}}</td>
+      <td style='text-align:center;'>{{data.midium_14}}</td>
+      <td style='text-align:center;'>{{data.class_14}}</td>
+      <td style='text-align:center;'>{{data.bsubject_13}}</td>
+      <td style='text-align:center;'>{{data.bquantity_13}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_13}}</td>
+   {% endif %}
+   </tr>
+
+   {% if data.bsubject_14 %}
+   <tr>
+      <td style='text-align:center;'>15.</td>
+      <td style='text-align:center;'>{{data.code_14}}</td>
+      <td style='text-align:center;'>{{data.brand_14}}</td>
+      <td style='text-align:center;'>{{data.midium_14}}</td>
+      <td style='text-align:center;'>{{data.class_14}}</td>
+      <td style='text-align:center;'>{{data.bsubject_14}}</td>
+      <td style='text-align:center;'>{{data.bquantity_14}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_14}}</td>
+   {% endif %}
+   </tr>
+
+   {% if data.bsubject_15 %}
+   <tr>
+      <td style='text-align:center;'>16.</td>
+      <td style='text-align:center;'>{{data.code_15}}</td>
+      <td style='text-align:center;'>{{data.brand_15}}</td>
+      <td style='text-align:center;'>{{data.midium_15}}</td>
+      <td style='text-align:center;'>{{data.class_15}}</td>
+      <td style='text-align:center;'>{{data.bsubject_15}}</td>
+      <td style='text-align:center;'>{{data.bquantity_15}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_15}}</td>
+   {% endif %}
+   </tr>
+
+   {% if data.bsubject_16 %}
+   <tr>
+      <td style='text-align:center;'>17.</td>
+      <td style='text-align:center;'>{{data.code_16}}</td>
+      <td style='text-align:center;'>{{data.brand_16}}</td>
+      <td style='text-align:center;'>{{data.midium_16}}</td>
+      <td style='text-align:center;'>{{data.class_16}}</td>
+      <td style='text-align:center;'>{{data.bsubject_16}}</td>
+      <td style='text-align:center;'>{{data.bquantity_16}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_16}}</td>
+   {% endif %}
+   </tr>
+
+   {% if data.bsubject_17 %}
+   <tr>
+      <td style='text-align:center;'>18.</td>
+      <td style='text-align:center;'>{{data.code_17}}</td>
+      <td style='text-align:center;'>{{data.brand_17}}</td>
+      <td style='text-align:center;'>{{data.midium_17}}</td>
+      <td style='text-align:center;'>{{data.class_17}}</td>
+      <td style='text-align:center;'>{{data.bsubject_17}}</td>
+      <td style='text-align:center;'>{{data.bquantity_17}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_17}}</td>
+   {% endif %}
+   </tr>
+
+   {% if data.bsubject_18 %}
+   <tr>
+      <td style='text-align:center;'>19.</td>
+      <td style='text-align:center;'>{{data.code_118}}</td>
+      <td style='text-align:center;'>{{data.brand_18}}</td>
+      <td style='text-align:center;'>{{data.midium_18}}</td>
+      <td style='text-align:center;'>{{data.class_18}}</td>
+      <td style='text-align:center;'>{{data.bsubject_18}}</td>
+      <td style='text-align:center;'>{{data.bquantity_18}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_18}}</td>
+   {% endif %}
+   </tr>
+
+   {% if data.bsubject_19 %}
+   <tr>
+      <td style='text-align:center;'>20.</td>
+      <td style='text-align:center;'>{{data.code_19}}</td>
+      <td style='text-align:center;'>{{data.brand_19}}</td>
+      <td style='text-align:center;'>{{data.midium_19}}</td>
+      <td style='text-align:center;'>{{data.class_19}}</td>
+      <td style='text-align:center;'>{{data.bsubject_19}}</td>
+      <td style='text-align:center;'>{{data.bquantity_19}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_19}}</td>
+   {% endif %}
+   </tr>
+
+   <!-- Continue adding the code block below for subjects 20 to 50 -->
+
+   {% if data.bsubject_20 %}
+   <tr>
+      <td style='text-align:center;'>21.</td>
+      <td style='text-align:center;'>{{data.code_20}}</td>
+      <td style='text-align:center;'>{{data.brand_20}}</td>
+      <td style='text-align:center;'>{{data.midium_20}}</td>
+      <td style='text-align:center;'>{{data.class_20}}</td>
+      <td style='text-align:center;'>{{data.bsubject_20}}</td>
+      <td style='text-align:center;'>{{data.bquantity_20}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_20}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_21 %}
+   <tr>
+      <td style='text-align:center;'>22.</td>
+      <td style='text-align:center;'>{{data.code_21}}</td>
+      <td style='text-align:center;'>{{data.brand_21}}</td>
+      <td style='text-align:center;'>{{data.midium_21}}</td>
+      <td style='text-align:center;'>{{data.class_21}}</td>
+      <td style='text-align:center;'>{{data.bsubject_21}}</td>
+      <td style='text-align:center;'>{{data.bquantity_21}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_21}}</td>
+   {% endif %}
+   </tr>
+   
+
+   {% if data.bsubject_22 %}
+   <tr>
+      <td style='text-align:center;'>23.</td>
+      <td style='text-align:center;'>{{data.code_22}}</td>
+      <td style='text-align:center;'>{{data.brand_22}}</td>
+      <td style='text-align:center;'>{{data.midium_22}}</td>
+      <td style='text-align:center;'>{{data.class_22}}</td>
+      <td style='text-align:center;'>{{data.bsubject_22}}</td>
+      <td style='text-align:center;'>{{data.bquantity_22}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_22}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_23 %}
+   <tr>
+      <td style='text-align:center;'>24.</td>
+      <td style='text-align:center;'>{{data.code_23}}</td>
+      <td style='text-align:center;'>{{data.brand_23}}</td>
+      <td style='text-align:center;'>{{data.midium_23}}</td>
+      <td style='text-align:center;'>{{data.class_23}}</td>
+      <td style='text-align:center;'>{{data.bsubject_23}}</td>
+      <td style='text-align:center;'>{{data.bquantity_23}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_23}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_24 %}
+   <tr>
+      <td style='text-align:center;'>25.</td>
+      <td style='text-align:center;'>{{data.code_24}}</td>
+      <td style='text-align:center;'>{{data.brand_24}}</td>
+      <td style='text-align:center;'>{{data.midium_24}}</td>
+      <td style='text-align:center;'>{{data.class_24}}</td>
+      <td style='text-align:center;'>{{data.bsubject_24}}</td>
+      <td style='text-align:center;'>{{data.bquantity_24}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_24}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_25 %}
+   <tr>
+      <td style='text-align:center;'>26.</td>
+      <td style='text-align:center;'>{{data.code_25}}</td>
+      <td style='text-align:center;'>{{data.brand_25}}</td>
+      <td style='text-align:center;'>{{data.midium_25}}</td>
+      <td style='text-align:center;'>{{data.class_25}}</td>
+      <td style='text-align:center;'>{{data.bsubject_25}}</td>
+      <td style='text-align:center;'>{{data.bquantity_25}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_25}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_26 %}
+   <tr>
+      <td style='text-align:center;'>27.</td>
+      <td style='text-align:center;'>{{data.code_26}}</td>
+      <td style='text-align:center;'>{{data.brand_26}}</td>
+      <td style='text-align:center;'>{{data.midium_26}}</td>
+      <td style='text-align:center;'>{{data.class_26}}</td>
+      <td style='text-align:center;'>{{data.bsubject_26}}</td>
+      <td style='text-align:center;'>{{data.bquantity_26}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_26}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_27 %}
+   <tr>
+      <td style='text-align:center;'>28.</td>
+      <td style='text-align:center;'>{{data.code_27}}</td>
+      <td style='text-align:center;'>{{data.brand_27}}</td>
+      <td style='text-align:center;'>{{data.midium_27}}</td>
+      <td style='text-align:center;'>{{data.class_27}}</td>
+      <td style='text-align:center;'>{{data.bsubject_27}}</td>
+      <td style='text-align:center;'>{{data.bquantity_27}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_27}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_28 %}
+   <tr>
+      <td style='text-align:center;'>29.</td>
+      <td style='text-align:center;'>{{data.code_28}}</td>
+      <td style='text-align:center;'>{{data.brand_28}}</td>
+      <td style='text-align:center;'>{{data.midium_28}}</td>
+      <td style='text-align:center;'>{{data.class_28}}</td>
+      <td style='text-align:center;'>{{data.bsubject_28}}</td>
+      <td style='text-align:center;'>{{data.bquantity_28}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_28}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_29 %}
+   <tr>
+      <td style='text-align:center;'>30.</td>
+      <td style='text-align:center;'>{{data.code_29}}</td>
+      <td style='text-align:center;'>{{data.brand_29}}</td>
+      <td style='text-align:center;'>{{data.midium_29}}</td>
+      <td style='text-align:center;'>{{data.class_29}}</td>
+      <td style='text-align:center;'>{{data.bsubject_29}}</td>
+      <td style='text-align:center;'>{{data.bquantity_29}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_29}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_30 %}
+   <tr>
+      <td style='text-align:center;'>31.</td>
+      <td style='text-align:center;'>{{data.code_30}}</td>
+      <td style='text-align:center;'>{{data.brand_30}}</td>
+      <td style='text-align:center;'>{{data.midium_30}}</td>
+      <td style='text-align:center;'>{{data.class_30}}</td>
+      <td style='text-align:center;'>{{data.bsubject_30}}</td>
+      <td style='text-align:center;'>{{data.bquantity_30}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_30}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_31 %}
+   <tr>
+      <td style='text-align:center;'>32.</td>
+      <td style='text-align:center;'>{{data.code_31}}</td>
+      <td style='text-align:center;'>{{data.brand_31}}</td>
+      <td style='text-align:center;'>{{data.midium_31}}</td>
+      <td style='text-align:center;'>{{data.class_31}}</td>
+      <td style='text-align:center;'>{{data.bsubject_31}}</td>
+      <td style='text-align:center;'>{{data.bquantity_31}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_31}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_32 %}
+   <tr>
+      <td style='text-align:center;'>33.</td>
+      <td style='text-align:center;'>{{data.code_32}}</td>
+      <td style='text-align:center;'>{{data.brand_32}}</td>
+      <td style='text-align:center;'>{{data.midium_32}}</td>
+      <td style='text-align:center;'>{{data.class_32}}</td>
+      <td style='text-align:center;'>{{data.bsubject_32}}</td>
+      <td style='text-align:center;'>{{data.bquantity_32}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_32}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_33 %}
+   <tr>
+      <td style='text-align:center;'>34.</td>
+      <td style='text-align:center;'>{{data.code_33}}</td>
+      <td style='text-align:center;'>{{data.brand_33}}</td>
+      <td style='text-align:center;'>{{data.midium_33}}</td>
+      <td style='text-align:center;'>{{data.class_33}}</td>
+      <td style='text-align:center;'>{{data.bsubject_33}}</td>
+      <td style='text-align:center;'>{{data.bquantity_33}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_33}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_34 %}
+   <tr>
+      <td style='text-align:center;'>35.</td>
+      <td style='text-align:center;'>{{data.code_34}}</td>
+      <td style='text-align:center;'>{{data.brand_34}}</td>
+      <td style='text-align:center;'>{{data.midium_34}}</td>
+      <td style='text-align:center;'>{{data.class_34}}</td>
+      <td style='text-align:center;'>{{data.bsubject_34}}</td>
+      <td style='text-align:center;'>{{data.bquantity_34}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_34}}</td>
+   {% endif %}
+   </tr>
+
+
+
+
+   {% if data.bsubject_35 %}
+   <tr>
+      <td style='text-align:center;'>36.</td>
+      <td style='text-align:center;'>{{data.code_35}}</td>
+      <td style='text-align:center;'>{{data.brand_35}}</td>
+      <td style='text-align:center;'>{{data.midium_35}}</td>
+      <td style='text-align:center;'>{{data.class_35}}</td>
+      <td style='text-align:center;'>{{data.bsubject_35}}</td>
+      <td style='text-align:center;'>{{data.bquantity_35}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_35}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_36 %}
+   <tr>
+      <td style='text-align:center;'>37.</td>
+      <td style='text-align:center;'>{{data.code_36}}</td>
+      <td style='text-align:center;'>{{data.brand_36}}</td>
+      <td style='text-align:center;'>{{data.midium_36}}</td>
+      <td style='text-align:center;'>{{data.class_36}}</td>
+      <td style='text-align:center;'>{{data.bsubject_36}}</td>
+      <td style='text-align:center;'>{{data.bquantity_36}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_36}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_37 %}
+   <tr>
+      <td style='text-align:center;'>38.</td>
+      <td style='text-align:center;'>{{data.code_37}}</td>
+      <td style='text-align:center;'>{{data.brand_37}}</td>
+      <td style='text-align:center;'>{{data.midium_37}}</td>
+      <td style='text-align:center;'>{{data.class_37}}</td>
+      <td style='text-align:center;'>{{data.bsubject_37}}</td>
+      <td style='text-align:center;'>{{data.bquantity_37}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_37}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_38 %}
+   <tr>
+      <td style='text-align:center;'>39.</td>
+      <td style='text-align:center;'>{{data.code_38}}</td>
+      <td style='text-align:center;'>{{data.brand_38}}</td>
+      <td style='text-align:center;'>{{data.midium_38}}</td>
+      <td style='text-align:center;'>{{data.class_38}}</td>
+      <td style='text-align:center;'>{{data.bsubject_38}}</td>
+      <td style='text-align:center;'>{{data.bquantity_38}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_38}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_39 %}
+   <tr>
+      <td style='text-align:center;'>40.</td>
+      <td style='text-align:center;'>{{data.code_39}}</td>
+      <td style='text-align:center;'>{{data.brand_39}}</td>
+      <td style='text-align:center;'>{{data.midium_39}}</td>
+      <td style='text-align:center;'>{{data.class_39}}</td>
+      <td style='text-align:center;'>{{data.bsubject_39}}</td>
+      <td style='text-align:center;'>{{data.bquantity_39}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_39}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_40 %}
+   <tr>
+      <td style='text-align:center;'>41.</td>
+      <td style='text-align:center;'>{{data.code_40}}</td>
+      <td style='text-align:center;'>{{data.brand_40}}</td>
+      <td style='text-align:center;'>{{data.midium_40}}</td>
+      <td style='text-align:center;'>{{data.class_40}}</td>
+      <td style='text-align:center;'>{{data.bsubject_40}}</td>
+      <td style='text-align:center;'>{{data.bquantity_40}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_40}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_41 %}
+   <tr>
+      <td style='text-align:center;'>42.</td>
+      <td style='text-align:center;'>{{data.code_41}}</td>
+      <td style='text-align:center;'>{{data.brand_41}}</td>
+      <td style='text-align:center;'>{{data.midium_41}}</td>
+      <td style='text-align:center;'>{{data.class_41}}</td>
+      <td style='text-align:center;'>{{data.bsubject_41}}</td>
+      <td style='text-align:center;'>{{data.bquantity_41}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_41}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_42 %}
+   <tr>
+      <td style='text-align:center;'>43.</td>
+      <td style='text-align:center;'>{{data.code_42}}</td>
+      <td style='text-align:center;'>{{data.brand_42}}</td>
+      <td style='text-align:center;'>{{data.midium_42}}</td>
+      <td style='text-align:center;'>{{data.class_42}}</td>
+      <td style='text-align:center;'>{{data.bsubject_42}}</td>
+      <td style='text-align:center;'>{{data.bquantity_42}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_42}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_43 %}
+   <tr>
+      <td style='text-align:center;'>44.</td>
+      <td style='text-align:center;'>{{data.code_43}}</td>
+      <td style='text-align:center;'>{{data.brand_43}}</td>
+      <td style='text-align:center;'>{{data.midium_43}}</td>
+      <td style='text-align:center;'>{{data.class_43}}</td>
+      <td style='text-align:center;'>{{data.bsubject_43}}</td>
+      <td style='text-align:center;'>{{data.bquantity_43}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_43}}</td>
+   {% endif %}
+   </tr>
+
+
+
+
+   {% if data.bsubject_44 %}
+   <tr>
+      <td style='text-align:center;'>45.</td>
+      <td style='text-align:center;'>{{data.code_44}}</td>
+      <td style='text-align:center;'>{{data.brand_44}}</td>
+      <td style='text-align:center;'>{{data.midium_44}}</td>
+      <td style='text-align:center;'>{{data.class_44}}</td>
+      <td style='text-align:center;'>{{data.bsubject_44}}</td>
+      <td style='text-align:center;'>{{data.bquantity_44}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_44}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_45 %}
+   <tr>
+      <td style='text-align:center;'>46.</td>
+      <td style='text-align:center;'>{{data.code_45}}</td>
+      <td style='text-align:center;'>{{data.brand_45}}</td>
+      <td style='text-align:center;'>{{data.midium_45}}</td>
+      <td style='text-align:center;'>{{data.class_45}}</td>
+      <td style='text-align:center;'>{{data.bsubject_45}}</td>
+      <td style='text-align:center;'>{{data.bquantity_45}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_45}}</td>
+   {% endif %}
+   </tr>
+
+
+
+
+   {% if data.bsubject_46 %}
+   <tr>
+      <td style='text-align:center;'>47.</td>
+      <td style='text-align:center;'>{{data.code_46}}</td>
+      <td style='text-align:center;'>{{data.brand_46}}</td>
+      <td style='text-align:center;'>{{data.midium_46}}</td>
+      <td style='text-align:center;'>{{data.class_46}}</td>
+      <td style='text-align:center;'>{{data.bsubject_46}}</td>
+      <td style='text-align:center;'>{{data.bquantity_46}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_46}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_47 %}
+   <tr>
+      <td style='text-align:center;'>48.</td>
+      <td style='text-align:center;'>{{data.code_47}}</td>
+      <td style='text-align:center;'>{{data.brand_47}}</td>
+      <td style='text-align:center;'>{{data.midium_47}}</td>
+      <td style='text-align:center;'>{{data.class_47}}</td>
+      <td style='text-align:center;'>{{data.bsubject_47}}</td>
+      <td style='text-align:center;'>{{data.bquantity_47}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_47}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_48 %}
+   <tr>
+      <td style='text-align:center;'>49.</td>
+      <td style='text-align:center;'>{{data.code_48}}</td>
+      <td style='text-align:center;'>{{data.brand_48}}</td>
+      <td style='text-align:center;'>{{data.midium_48}}</td>
+      <td style='text-align:center;'>{{data.class_48}}</td>
+      <td style='text-align:center;'>{{data.bsubject_48}}</td>
+      <td style='text-align:center;'>{{data.bquantity_48}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_48}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_49 %}
+   <tr>
+      <td style='text-align:center;'>50.</td>
+      <td style='text-align:center;'>{{data.code_49}}</td>
+      <td style='text-align:center;'>{{data.brand_49}}</td>
+      <td style='text-align:center;'>{{data.midium_49}}</td>
+      <td style='text-align:center;'>{{data.class_49}}</td>
+      <td style='text-align:center;'>{{data.bsubject_49}}</td>
+      <td style='text-align:center;'>{{data.bquantity_49}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_49}}</td>
+   {% endif %}
+   </tr>
+
+
+
+   {% if data.bsubject_50 %}
+   <tr>
+      <td style='text-align:center;'>51.</td>
+      <td style='text-align:center;'>{{data.code_50}}</td>
+      <td style='text-align:center;'>{{data.brand_50}}</td>
+      <td style='text-align:center;'>{{data.midium_50}}</td>
+      <td style='text-align:center;'>{{data.class_50}}</td>
+      <td style='text-align:center;'>{{data.bsubject_50}}</td>
+      <td style='text-align:center;'>{{data.bquantity_50}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_50}}</td>
+   {% endif %}
+   </tr>
+
+
+   {% if data.bsubject_51 %}
+   <tr>
+      <td style='text-align:center;'>52.</td>
+      <td style='text-align:center;'>{{data.code_51}}</td>
+      <td style='text-align:center;'>{{data.brand_51}}</td>
+      <td style='text-align:center;'>{{data.midium_51}}</td>
+      <td style='text-align:center;'>{{data.class_51}}</td>
+      <td style='text-align:center;'>{{data.bsubject_51}}</td>
+      <td style='text-align:center;'>{{data.bquantity_51}}</td>
+      <td style='text-align:center;'>{{data.brate_binding_51}}</td>
+   {% endif %}
+   </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+   <tr>
+      <td style='text-align:center;'></td>
+      <th style='text-align:center;'>TOTAL</th>
+      <td style='text-align:center;'></td>
+      <td style='text-align:center;'></td>
+      <td style='text-align:center;'></td>
+      <td style='text-align:center;'></td>
+      <td style='text-align:center;'></td>
+      <td style='text-align:center;'>{{data.binding_order_total}}</td> 
+     
+      <!-- <td style='text-align:center;'>{{data.total_rim}}</td>   -->
+   </tr> 
+</table>
+</div>
+</center>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.js"></script>
+<script type="text/javascript">
+  function savePage() {
+    // Hide the buttons temporarily
+    var pdfButton = document.getElementById('pdf-button');
+    var printButton = document.getElementById('print-button');
+    pdfButton.style.display = 'none';
+    printButton.style.display = 'none';
+
+    // Get the current HTML of the page
+    var html = document.documentElement;
+
+    // Set the options for the PDF conversion
+    var options = {
+      margin: [10, 10],
+      filename: 'topi order bill.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+
+    // Convert the HTML to PDF using html2pdf.js
+    html2pdf().set(options).from(html).save();
+
+    // Restore the visibility of the buttons after PDF generation
+    pdfButton.style.display = 'block';
+    printButton.style.display = 'block';
+  }
+</script>
+</body>
+</html>
+
+

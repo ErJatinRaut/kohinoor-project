@@ -1,0 +1,2247 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST" onsubmit="return myfun()" >
+                    {% csrf_token %} 
+                    <div class="panel-body" >
+                        <div class=""  >
+                            <div class="title">
+                                <h4 style="margin-left:205px;">Winwings Publications</h4><br><br>
+                                <h5 style="color: rgb(90, 88, 88); font-size:17px;"><b>Address:</b> 780,Gulgulwar Niwas,Golibar Chowk,<br>Nagpur-440002</h5>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <div class="form-group" >
+                                        <div class="input-group">
+                                            <input type="date" class="form-control mobile" name="date" id="date" placeholder="{% now 'Y-m-d' %}" value="" required max="{% now 'Y-m-d' %}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <br><br>   
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="name" class="control-label" disabled><b>Vender Name<span style="color:red;">*</span></b></label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input  class="form-control" name="vender_name" value="{{data1.vender_name}}" readonly>
+
+                                    </div>                                    
+                                </div>
+                            </div> <br>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="name" class="control-label" disabled><b>Address</b></label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input class="form-control"  name="vender_address" value= "{{data1.vender_address}}" readonly>
+                                            
+                                    </div>  
+                                </div>
+                            </div><br>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="name" class="control-label" disabled ><b>Mobile No<span style="color:red;">*</span></b></label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input class="form-control"  name="vender_mob" value= "{{data1.vender_mob}}" readonly>
+                                        
+                                    </div>  
+                                </div>
+                            </div><br> 
+                            
+                            <div class="col-md-12" style="">
+                                
+                                <div class="col-md-12" style="">
+                                    <div class="input_fields_container">
+                                        <div class="form-group" style="padding-left: 12px; padding-bottom: 0px;">
+                                            <div class="row" id="myDiv" style=" padding-top: 12px ;padding-bottom: 0%;"> 
+                                        
+                                                <div class="col-md-2"><label>Brand Name<span style="color:red;">*</span></label></div>
+                                                <div class="col-md-2"><label>Class Name<span style="color:red;">*</span></label></div>
+                                                <div class="col-md-2"><label>Medium<span style="color:red;">*</span></label></div>
+                                                <div class="col-md-2"><label>Subject<span style="color:red;">*</span></label></div>
+                                                <div class="col-md-2"><label>Quantity<span style="color:red;">*</span></label></div>
+                                                <div class="col-md-2"><label>Total Cutting<span style="color:red;">*</span></label></div>
+                                                
+                                                
+                                                <div class="form-group row">
+                                                    {% if data1.item1 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_1}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_1}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_1}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_1}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_1}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_1" value= "{{data1.cutting_received_1}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item2 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_2}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_2}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_2}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_2}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_2}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_2" value= "{{data1.cutting_received_2}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item3 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_3}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_3}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_3}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_3}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_3}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_3" value= "{{data1.cutting_received_3}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item4 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_4}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_4}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_4}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_4}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_4}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_4" value= "{{data1.cutting_received_4}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item5 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_5}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_5}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_5}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_5}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_5}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_5" value= "{{data1.cutting_received_5}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item6 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_6}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_6}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_6}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_6}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_6}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_6" value= "{{data1.cutting_received_6}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item7 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_7}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_7}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_7}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_7}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_7}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_7" value= "{{data1.cutting_received_7}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item8 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_8}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_8}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_8}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_8}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_8}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_8" value= "{{data1.cutting_received_8}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item9 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_9}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_9}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_9}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_9}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_9}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_9" value= "{{data1.cutting_received_9}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item10 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_10}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_10}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_10}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_10}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_10}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_10" value= "{{data1.cutting_received_10}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item11 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_11}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_11}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_11}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_11}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_11}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_11" value= "{{data1.cutting_received_11}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item11 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_11}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_11}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_11}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_11}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_11}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_11" value= "{{data1.cutting_received_11}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item12 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_12}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_12}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_12}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_12}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_12}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_12" value= "{{data1.cutting_received_12}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item13 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_13}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_13}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_13}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_13}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_13}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_13" value= "{{data1.cutting_received_13}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item14 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_14}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_14}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_14}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_14}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_14}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_14" value= "{{data1.cutting_received_14}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item15 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_15}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_15}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_15}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_15}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_15}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_15" value= "{{data1.cutting_received_15}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item16 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_16}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_16}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_16}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_16}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_16}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_16" value= "{{data1.cutting_received_16}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item17 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_17}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_17}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_17}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_17}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_17}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_17" value= "{{data1.cutting_received_17}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item18 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_18}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_18}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_18}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_18}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_18}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_18" value= "{{data1.cutting_received_18}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item19 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_19}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_19}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_19}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_19}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_19}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_19" value= "{{data1.cutting_received_19}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item20 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_20}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_20}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_20}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_20}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_20}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_20" value= "{{data1.cutting_received_20}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item21 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_21}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_21}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_21}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_21}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_21}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_21" value= "{{data1.cutting_received_21}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item22 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_22}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_22}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_22}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_22}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_22}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_22" value= "{{data1.cutting_received_22}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item23 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_23}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_23}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_23}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_23}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_23}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_23" value= "{{data1.cutting_received_23}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item24 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_24}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_24}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_24}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_24}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_24}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_24" value= "{{data1.cutting_received_24}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item25 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_25}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_25}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_25}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_25}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_25}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_25" value= "{{data1.cutting_received_25}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item26 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_26}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_26}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_26}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_26}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_26}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_26" value= "{{data1.cutting_received_26}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item27 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_27}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_27}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_27}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_27}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_27}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_27" value= "{{data1.cutting_received_27}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item28 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_28}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_28}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_28}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_28}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_28}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_28" value= "{{data1.cutting_received_28}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item29 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_29}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_29}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_29}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_29}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_29}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_29" value= "{{data1.cutting_received_29}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item30 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_30}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_30}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_30}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_30}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_30}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_30" value= "{{data1.cutting_received_30}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item31 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_31}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_31}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_31}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_31}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_31}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_31" value= "{{data1.cutting_received_31}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item32 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_32}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_32}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_32}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_32}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_32}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_32" value= "{{data1.cutting_received_32}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item33 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_33}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_33}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_33}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_33}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_33}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_33" value= "{{data1.cutting_received_33}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item34 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_34}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_34}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_34}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_34}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_34}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_34" value= "{{data1.cutting_received_34}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item35 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_35}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_35}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_35}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_35}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_35}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_35" value= "{{data1.cutting_received_35}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item36 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_36}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_36}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_36}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_36}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_36}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_36" value= "{{data1.cutting_received_36}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item37 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_37}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_37}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_37}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_37}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_37}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_37" value= "{{data1.cutting_received_37}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item38 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_38}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_38}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_38}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_38}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_38}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_38" value= "{{data1.cutting_received_38}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item39 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_39}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_39}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_39}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_39}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_39}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_39" value= "{{data1.cutting_received_39}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    {% if data1.item40 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_40}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_40}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_40}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_40}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_40}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_40" value= "{{data1.cutting_received_40}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item41 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_41}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_41}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_41}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_41}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_41}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_41" value= "{{data1.cutting_received_41}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item42 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_42}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_42}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_42}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_42}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_42}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_42" value= "{{data1.cutting_received_42}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item43 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_43}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_43}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_43}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_43}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_43}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_43" value= "{{data1.cutting_received_43}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item44 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_44}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_44}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_44}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_44}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_44}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_44" value= "{{data1.cutting_received_44}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item45 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_45}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_45}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_45}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_45}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_45}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_45" value= "{{data1.cutting_received_45}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item46 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_46}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_46}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_46}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_46}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_46}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_46" value= "{{data1.cutting_received_46}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item47 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_47}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_47}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_47}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_47}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_47}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_47" value= "{{data1.cutting_received_47}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item48 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_48}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_48}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_48}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_48}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_48}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_48" value= "{{data1.cutting_received_48}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item49 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_49}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_49}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_49}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_49}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_49}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_49" value= "{{data1.cutting_received_49}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+                                                <div class="form-group row">
+                                                    {% if data1.item50 != ''%}
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.brand_name_50}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.class_name_50}} " readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"   value= "{{data1.medium_50}}" readonly>
+                                                            
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.subject_50}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  value= "{{data1.quantity_50}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="cutting_received_50" value= "{{data1.cutting_received_50}}">
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}  
+                                                </div>
+
+
+                                                {% comment %} <div class="form-group row">
+                                                    {% if data1.item1 !=""%}
+                                                    <div class="col-md-6" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="brand_name" value= "{{data1.item1}}" readonly> 
+                                                        </div>  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="total_cutting" value= "{{data1.total_cutting}}">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+                                            
+                                                    <div class="col-md-2" style="padding-left:0;">
+                                                        <div class="col-md-10">
+                                                            <input class="form-control"  name="balance_cutting" value= "{{data1.balance_cutting}}" >
+                                                            
+                                                        </div>  
+                                                    </div>  
+                                                </div> {% endcomment %}
+                                            </div>
+                                        </div><br>    
+                                </div>
+                                <div class="col-md-12" >
+                                    <div class="form-group">
+                                        <label style="padding-right:100%;">Note</label>
+                                        <input type="text" class="form-control mobile" name="term_and_condition1" maxlength="60" 
+                                        id="term_and_condition1" placeholder="1. Terms and Conditions" value="{{first_condition}}" style="border-bottom: 1px solid rgb(214, 213, 213);
+                                        border-left:none ; border-top: none; border-right: none; margin-bottom: 13px;"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 text-center"></div>
+                                <div class="col-md-12">
+                                    <div class="text-center mt-3 mb-3">
+                                        <button type="submit" class="btn btn-primary" style="background-color: ; color:white;">DONE</button>
+                                        <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            
+
+
+
+
+            <script>
+              $(document).ready(function() {
+               var max_fields_limit= 11;
+               var x = 1;
+               $('.add_more_button').click(function(e){ 
+               e.preventDefault();
+               $('#myDiv').show();
+               if(x < max_fields_limit){ 
+                   x++;  
+                   $('.input_fields_container').append(
+                       
+                   '<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description"><input type="text" pattern="[a-z A-Z 0-9\s]+" class="form-control mobile" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" placeholder="brand name" value="" required maxlength="30" /></div><div class="col-md-2 form-group "><input type="text" class="form-control mobile" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" maxlength="30" placeholder="Class Name" min=""  pattern="^[a-z A-Z 0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;"  name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" type="text" maxlength="30" placeholder=" Medium" min=""  pattern="^[a-zA-Z0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" placeholder="Subject" value="" required maxlength="30"></div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+                       // <input type="text" class="form-control mobile" name="amount_'+x.toString()+'" id="amount_'+x.toString()+'" placeholder="Amount" value="" required />
+                   }
+     
+     
+           });  
+           $('.input_fields_container').on("click",".remove_field", function(e){ //user click on remove text links
+               e.preventDefault(); $(this).parent('div').remove(); x--;
+              
+           })
+       });
+     
+     
+       function restrictMinus(e) {
+               var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+     
+               if (inputKeyCode != null) {
+                   if (inputKeyCode == 45) e.preventDefault();
+               }
+       }
+     
+       </script>
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal 
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+      modal.style.display = "none";
+      }
+  }
+
+  </script>
+
+
+
+
+
+  <script>
+    document.getElementById("from_date").onchange = function () {
+    var input = document.getElementById("to_date");
+    input.setAttribute("min", this.value);
+  }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+    <script type="text/javascript">
+  var rad = document.cash_memo_add.stamp_type;
+  var prev = null;
+  for (var i = 0; i < rad.length; i++) {
+      rad[i].addEventListener('change', function() {
+          (prev) ? console.log(prev.value): null;
+          if (this !== prev) {
+              prev = this;
+          }
+          if(this.value == 'merchant_stamp')
+          {
+              document.getElementById('default_stmaps').style.display = 'block';
+              document.getElementById('own_stamps').style.display = 'none';
+          }
+          else if(this.value == 'own_stamp')
+          {
+              // document.getElementById('messageError').innerHTML = "";
+              document.getElementById('default_stmaps').style.display = 'none';
+              document.getElementById('own_stamps').style.display = 'block';
+          }
+      });
+  }
+</script>
+<script type="text/javascript">
+  jQuery.validator.addMethod("greaterStart", function (value, element, params) {
+      return this.optional(element) || new Date(value) >= new Date($(params).val());
+  },'Must be greater than from date.');
+  
+  $("#add_merchant_form").validate({
+      rules: {
+          chk: {
+              required: true,
+          },
+      },
+
+  });
+  $("#stamp_image_form").validate({
+      rules: {
+          chkcashmeo: {
+              required: true,
+          },
+      },
+
+  });
+  $("#bill_info_filter_form").validate({
+      rules: {
+          from_date: {
+              required: true,
+          },
+          to_date: {
+              required: true,
+              greaterStart: "#from_date",
+          },
+      },
+
+  });
+  $(document).ready(function() {
+// $('input[name=to_date]').change(function() {
+//         var to_date = $('#to_date').val();
+//         document.getElementById('from_date').setAttribute("max", to_date);
+// })
+
+// $('input[name=from_date]').change(function() {
+//   var from_date = $('#from_date').val();
+//     document.getElementById('to_date').setAttribute("min", from_date);
+// })
+})
+</script>
+<script>
+  $(document).ready(function() {
+    $('#add-row').DataTable({
+        dom: 'lBfrtip',
+        "ordering": false,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        buttons: [
+           'excel', 'pdf', 'print'
+        ],
+        initComplete: function () {
+        this.api().columns([2,3]).every( function () {
+            var column = this;
+            var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+            
+            .appendTo( $("#type_filter_" + column[0][0]).empty())
+                
+            .on( 'change', function () {
+
+            var val = $(':selected', select).map(function(index, element) {
+            return $.fn.dataTable.util.escapeRegex($(this).val());
+            }).toArray().join('|');
+                  
+            column
+                .search( val ? '^'+val+'$' : '', true, false )
+                .draw();
+            } );
+
+            column.data().unique().sort().each( function ( d, j ) {
+                select.append( '<option value="'+d+'">'+d+'</option>' )
+            });
+        });        
+      }
+    });
+
+    $("#column_id_2").select2({
+      placeholder:" Select Date",
+      closeOnSelect: true,
+      width: '90%',
+    })
+
+    $("#column_id_3").select2({
+      placeholder:" Select Number",
+      closeOnSelect: true,
+      width: '80%',
+    })
+
+  });
+</script>
+
+
+<script >
+var today = new Date();
+
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    // today = yyyy + '/' + mm + '/' + dd;
+     today = yyyy + '-' + mm + '-' + dd;
+
+    console.log(today);
+    document.getElementById('date').value = today;
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_venderlist").on('change', function()
+        {
+
+            var state = $("#id_venderlist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Orderlist/"+state,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'organization_name': state
+                },
+                success: function(result){
+                  
+                    $("#id_courselist").empty();
+                    var empty = ""
+                    $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Address *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+ 
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_courselist").on('change', function()
+        {
+
+            var state = $("#id_courselist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Addresslist/"+maha,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'medium': maha
+                },
+                success: function(result){
+                  
+                    $("#id_offervalue").empty();
+                    var empty = ""
+                    $('#id_offervalue').append("<option value='" + empty + "' disabled selected value>" + "Select special offer*" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_offervalue').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_brand").on('change', function()
+        {
+
+            var state = $("#id_brand").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Brandlist/"+city,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'books_name': city
+                },
+                success: function(result){
+                  
+                    $("#id_classname").empty();
+                    var empty = ""
+                    $('#id_classname').append("<option value='" + empty + "' disabled selected value>" + "Select classname *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_classname').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
+
+{% endblock %}

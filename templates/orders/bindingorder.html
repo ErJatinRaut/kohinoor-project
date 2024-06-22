@@ -1,0 +1,1154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>orders</title>
+  <style>
+    * {
+      font-family: Georgia;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 50px;
+      border: 1px solid #888;
+      width: 50%;
+      max-width: 750px;
+    }
+
+
+    .select-style {
+      border-radius: 0.25rem;
+      border-color: black;
+    }
+
+    .form-control {
+      border-radius: 0.25rem;
+      border-color: black;
+      padding-left: 10%;
+    }
+
+    .title h3 {
+
+      border-bottom: 2px solid blueviolet;
+      display: inline-block;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .title h5 {
+
+      display: inline-block;
+
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="page-content">
+      <div class="page-breadcrumb  mb-3">
+        <div class="breadcrumb-title pe-3">Binding Order Info</div>
+        <hr>
+        <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+          <button class="btn btn-primary me-md-2" id="myBtn" type="button"><i class="fa fa-plus"></i>&nbsp;Create
+            Order1</button>
+        </div>
+        <div id="myModal" class="modal">
+          <div class="modal-content">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="color:black; background-color:#6e95fc;text-align:center;">
+                <h4 style="color:white ;">Order1 </h4>
+              </div>
+              <hr style="color:black">
+              <form method="POST" onsubmit="return myfun()">
+                {% csrf_token %}
+                <div class="panel-body">
+                  <div class="">
+                    <div class="title">
+                      <h4 style="margin-left:205px;">Winwings Publications</h4><br><br>
+                      <h5 style="color: rgb(90, 88, 88); font-size:17px;"><b>Address:</b> 780,Gulgulwar Niwas,Golibar
+                        Chowk,<br>Nagpur-440002</h5>
+                    </div>
+                    <div class="row" style="text-align: right;">
+                      <div class="col-md-8"></div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <input type="text" class="form-control mobile" name="date" id="date"
+                              placeholder="{% now 'Y-m-d' %}" value="" required max="{% now 'Y-m-d' %}" readonly />
+                          </div>
+                        </div>
+                      </div>
+                    </div> <br><br>
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-2">
+
+                          <label for="name" class="control-label"><b>Vender Name<span
+                                style="color:red;">*</span></b></label>
+
+
+                          <!-- {% comment %} <label for="name" class="control-label"><b>Date<span
+                                style="color:red;">*</span></b></label>
+                          <input type="date" class="form-control mobile" name="date" id="date"
+                            placeholder="{% now 'Y-m-d' %}" value="" required max="{% now 'Y-m-d' %}" /> {% endcomment
+                          %} -->
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-10">
+                          <!-- {% comment %} <label for="name" class="control-label"><b>Vendor Name<span
+                                style="color:red;">*</span></b></label> {% endcomment %} -->
+                          <select class="form-control" name="vender_name" id="vender_name" style="width:100%;" required>
+                            <option disabled selected value>Select Vendor</option>
+                            {% for i in vend %}
+                            <option>{{i.organization_name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div></div>
+
+                        <!-- {% comment %} <div class="col-md-2">
+                          <label for="name" class="control-label"><b>Particulars<span
+                                style="color:red;">*</span></b></label>
+                          <input type="text" class="form-control mobile" name="particulars" id="particulars" />
+                        </div> {% endcomment %} -->
+                        <div class="col-md-4">
+
+                          <label for="name" class="control-label"><b>Subject<span
+                                style="color:red;">*</span></b></label>
+                          <select type="text" class="form-control mobile" name="subject" id="subject" />
+                          <option disabled selected value>Select Subject</option>
+                          {% for i in book %}
+                          <option value="{{ i.subject }}">{{i.subject}}</option>
+                          {% endfor %}
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+
+                          <label for="name" class="control-label"><b>Quantity<span
+                                style="color:red;">*</span></b></label>
+                          <input type="number" class="form-control mobile" name="quantity" id="quantity" />
+                        </div>
+                        <div class="col-md-4">
+
+                          <label for="name" class="control-label"><b>Binding Rate<span
+                                style="color:red;">*</span></b></label>
+                          <select type="number" class="form-control mobile" name="rate_binding" id="rate_binding" />
+                          <option disabled selected value>Select Rate</option>
+                          {% for i in book %}
+                          <option>{{i.binding_rate}}</option>
+                          {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div> <br>
+
+                    {% comment %} <div class="col-md-12" style="">
+                      <div class="col-md-12" style="">
+                        <div class="input_fields_container">
+                          <div class="form-group" style="padding-left: 12px; padding-bottom: 0px;">
+                            <div class="row" id="myDiv" style=" padding-top: 12px ;padding-bottom: 0%;">
+                              <div class="col-md-2"><label>Brand Name<span style="color:red;">*</span></label></div>
+                              <div class="col-md-2"><label>Class Name<span style="color:red;">*</span></label></div>
+                              <div class="col-md-2"><label>Medium<span style="color:red;">*</span></label></div>
+                              <div class="col-md-2"><label>Subject<span style="color:red;">*</span></label></div>
+                              <div class="col-md-2"><label>pages<span style="color:red;">*</span></label></div>
+                            </div>
+                            <div class="col-md-2"><label>Quantity<span style="color:red;">*</span></label></div>
+                            <div class="form-group row">
+                              <div class="col-md-2" style="padding-left:0;">
+                                <select class="form-control" id="brand_name_1" style="width:20%%;" name="brand_name_1"
+                                  required onselect="calculateFormsPerSet()">
+                                  <option disabled selected value>Select Brand</option>
+                                  {% for i in book %}
+                                  <option value="{{ i.books_name }}">{{ i.books_name }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <select class="form-control" id="class_name_1" style="width:15%;" name="class_name_1"
+                                required>
+                                <option disabled selected value>Select Class</option>
+                                {% for i in book %}
+                                <option value="{{ i.books_class }}" data-brand="{{i.books_name}}">{{i.books_class}}
+                                </option>
+                                {% endfor %}
+                              </select>
+                              <div class="col-md-2 form-group quantity">
+                                <select class="form-control" id="medium_1" style="width:15%%;pading-left:10%;"
+                                  name="medium_1" required>
+                                  <option disabled selected value>Select Medium</option>
+                                  {% for i in book %}
+                                  <option value="{{i.medium}}" data-depends-on-brand="{{ i.books_name }}"
+                                    data-depends-on-class="{{ i.books_class }}">{{i.medium}}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <select class="form-control" id="subject_1" style="width:15%;" name="subject_1" required>
+                                <option disabled selected value>Select Subject</option>
+                                {% for i in book %}
+                                <option value="{{i.subject}}" data-depends-on-brand="{{ i.books_name }}"
+                                  data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}">
+                                  {{i.subject}}</option>
+                                {% endfor %}
+                              </select>
+                              <select class="form-control" id="pages_1" style="width:15%;" name="pages_1" required
+                                onselect="calculateFormsPerSet()">
+                                <option disabled selected value>Select Pages</option>
+                                {% for i in book %}
+                                <option value="{{ i.no_of_pages }}" data-depends-on-brand="{{ i.books_name }}"
+                                  data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}"
+                                  data-depends-on-subject="{{ i.subject }}">{{ i.no_of_pages }}</option>
+                                {% endfor %}
+                              </select>
+
+                              <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile"
+                                  name="quantity_1" id="quantity_1" maxlength="10" placeholder="Quantity" min="1"
+                                  step="1" value="" oninput="calculateFormsPerSet()" required style="margin-left:15%" />
+                              </div>
+                              <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile"
+                                  name="forms-per-set" id="forms-per-set" maxlength="10" placeholder="forms-per-set"
+                                  min="1" step="1" value="" style="margin-left:15%" readonly /></div>
+
+
+                            </div>
+                          </div>
+                        </div><br>
+
+                        <div class="col-md-12" style="text-align: right;">
+                          <button class="btn btn-primary btn-sm add_more_button">Add New Items</button>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label style="padding-right:100%;">Note</label>
+                          <input type="text" class="form-control mobile" name="term_and_condition1" maxlength="60"
+                            id="term_and_condition1" placeholder="1. Terms and Conditions" value="{{first_condition}}"
+                            style="border-bottom: 1px solid rgb(214, 213, 213);
+                                                border-left:none ; border-top: none; border-right: none; margin-bottom: 13px;" />
+                        </div>
+                      </div>{%endcomment%}
+                      <div class="col-md-8 text-center"></div>
+                      <div class="col-md-12">
+                        <div class="text-center mt-3 mb-3">
+                          <button type="submit" class="btn btn-primary" name="create_form_btn"
+                            value="save_cashmemo_btn">Create</button>
+                          <button class="btn btn-primary" style="background-color: ; "><a
+                              href="{{ form.get_cancel_link }}"
+                              style="color:white; text-decoration: none;">Back</a></button>
+                          <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row" style="text-align: center;">
+            <div class="col-md-11">
+              <div class="table-responsive">
+                <table class="display table table-hover">
+                  <thead>
+                    <tr style="text-align: center;">
+                      <th align="center">Sr.No</th>
+                      <th align="center">Date</th>
+                      <th align="center">Vendor Name</th>
+
+                      <th align="center">Subject</th>
+                      <th align="center">Quantity</th>
+                      <th align="center">Binding Rate</th>
+                      {% comment %} <th align="center">Total Form </th> {% endcomment %}
+                      <th align="center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in data %}
+
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{i.date}}</td>
+                      <td>{{i.vender_name}}</td>
+
+                      <td>{{ i.subject }}</td>
+                      <td>{{ i.quantity }}</td>
+                      {% comment %} <td>
+                        <input type="number" value="{{ i.quantity }}" min="0" step="1" name="quantity">
+                      </td> {% endcomment %}
+                      <td>{{ i.rate_binding }}</td>
+                      {% comment %} <td>{{ i.total_form }}</td> {% endcomment %}
+                      <td>
+                        <div>
+                          <a href="/delete_binding//{{data.id}}/"></a><a href="/delete_binding/{{i.id}}/"><i
+                              class="bi bi-archive"></i></a></i></a>
+                          <!-- <div id="popup1 {{i.id}}" class="overlay">
+                                            </div> -->
+                          <a href="/edit_binding/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% comment %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+          $(document).ready(function () {
+            $('button[name="create_form_btn"]').click(function () {
+              // Show the "Create Successfully" popup
+              alert("Create Successfully");
+            });
+          });
+        </script> {% endcomment %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
+
+        <script>
+          document.getElementById('save_cashmemo_btn').addEventListener('click', function () {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Create Binding Orders Successfully',
+              showConfirmButton: false,
+              timer: 1500
+            }).then(function () {
+              location.reload();
+            });
+          });
+        </script>
+
+        <script>
+          $(document).ready(function () {
+            var max_fields_limit = 51;
+            var x = 1;
+            $('.add_more_button').click(function (e) {
+              e.preventDefault();
+              $('#myDiv').show();
+              if (x < max_fields_limit) {
+                x++;
+                $('.input_fields_container').append(
+
+                  '<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="brand_name_' + x.toString() + '" id="brand_name_' + x.toString() + '" required><option disabled selected value>Select Brand</option>{% for i in book %}<option>{{i.books_name}}</option>{% endfor %}</select>     </div><div class="col-md-2 form-group ">   <select class="form-control mobile" style="width:20%%;" name="class_name_' + x.toString() + '" id="class_name_' + x.toString() + '" required><option disabled selected value>Select Class</option>{% for i in book %} <option value="{{ i.books_class }}" data-brand="{{i.books_name}}">{{i.books_class}}</option>  {% endfor %}</select>     </div><div class="col-md-2 form-group description">    <select class="form-control mobile" style="width:20%%;" name="medium_' + x.toString() + '" id="medium_' + x.toString() + '" required><option disabled selected value>Select Medium</option>{% for i in book %}<option value="{{i.medium}}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}">{{i.medium}}</option>{% endfor %}</select>      </div><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="subject_' + x.toString() + '" id="subject_' + x.toString() + '" required><option disabled selected value>Select Subject</option>{% for i in book %}<option value="{{i.subject}}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}">{{i.subject}}</option>{% endfor %}</select>   </div>  <div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="pages_' + x.toString() + '" id="pages_' + x.toString() + '" required><option disabled selected value>Select Pages</option>{% for i in book %}<option value="{{i.no_of_pages}}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}" data-depends-on-subject="{{ i.subject }}">{{i.no_of_pages}}</option>{% endfor %}</select>   </div> <div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_' + x.toString() + '" id="quantity_' + x.toString() + '" placeholder="Quantity" value="" required maxlength="30"/></div> <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="forms-per-set' + x.toString() + '" id="forms-per-set' + x.toString() + '" maxlength="10" placeholder="forms-per-set" min="1" step="1" value="" style="margin-left:15%" readonly /></div> <a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+                $(document).ready(function () {
+                  var selectedBooks = {};
+                  var selectedMediums = {};
+                  var selectedSubjects = {};
+                  var selectedPages = {};
+
+                  var uniqueBrands = [];
+
+                  // Populate the uniqueBrands array and remove any duplicate options from the brand select box
+                  $('#brand_name_' + x.toString() + ' option').each(function () {
+                    if ($.inArray($(this).val(), uniqueBrands) === -1) {
+                      uniqueBrands.push($(this).val());
+                    } else {
+                      $(this).remove();
+                    }
+                  });
+
+                  // When the brand is changed
+                  $('#brand_name_' + x.toString() + '').change(function () {
+                    var selectedBrand = $(this).val();
+
+                    // Show/hide class options based on the selected brand
+                    $('#class_name_' + x.toString() + ' option').each(function () {
+                      if ($(this).data('brand') === selectedBrand) {
+                        $(this).show();
+                      } else {
+                        $(this).hide();
+                      }
+                    });
+
+                    // Reset selected books and mediums for the brand
+                    selectedBooks[selectedBrand] = null;
+                    selectedMediums[selectedBrand] = null;
+
+                    // Reset selected subjects for each class and medium combination of the brand
+                    selectedSubjects[selectedBrand] = {};
+
+                    // Reset selected pages for each subject, medium, class, and brand combination
+                    selectedPages[selectedBrand] = {};
+
+                    // Update medium options based on the selected brand and class
+                    updateMediumOptions(selectedBrand);
+                  });
+
+                  // When the class is changed
+                  $('#class_name_' + x.toString() + '').change(function () {
+                    var selectedBrand = $('#brand_name_' + x.toString() + '').val();
+
+                    // Reset selected books and mediums for the brand
+                    selectedBooks[selectedBrand] = null;
+                    selectedMediums[selectedBrand] = null;
+
+                    // Reset selected subjects for the class and brand combination
+                    selectedSubjects[selectedBrand] = {};
+
+                    // Reset selected pages for each subject, medium, class, and brand combination
+                    selectedPages[selectedBrand] = {};
+
+                    // Update medium options based on the selected brand and class
+                    updateMediumOptions(selectedBrand);
+                  });
+
+                  // When the medium is changed
+                  $('#medium_' + x.toString() + '').change(function () {
+                    var selectedBrand = $('#brand_name_' + x.toString() + '').val();
+                    var selectedClass = $('#class_name_' + x.toString() + '').val();
+                    var selectedMedium = $(this).val();
+
+                    // Reset selected books for the brand and class combination
+                    selectedBooks[selectedBrand] = null;
+
+                    // Reset selected subjects for the medium, class, and brand combination
+                    selectedSubjects[selectedBrand][selectedClass] = null;
+
+                    // Reset selected pages for each subject, medium, class, and brand combination
+                    selectedPages[selectedBrand] = {};
+
+                    // Update subject options based on the selected brand, class, and medium
+                    updateSubjectOptions(selectedBrand, selectedClass, selectedMedium);
+                  });
+
+                  // When the subject is changed
+                  $('#subject_' + x.toString() + '').change(function () {
+                    var selectedBrand = $('#brand_name_' + x.toString() + '').val();
+                    var selectedClass = $('#class_name_' + x.toString() + '').val();
+                    var selectedMedium = $('#medium_' + x.toString() + '').val();
+                    var selectedSubject = $(this).val();
+
+                    // Reset selected books for the brand and class combination
+                    selectedBooks[selectedBrand] = null;
+
+                    // Reset selected pages for the subject, medium, class, and brand combination
+                    selectedPages[selectedBrand] = {};
+
+                    // Update page options based on the selected brand, class, medium, and subject
+                    updatePageOptions(selectedBrand, selectedClass, selectedMedium, selectedSubject);
+                  });
+
+                  // Function to update the medium options based on the selected brand and class
+                  function updateMediumOptions(brand) {
+                    var selectedClass = $('#class_name_' + x.toString() + '').val();
+
+                    $('#medium_' + x.toString() + ' option').each(function () {
+                      var dependsOnBrand = $(this).data('depends-on-brand');
+                      var dependsOnClass = $(this).data('depends-on-class');
+
+                      if (dependsOnBrand === brand && dependsOnClass === selectedClass) {
+                        $(this).show();
+                      } else {
+                        $(this).hide();
+                      }
+                    });
+                  }
+
+                  // Function to update the subject options based on the selected brand, class, and medium
+                  function updateSubjectOptions(brand, selectedClass, selectedMedium) {
+                    $('#subject_' + x.toString() + ' option').each(function () {
+                      var dependsOnBrand = $(this).data('depends-on-brand');
+                      var dependsOnClass = $(this).data('depends-on-class');
+                      var dependsOnMedium = $(this).data('depends-on-medium');
+
+                      if (dependsOnBrand === brand && dependsOnClass === selectedClass && dependsOnMedium === selectedMedium) {
+                        $(this).show();
+                      } else {
+                        $(this).hide();
+                      }
+                    });
+                  }
+
+                  // Function to update the page options based on the selected brand, class, medium, and subject
+                  function updatePageOptions(brand, selectedClass, selectedMedium, selectedSubject) {
+                    $('#pages_' + x.toString() + ' option').each(function () {
+                      var dependsOnBrand = $(this).data('depends-on-brand');
+                      var dependsOnClass = $(this).data('depends-on-class');
+                      var dependsOnMedium = $(this).data('depends-on-medium');
+                      var dependsOnSubject = $(this).data('depends-on-subject');
+
+                      if (
+                        dependsOnBrand === brand &&
+                        dependsOnClass === selectedClass &&
+                        dependsOnMedium === selectedMedium &&
+                        dependsOnSubject === selectedSubject
+                      ) {
+                        $(this).show();
+                      } else {
+                        $(this).hide();
+                      }
+                    });
+                  }
+                });
+
+
+                const pagesInput = document.getElementById('pages_' + x.toString() + '');
+                const quantityInput = document.getElementById('quantity_' + x.toString() + '');
+                const brandSelect = document.getElementById('brand_name_' + x.toString() + '');
+                const formsPerSetInput = document.getElementById('forms-per-set' + x.toString() + '');
+                function calculateFormsPerSet() {
+                  const pages = parseInt(pagesInput.value);
+                  const quantity = parseInt(quantityInput.value);
+                  const brand = brandSelect.value;
+                  let pagesPerForm = 0;
+                  if (brand === 'Kohinoor') {
+                    pagesPerForm = 64;
+                  } else if (brand === 'Spark') {
+                    pagesPerForm = 128;
+                  } else if (brand === 'Vidhya Mitra') {
+                    pagesPerForm = 32;
+                  } else if (brand === 'Abhiyashika') {
+                    pagesPerForm = 16;
+                  }
+                  const forms = Math.ceil(pages / pagesPerForm * quantity);
+                  const totalSet = Math.ceil(pages / 32);
+                  const formsPerSet = Math.ceil(forms / totalSet);
+                  formsPerSetInput.value = formsPerSet;
+                }
+
+                pagesInput.addEventListener('input', calculateFormsPerSet);
+                quantityInput.addEventListener('input', calculateFormsPerSet);
+                brandSelect.addEventListener('change', calculateFormsPerSet);
+
+              };
+
+            });
+            $('.input_fields_container').on("click", ".remove_field", function (e) { //user click on remove text links
+              e.preventDefault(); $(this).parent('div').remove(); x--;
+
+            })
+          });
+
+
+          function restrictMinus(e) {
+            var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+
+            if (inputKeyCode != null) {
+              if (inputKeyCode == 45) e.preventDefault();
+            }
+          }
+          initializeSelectFields(x);
+
+        </script>
+
+
+        <script>
+          $(document).ready(function () {
+            // When the subject is changed
+            $('#subject').change(function () {
+              var selectedSubject = $(this).val();
+
+              // Clear existing options in the binding rate dropdown
+              $('#rate_binding').empty();
+
+              // Add default option
+              $('#rate_binding').append('<option disabled selected value>Select Rate</option>');
+
+              // Filter and add options based on the selected subject
+              {% for i in book %}
+              if ("{{ i.subject }}" === selectedSubject) {
+                $('#rate_binding').append('<option value="{{ i.binding_rate }}">{{ i.binding_rate }}</option>');
+              }
+              {% endfor %}
+            });
+          });
+        </script>
+
+
+        <script>
+          $(document).ready(function () {
+            var selectedBooks = {};
+            var selectedMediums = {};
+            var selectedSubjects = {};
+            var selectedPages = {};
+
+            var uniqueBrands = [];
+
+            // Populate the uniqueBrands array and remove any duplicate options from the brand select box
+            $('#brand_name_1 option').each(function () {
+              if ($.inArray($(this).val(), uniqueBrands) === -1) {
+                uniqueBrands.push($(this).val());
+              } else {
+                $(this).remove();
+              }
+            });
+
+            // When the brand is changed
+            $('#brand_name_1').change(function () {
+              var selectedBrand = $(this).val();
+
+              // Show/hide class options based on the selected brand
+              $('#class_name_1 option').each(function () {
+                if ($(this).data('brand') === selectedBrand) {
+                  $(this).show();
+                } else {
+                  $(this).hide();
+                }
+              });
+
+              // Reset selected books and mediums for the brand
+              selectedBooks[selectedBrand] = null;
+              selectedMediums[selectedBrand] = null;
+
+              // Reset selected subjects for each class and medium combination of the brand
+              selectedSubjects[selectedBrand] = {};
+
+              // Reset selected pages for each subject, medium, class, and brand combination
+              selectedPages[selectedBrand] = {};
+
+              // Update medium options based on the selected brand and class
+              updateMediumOptions(selectedBrand);
+            });
+
+            // When the class is changed
+            $('#class_name_1').change(function () {
+              var selectedBrand = $('#brand_name_1').val();
+
+              // Reset selected books and mediums for the brand
+              selectedBooks[selectedBrand] = null;
+              selectedMediums[selectedBrand] = null;
+
+              // Reset selected subjects for the class and brand combination
+              selectedSubjects[selectedBrand] = {};
+
+              // Reset selected pages for each subject, medium, class, and brand combination
+              selectedPages[selectedBrand] = {};
+
+              // Update medium options based on the selected brand and class
+              updateMediumOptions(selectedBrand);
+            });
+
+            // When the medium is changed
+            $('#medium_1').change(function () {
+              var selectedBrand = $('#brand_name_1').val();
+              var selectedClass = $('#class_name_1').val();
+              var selectedMedium = $(this).val();
+
+              // Reset selected books for the brand and class combination
+              selectedBooks[selectedBrand] = null;
+
+              // Reset selected subjects for the medium, class, and brand combination
+              selectedSubjects[selectedBrand][selectedClass] = null;
+
+              // Reset selected pages for each subject, medium, class, and brand combination
+              selectedPages[selectedBrand] = {};
+
+              // Update subject options based on the selected brand, class, and medium
+              updateSubjectOptions(selectedBrand, selectedClass, selectedMedium);
+            });
+
+            // When the subject is changed
+            $('#subject_1').change(function () {
+              var selectedBrand = $('#brand_name_1').val();
+              var selectedClass = $('#class_name_1').val();
+              var selectedMedium = $('#medium_1').val();
+              var selectedSubject = $(this).val();
+
+              // Reset selected books for the brand and class combination
+              selectedBooks[selectedBrand] = null;
+
+              // Reset selected pages for the subject, medium, class, and brand combination
+              selectedPages[selectedBrand] = {};
+
+              // Update page options based on the selected brand, class, medium, and subject
+              updatePageOptions(selectedBrand, selectedClass, selectedMedium, selectedSubject);
+            });
+
+            // Function to update the medium options based on the selected brand and class
+            function updateMediumOptions(brand) {
+              var selectedClass = $('#class_name_1').val();
+
+              $('#medium_1 option').each(function () {
+                var dependsOnBrand = $(this).data('depends-on-brand');
+                var dependsOnClass = $(this).data('depends-on-class');
+
+                if (dependsOnBrand === brand && dependsOnClass === selectedClass) {
+                  $(this).show();
+                } else {
+                  $(this).hide();
+                }
+              });
+            }
+
+            // Function to update the subject options based on the selected brand, class, and medium
+            function updateSubjectOptions(brand, selectedClass, selectedMedium) {
+              $('#subject_1 option').each(function () {
+                var dependsOnBrand = $(this).data('depends-on-brand');
+                var dependsOnClass = $(this).data('depends-on-class');
+                var dependsOnMedium = $(this).data('depends-on-medium');
+
+                if (dependsOnBrand === brand && dependsOnClass === selectedClass && dependsOnMedium === selectedMedium) {
+                  $(this).show();
+                } else {
+                  $(this).hide();
+                }
+              });
+            }
+
+            // Function to update the page options based on the selected brand, class, medium, and subject
+            function updatePageOptions(brand, selectedClass, selectedMedium, selectedSubject) {
+              $('#pages_1 option').each(function () {
+                var dependsOnBrand = $(this).data('depends-on-brand');
+                var dependsOnClass = $(this).data('depends-on-class');
+                var dependsOnMedium = $(this).data('depends-on-medium');
+                var dependsOnSubject = $(this).data('depends-on-subject');
+
+                if (
+                  dependsOnBrand === brand &&
+                  dependsOnClass === selectedClass &&
+                  dependsOnMedium === selectedMedium &&
+                  dependsOnSubject === selectedSubject
+                ) {
+                  $(this).show();
+                } else {
+                  $(this).hide();
+                }
+              });
+            }
+          });
+
+        </script>
+
+
+
+
+        <script>
+          // Get the modal
+          var modal = document.getElementById("myModal");
+
+          // Get the button that opens the modal
+          var btn = document.getElementById("myBtn");
+
+          // Get the <span> element that closes the modal
+          var span = document.getElementsByClassName("close")[0];
+
+          // When the user clicks the button, open the modal 
+          btn.onclick = function () {
+            modal.style.display = "block";
+          }
+
+          // When the user clicks on <span> (x), close the modal
+          span.onclick = function () {
+            modal.style.display = "none";
+          }
+
+          // When the user clicks anywhere outside of the modal, close it
+          window.onclick = function (event) {
+            if (event.target == modal) {
+              modal.style.display = "none";
+            }
+          }
+
+        </script>
+
+
+
+
+
+        <script>
+          document.getElementById("from_date").onchange = function () {
+            var input = document.getElementById("to_date");
+            input.setAttribute("min", this.value);
+          }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+        <script type="text/javascript">
+          var rad = document.cash_memo_add.stamp_type;
+          var prev = null;
+          for (var i = 0; i < rad.length; i++) {
+            rad[i].addEventListener('change', function () {
+              (prev) ? console.log(prev.value) : null;
+              if (this !== prev) {
+                prev = this;
+              }
+              if (this.value == 'merchant_stamp') {
+                document.getElementById('default_stmaps').style.display = 'block';
+                document.getElementById('own_stamps').style.display = 'none';
+              }
+              else if (this.value == 'own_stamp') {
+                // document.getElementById('messageError').innerHTML = "";
+                document.getElementById('default_stmaps').style.display = 'none';
+                document.getElementById('own_stamps').style.display = 'block';
+              }
+            });
+          }
+        </script>
+        <script type="text/javascript">
+          jQuery.validator.addMethod("greaterStart", function (value, element, params) {
+            return this.optional(element) || new Date(value) >= new Date($(params).val());
+          }, 'Must be greater than from date.');
+
+          $("#add_merchant_form").validate({
+            rules: {
+              chk: {
+                required: true,
+              },
+            },
+
+          });
+          $("#stamp_image_form").validate({
+            rules: {
+              chkcashmeo: {
+                required: true,
+              },
+            },
+
+          });
+          $("#bill_info_filter_form").validate({
+            rules: {
+              from_date: {
+                required: true,
+              },
+              to_date: {
+                required: true,
+                greaterStart: "#from_date",
+              },
+            },
+
+          });
+          $(document).ready(function () {
+            // $('input[name=to_date]').change(function() {
+            //         var to_date = $('#to_date').val();
+            //         document.getElementById('from_date').setAttribute("max", to_date);
+            // })
+
+            // $('input[name=from_date]').change(function() {
+            //   var from_date = $('#from_date').val();
+            //     document.getElementById('to_date').setAttribute("min", from_date);
+            // })
+          })
+        </script>
+        <script>
+          $(document).ready(function () {
+            $('#add-row').DataTable({
+              dom: 'lBfrtip',
+              "ordering": false,
+              "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+              buttons: [
+                'excel', 'pdf', 'print'
+              ],
+              initComplete: function () {
+                this.api().columns([2, 3]).every(function () {
+                  var column = this;
+                  var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+
+                    .appendTo($("#type_filter_" + column[0][0]).empty())
+
+                    .on('change', function () {
+
+                      var val = $(':selected', select).map(function (index, element) {
+                        return $.fn.dataTable.util.escapeRegex($(this).val());
+                      }).toArray().join('|');
+
+                      column
+                        .search(val ? '^' + val + '$' : '', true, false)
+                        .draw();
+                    });
+
+                  column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                  });
+                });
+              }
+            });
+
+            $("#column_id_2").select2({
+              placeholder: " Select Date",
+              closeOnSelect: true,
+              width: '90%',
+            })
+
+            $("#column_id_3").select2({
+              placeholder: " Select Number",
+              closeOnSelect: true,
+              width: '80%',
+            })
+
+          });
+        </script>
+
+
+        <script>
+          var today = new Date();
+
+          var dd = today.getDate();
+          var mm = today.getMonth() + 1; //January is 0!
+          var yyyy = today.getFullYear();
+
+          if (dd < 10) {
+            dd = '0' + dd
+          }
+
+          if (mm < 10) {
+            mm = '0' + mm
+          }
+
+          // today = yyyy + '/' + mm + '/' + dd;
+          today = yyyy + '-' + mm + '-' + dd;
+
+          console.log(today);
+          document.getElementById('date').value = today;
+        </script>
+
+        <script type="text/javascript">
+          $(document).ready(function () {
+
+            $("#id_venderlist").on('change', function () {
+
+              var state = $("#id_venderlist").val();
+              // alert(state);
+
+              $.ajax({
+                type: "POST",
+                url: "/Orderlist/" + state,
+                data: {
+                  csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                  'organization_name': state
+                },
+                success: function (result) {
+
+                  $("#id_courselist").empty();
+                  var empty = ""
+                  $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Address *" + "</option>");
+                  $.each(result.data, function (key, value) {
+                    $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                  });
+                }
+              });
+
+            })
+          })
+        </script>
+
+        <script type="text/javascript">
+          $(document).ready(function () {
+
+            $("#id_courselist").on('change', function () {
+
+              var state = $("#id_courselist").val();
+              // alert(state);
+
+              $.ajax({
+                type: "POST",
+                url: "/Addresslist/" + maha,
+                data: {
+                  csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                  'medium': maha
+                },
+                success: function (result) {
+
+                  $("#id_offervalue").empty();
+                  var empty = ""
+                  $('#id_offervalue').append("<option value='" + empty + "' disabled selected value>" + "Select special offer*" + "</option>");
+                  $.each(result.data, function (key, value) {
+                    $('#id_offervalue').append("<option value='" + value + "'>" + value + "</option>");
+                  });
+                }
+              });
+
+            })
+          })
+        </script>
+
+        <script type="text/javascript">
+          $(document).ready(function () {
+
+            $("#id_brand").on('change', function () {
+
+              var state = $("#id_brand").val();
+              // alert(state);
+
+              $.ajax({
+                type: "POST",
+                url: "/Brandlist/" + city,
+                data: {
+                  csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                  'books_name': city
+                },
+                success: function (result) {
+
+                  $("#id_classname").empty();
+                  var empty = ""
+                  $('#id_classname').append("<option value='" + empty + "' disabled selected value>" + "Select classname *" + "</option>");
+                  $.each(result.data, function (key, value) {
+                    $('#id_classname').append("<option value='" + value + "'>" + value + "</option>");
+                  });
+                }
+              });
+
+            })
+          })
+        </script>
+
+
+
+
+
+
+        <script>
+
+          const pagesInput = document.getElementById('pages_1');
+          const quantityInput = document.getElementById('quantity_1');
+          const brandSelect = document.getElementById('brand_name_1');
+          const formsPerSetInput = document.getElementById('forms-per-set');
+
+
+
+
+          function calculateFormsPerSet() {
+            const pages = parseInt(pagesInput.value);
+            const quantity = parseInt(quantityInput.value);
+            const brand = brandSelect.value;
+            let pagesPerForm = 0;
+            if (brand === 'Kohinoor') {
+              pagesPerForm = 64;
+            } else if (brand === 'Spark') {
+              pagesPerForm = 128;
+            } else if (brand === 'Vidhya Mitra') {
+              pagesPerForm = 32;
+            } else if (brand === 'Abhiyashika') {
+              pagesPerForm = 16;
+            }
+            const forms = Math.ceil(pages / pagesPerForm * quantity);
+            const totalSet = Math.ceil(pages / 32);
+            const formsPerSet = Math.ceil(forms / totalSet);
+            formsPerSetInput.value = formsPerSet;
+          }
+
+          pagesInput.addEventListener('input', calculateFormsPerSet);
+          quantityInput.addEventListener('input', calculateFormsPerSet);
+          brandSelect.addEventListener('change', calculateFormsPerSet);
+
+
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- <script>
+    $(document).ready(function() {
+      // Initialize selectedBooks object to keep track of selected books for each brand
+      var selectedBooks = {};
+      // Initialize selectedMediums object to keep track of selected mediums for each brand and book
+      var selectedMediums = {};
+      // Initialize selectedSubjects object to keep track of selected subjects for each brand, class, and medium combination
+      var selectedSubjects = {};
+
+      var selectedPages = {};
+  
+      // Create an array to hold unique brand names
+      var uniqueBrands = [];
+  
+      // Populate the uniqueBrands array and remove any duplicate options from the brand select box
+      $('#brand_name_1 option').each(function() {
+        if ($.inArray($(this).val(), uniqueBrands) === -1) {
+          uniqueBrands.push($(this).val());
+        } else {
+          $(this).remove();
+        }
+      });
+  
+      // When the brand is changed, show the available class options for that brand and reset the selected books, mediums, and subjects for that brand
+      $('#brand_name_1').change(function() {
+        var selectedBrand = $(this).val();
+  
+        $('#class_name_1 option').each(function() {
+          if ($(this).data('brand') === selectedBrand) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+  
+        $('#medium_1 option').each(function() {
+          if ($(this).data('depends-on') === selectedBrand) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+  
+        $('#subject_1 option').each(function() {
+          if ($(this).data('depends-on') === selectedBrand) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+
+        $('#pages_1 option').each(function() {
+          if ($(this).data('depends-on') === selectedBrand) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+        
+        
+  
+        selectedBooks[selectedBrand] = null;
+        selectedMediums[selectedBrand] = null;
+        selectedSubjects[selectedBrand] = {};
+        selectedPages[selectedBrand] = {};
+      });
+  
+      // When the class is
+    });
+</script> 
+
+< working for 1 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
+
+{% endblock %}

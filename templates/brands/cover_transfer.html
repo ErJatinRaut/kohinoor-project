@@ -1,0 +1,883 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>orders</title>
+  <style>
+  *{
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 50px;
+  border: 1px solid #888;
+  width: 50%; 
+  max-width: 750px;
+}
+
+
+.select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+    padding-left:10%;
+  }
+  .title h3{
+  
+  border-bottom: 2px solid blueviolet ;
+  display: inline-block;
+   color: #000;
+  font-weight: bold;
+}
+.title h5{
+
+  display: inline-block;
+   
+}
+
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Print Transfer</div>
+            <hr>
+            {% comment %} <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color: mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Print Now</button>
+            </div><br> {% endcomment %}
+            <div id="myModal" class="modal">
+                <div class="modal-content">                    
+                    <div class="panel panel-default">
+                        {% comment %} <div class="panel-heading" style="color:black; background-color:#6e95fc;text-align:center;"><h4 style="color:white ;">Print Now</h4></div> {% endcomment %}
+                        
+                        <hr style="color:black">
+                        <form method="POST" onsubmit="return myfun()" >
+                            {% csrf_token %}
+                            <div class="panel-body" >
+                                <div class="" >
+                                    
+                                    <div class="row" style="text-align: right; background-color: lightcyan;">
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-4">
+                                            <div class="form-group" >
+                                                <div class="input-group">
+                                                    <input type="date" class="form-control mobile" name="p_print_date" id="date" placeholder="{% now 'd-m-Y' %}" disabled  max="{% now 'd-m-Y' %}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <br><br>   
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="name" class="control-label"><b>Name<span style="color:red;">*</span></b></label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" name="p_vender_name" id="vender_name" style="width:100%;" required>
+                                                    <option disabled selected value>Select Vendor</option>
+                                                    {% for i in vend %}
+                                                        <option value="{{i.organization_name}}">{{i.organization_name}}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                            </div>                                    
+                                        </div>
+                                    </div> <br>
+                                    
+                                    <div class="col-md-12" style="">
+                                        <div class="col-md-12" style="">
+                                            <div class="input_fields_container">
+                                                <div class="form-group" style="padding-left: 12px; padding-bottom: 0px;">
+                                                    <div class="row" id="myDiv" style=" padding-top: 12px ;padding-bottom: 0%;"> 
+                                                        <div class="col-md-2"><label>Brand<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Class<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Medium<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Subject<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Pages<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2" style="margin-left: 470px; margin-bottom:-10px;"><label>Quantity<span style="color:red;">*</span></label></div>
+                                                        <div class="form-group row">
+                                                        <div class="col-md-2"><label>Single<span style="color:red;">*</span></label></div></div>
+                                                        <div class="col-md-2"><label>Double<span style="color:red;">*</span></label></div></div>
+                                                        <div class="col-md-2"><label>four<span style="color:red;">*</span></label></div>
+                                                        <!-- <div class="col-md-2" style="padding-left:0;"> -->
+                                                          <div class="row"> 
+                                                             <input class="form-control" id="code" style="width:15%;" name="p_code" required onselect="calculateFormsPerSet()">
+                                                                {% comment %} <option disabled selected value>Select Brand</option>
+                                                                {% for i in obj %}
+                                                                <option value="{{ i.code }}">{{ i.code }}</option>
+                                                                {% endfor %}
+                                                             </select>  {% endcomment %}
+                                                                <input class="form-control" id="brand_name_1" style="width:15%;" name="p_brand_name_1" required onselect="calculateFormsPerSet()">
+                                                                    {% comment %} <option disabled selected value>Select Brand</option>
+                                                                    {% for i in obj1|dictsort:"books_name" %}
+                                                                    <option value="{{ i.books_name }}">{{ i.books_name }}</option>
+                                                                    {% endfor %}
+                                                                </select> {% endcomment %}
+                                                            <!-- </div> -->
+                                                            <input class="form-control" id="class_name_1" style="width:15%;" name="p_class_name_1" required>
+                                                                {% comment %} <option disabled selected value>Select Class</option>
+                                                                {% for i in obj2|dictsort:"books_class" %}
+                                                                <option value="{{ i.books_class }}" data-brand="{{i.books_name}}">{{i.books_class}}</option>
+                                                                {% endfor %} 
+                                                            </select> {% endcomment %}
+                                                            <div class="col-md-2 form-group quantity">
+                                                                <input class="form-control" id="medium_1" style="width:15%%;pading-left:10%;" name="p_medium_1" required>
+                                                                    {% comment %} <option disabled selected value>Select Medium</option>
+                                                                    {% for i in book %}
+                                                                    <option value="{{i.medium}}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}">{{i.medium}}</option>
+                                                                    {% endfor %}
+                                                                </select> {% endcomment %}
+                                                            </div>
+                                                            <input class="form-control" id="subject_1" style="width:15%;" name="p_subject_1" required>
+                                                                {% comment %} <option disabled selected value>Select Subject</option>
+                                                                {% for i in book %}
+                                                                <option value="{{i.subject}}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}">{{i.subject}}</option>
+                                                                {% endfor %}
+                                                            </select> {% endcomment %}
+                                                            
+                                                            <input class="form-control" id="pages_1" style="width:15%;" name="p_pages_1" required onselect="calculateFormsPerSet()">
+                                                                {% comment %} <option disabled selected value>Select Pages</option>
+                                                                {% for i in book %}
+                                                                <option value="{{ i.no_of_pages }}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}" data-depends-on-subject="{{ i.subject }}">{{ i.no_of_pages }}</option>
+                                                                {% endfor %}
+                                                            </select> {% endcomment %}
+                                                            </div>
+
+
+
+
+                                                             <div class="row">
+                                                             <input class="form-control" id="single_1" style="width:15%;" name="p_single_1" required data-depends-on-brand="" data-depends-on-class="" data-depends-on-medium="" data-depends-on-subject="" data-depends-on-pages="">
+                                                                {% comment %} <option disabled selected value>Select single Rate</option>
+                                                                {% for i in book %}
+                                                                <option value="{{ i.onec_rate }}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}" data-depends-on-subject="{{ i.subject }}" data-depends-on-pages="{{ i.no_of_pages }}">{{ i.onec_rate }}</option>
+                                                                {% endfor %}
+                                                            </select> {% endcomment %}
+                                                            
+                                                            <input class="form-control" id="double_1" style="width:15%;" name="p_double_1" required data-depends-on-brand="" data-depends-on-class="" data-depends-on-medium="" data-depends-on-subject="" data-depends-on-pages="">
+                                                                {% comment %} <option disabled selected value>Select double Rate</option>
+                                                                {% for i in book %}
+                                                                <option value="{{ i.twoc_rate }}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}" data-depends-on-subject="{{ i.subject }}" data-depends-on-pages="{{ i.no_of_pages }}">{{ i.twoc_rate }}</option>
+                                                                {% endfor %}
+                                                            </select> {% endcomment %}
+                                                            
+                                                            <input class="form-control" id="four_1" style="width:15%;" name="p_four_1" required data-depends-on-brand="" data-depends-on-class="" data-depends-on-medium="" data-depends-on-subject="" data-depends-on-pages="" disable>
+                                                                {% comment %} <option disabled selected value>Select Four rate</option>
+                                                                {% for i in book %}
+                                                                <option value="{{ i.fourc_rate }}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}" data-depends-on-subject="{{ i.subject }}" data-depends-on-pages="{{ i.no_of_pages }}">{{ i.fourc_rate }}</option>
+                                                                {% endfor %}
+                                                            </select> {% endcomment %}
+                                                            
+
+
+
+
+
+
+
+                                                            
+                                                           
+                                                            </div>
+                                                            {% comment %} <div id="dynamicInputBoxes"></div> {% endcomment %}
+                                                            <div class="row" id="dynamicInputBoxes"> </div>                                                        
+                                                            {% comment %} <div class="col-md-2 form-group quantity" ><input type="number" class="form-control mobile" name="p_printing_received_form_1" id="rec_1" maxlength="10" placeholder="Rec1" value=""  required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_2" id="rec_2" maxlength="10" placeholder="Rec2" value="" required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_3" id="rec_3" maxlength="10" placeholder="Rec3" value=""  required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_4" id="rec_4" maxlength="10" placeholder="Rec4" value=""  required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_5" id="rec_5" maxlength="10" placeholder="Rec5" value=""  required style="margin-left:15%" /></div>
+                                                            {% endcomment %}
+                                                            {% comment %} <div class="row">                                                          
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_6" id="rec_6" maxlength="10" placeholder="Rec6" value=""  required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_7" id="rec_7" maxlength="10" placeholder="Rec7" value="" required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_8" id="rec_8" maxlength="10" placeholder="Rec8" value=""  required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_9" id="rec_9" maxlength="10" placeholder="Rec9" value=""  required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="p_printing_received_form_10" id="rec_10" maxlength="10" placeholder="Rec10" value=""  required style="margin-left:15%" /></div>
+                                                            </div>   {% endcomment %}
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div><br>
+                                        
+                                          <div class="col-md-12" style="text-align: right;">
+                                          {% comment %} <button class="btn btn-primary btn-sm add_more_button" >Add New Items</button> {% endcomment %}
+                                          </div>
+                                      </div>
+
+                                        
+                                        <div class="col-md-12" >
+                                            <div class="form-group">
+                                                <label style="padding-right:100%;">Note</label>
+                                                <input type="text" class="form-control mobile" name="term_and_condition1" maxlength="60" 
+                                                id="term_and_condition1" placeholder="1. Terms and Conditions" value="{{first_condition}}" style="border-bottom: 1px solid rgb(214, 213, 213);
+                                                border-left:none ; border-top: none; border-right: none; margin-bottom: 13px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 text-center"></div>
+                                        <div class="col-md-12">
+                                          <div class="text-center mt-3 mb-3">
+                                              <button type="submit" class="btn btn-primary" name="create_form_btn"  value="save_cashmemo_btn">Create</button>
+                                              <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+                                          </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" >
+                <div class="row" style="text-align: center;" >
+                    <div class="col-md-11" >
+                        <div class="table-responsive">
+                            <table  class="display table table-hover table-striped table-bordered" >
+                                <thead>
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;">
+                                            <th align="center">Sr.No</th>
+                                            <th align="center">Plate No</th>
+                                            <th align="center">Transfer From</th>
+                                            <th align="center">To</th>
+                                            <th align="center">Paper To Be Used </th>
+                                            
+                                            <th align="center">No Of Ups</th>
+                                            
+                                            
+                                            <th align="center">Plate Rate</th>
+                                            <th align="center">Printing Rate</th>
+                                            <th align="center">Tax%</th>
+                                            <th align="center">Lamination</th>
+                                            <th align="center">Texture</th>
+                                            <th align="center">Bill Company</th>
+                                            <th align="center">Total Cover</th>
+                                            <th align="center">Transfer Cover</th>
+                                            {% comment %} <th align="center">Action</th> {% endcomment %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data1 %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td>
+                                                {{ i.plate_no }}
+                                            </td>
+                                            <td>
+                                                {{ i.from_vend }}
+                                            </td>
+                                            <td>
+                                                {{ i.to_vend }}
+                                            </td>
+                                             <td >
+                                                {{ i.paper_to_be_used }}
+                                            </td>
+                                             
+                                            <td >
+                                                {{ i.no_of_ups }}
+                                            </td>
+                                           
+                                            <td >
+                                                {{ i.plate_rate }}
+                                            </td>  
+                                            <td >
+                                                {{ i.printing_rate }}
+                                            </td> 
+                                            <td >
+                                                {{ i.tax }}
+                                            </td> 
+                                           
+                                            <td> 
+                                                {% if i.lamination == "Yes" %}
+                                                    {{ i.rate1 }}
+                                                {% else %}
+                                                    {{ i.lamination }}
+                                                {% endif %}
+                                            </td>
+                                            <td >
+                                                {% if i.texture == "Yes" %}
+                                                    {{ i.rate2 }}
+                                                {% else %}
+                                                    {{ i.texture }}
+                                                {% endif %}
+                                                
+                                            </td> 
+                                            <td >
+                                                {{ i.bill_company }}
+                                            </td> 
+                                            <td >
+                                                {{ i.quantity_cover }}
+                                            </td>  
+                                            <td >
+                                                {{ i.transfer}}
+                                            </td>                                                                                                                                            
+                                            <td>
+                                        
+                                        
+
+                                                                                                                 
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <script>
+                // JavaScript code to handle dropdown and input box dependencies
+            
+                // Get references to the dropdown elements
+                const codeDropdown = document.getElementById('code');
+                const brandDropdown = document.getElementById('brand_name_1');
+                const classDropdown = document.getElementById('class_name_1');
+                const mediumDropdown = document.getElementById('medium_1');
+                const subjectDropdown = document.getElementById('subject_1');
+                
+                const singleDropdown = document.getElementById('single_1');
+                const doubleDropdown = document.getElementById('double_1');
+                const fourDropdown = document.getElementById('four_1');
+                const pagesDropdown = document.getElementById('pages_1');
+                const dynamicInputBoxes = document.getElementById('dynamicInputBoxes');
+            
+                // Create a dictionary to store the book data
+                const bookData = {
+                    // Populate this object with book data from your backend
+                    {% for i in book %}
+                    "{{ i.code }}": {
+                        brand: "{{ i.books_name }}",
+                        class: "{{ i.books_class }}",
+                        medium: "{{ i.medium }}",
+                        subject: "{{ i.subject }}",
+                        pages: "{{ i.no_of_pages }}",
+                        single: "{{ i.onec_rate }}",
+                        double: "{{ i.twoc_rate }}",
+                        four: "{{ i.fourc_rate }}"
+                    },
+                    {% endfor %}
+                };
+                 codeDropdown.addEventListener('change', function () {
+                    const selectedCode = this.value;
+                    
+                    
+                    // Populate other dropdowns with data based on the selected "code"
+                    brandDropdown.value = bookData[selectedCode].brand;
+                    classDropdown.value = bookData[selectedCode].class;
+                    mediumDropdown.value = bookData[selectedCode].medium;
+                    subjectDropdown.value = bookData[selectedCode].subject;
+                    pagesDropdown.value = bookData[selectedCode].pages;
+                    singleDropdown.value = bookData[selectedCode].single;
+                    doubleDropdown.value = bookData[selectedCode].double;
+                    fourDropdown.value = bookData[selectedCode].four;
+            
+                    // You might also need to trigger the "calculateFormsPerSet()" function here
+                    calculateFormsPerSet();
+                })
+                // Function to update input boxes based on "pages_1" value
+                function updateInputBoxes() {
+                    const selectedCode = codeDropdown.value;
+                    const pagesValue = parseInt(pagesDropdown.value);
+            
+                    dynamicInputBoxes.innerHTML = ""; // Clear existing input boxes
+            
+                    if (pagesValue === 128) {
+                        var numInputBoxes = 4;
+                    } else if (pagesValue === 64) {
+                        var numInputBoxes = 2;
+                    } else if (pagesValue === 96) {
+                        var numInputBoxes = 3;
+                    } else if (pagesValue === 160) {
+                        var numInputBoxes = 5;
+                    } else if (pagesValue === 192) {
+                        var numInputBoxes = 6;
+                    } else if (pagesValue === 224) {
+                        var numInputBoxes = 7;
+                    } else if (pagesValue === 256) {
+                        var numInputBoxes = 8;
+                    } else if (pagesValue === 288) {
+                        var numInputBoxes = 9;
+                    } else if (pagesValue === 320) {
+                        var numInputBoxes = 10;
+                    } else {
+                        var numInputBoxes = 0;
+                    }
+            
+                    for (var i = 1; i <= numInputBoxes; i++) {
+                        var inputBox = document.createElement("input");
+                        inputBox.type = "number"; // Change this to "text" or other type if needed
+                        inputBox.className = "form-control mobile";
+                        inputBox.name = "p_printing_received_form_" + i;
+                        inputBox.id = "rec_" + i;
+                        inputBox.maxLength = "10";
+                        inputBox.placeholder = "Rec" + i;
+                        inputBox.required = true;
+                        inputBox.style.marginLeft = "15%";
+            
+                        dynamicInputBoxes.appendChild(inputBox);
+                    }
+                }
+            
+                // Add a change event listener to the "code" dropdown
+                codeDropdown.addEventListener('change', function () {
+                    // Populate other dropdowns with data based on the selected "code"
+                    const selectedCode = this.value;
+                    pagesDropdown.value = bookData[selectedCode].pages;
+            
+                    // Update dynamic input boxes
+                    updateInputBoxes();
+                });
+            
+                // Add an event listener to handle "pages_1" value changes
+                pagesDropdown.addEventListener("change", updateInputBoxes);
+            
+                // Trigger the initial calls
+                codeDropdown.dispatchEvent(new Event('change'));
+            </script>
+            
+
+
+            {% comment %} <script>
+                // JavaScript code to handle dropdown and input box dependencies
+            
+                // Get references to the dropdown elements
+                const codeDropdown = document.getElementById('code');
+                const brandDropdown = document.getElementById('brand_name_1');
+                const classDropdown = document.getElementById('class_name_1');
+                const mediumDropdown = document.getElementById('medium_1');
+                const subjectDropdown = document.getElementById('subject_1');
+                const pagesDropdown = document.getElementById('pages_1');
+                const singleDropdown = document.getElementById('single_1');
+                const doubleDropdown = document.getElementById('double_1');
+                const fourDropdown = document.getElementById('four_1');
+                const dynamicInputBoxes = document.getElementById('dynamicInputBoxes'); // Get the dynamic input boxes container
+            
+                // Create a dictionary to store the book data
+                const bookData = {
+                    // Populate this object with book data from your backend
+                    {% for i in book %}
+                    "{{ i.code }}": {
+                        brand: "{{ i.books_name }}",
+                        class: "{{ i.books_class }}",
+                        medium: "{{ i.medium }}",
+                        subject: "{{ i.subject }}",
+                        pages: "{{ i.no_of_pages }}",
+                        single: "{{ i.onec_rate }}",
+                        double: "{{ i.twoc_rate }}",
+                        four: "{{ i.fourc_rate }}"
+                    },
+                    {% endfor %}
+                };
+            
+                // Function to update input boxes based on "pages_1" value
+               
+                // Add a change event listener to the "code" dropdown
+                codeDropdown.addEventListener('change', function () {
+                    const selectedCode = this.value;
+                    // Populate other dropdowns with data based on the selected "code"
+                    brandDropdown.value = bookData[selectedCode].brand;
+                    classDropdown.value = bookData[selectedCode].class;
+                    mediumDropdown.value = bookData[selectedCode].medium;
+                    subjectDropdown.value = bookData[selectedCode].subject;
+                    pagesDropdown.value = bookData[selectedCode].pages;
+                    singleDropdown.value = bookData[selectedCode].single;
+                    doubleDropdown.value = bookData[selectedCode].double;
+                    fourDropdown.value = bookData[selectedCode].four;
+            
+                    // You might also need to trigger the "calculateFormsPerSet()" function here
+                    calculateFormsPerSet();
+                });
+            
+                // Add an event listener to handle "pages_1" value changes
+                pagesDropdown.addEventListener("change", updateInputBoxes);
+            
+                // Trigger the initial calls
+                codeDropdown.dispatchEvent(new Event('change'));
+                updateInputBoxes(); // Initial call
+            </script> {% endcomment %}
+            
+           
+
+            {% comment %} <script>
+                function updateInputBoxes() {
+                    var pagesValue = parseInt(document.getElementById("pages_1").value);
+                    var dynamicInputBoxes = document.getElementById("dynamicInputBoxes");
+                    dynamicInputBoxes.innerHTML = ""; // Clear existing input boxes
+                    
+                    if ( pagesValue === 128) {
+                        var numInputBoxes = 4;
+                    } else if (pagesValue === 64) {
+                        var numInputBoxes = 2;
+                    }else if (pagesValue === 96) {
+                        var numInputBoxes = 3;
+                    }else if (pagesValue === 160) {
+                        var numInputBoxes = 5;
+                    }else if (pagesValue === 192) {
+                        var numInputBoxes = 6;
+                    }else if (pagesValue === 224) {
+                        var numInputBoxes = 7;
+                    }else if (pagesValue === 256) {
+                        var numInputBoxes = 8;
+                    }else if (pagesValue === 288) {
+                        var numInputBoxes = 9;
+                    }else if (pagesValue === 320) {
+                        var numInputBoxes = 10;
+                    } else {
+                        var numInputBoxes = 0;
+                    }
+                
+                    for (var i = 1; i <= numInputBoxes; i++) {
+                        var inputBox = document.createElement("input");
+                        inputBox.type = "number"; // Change this to "text" or other type if needed
+                        inputBox.className = "form-control mobile";
+                        inputBox.name = "p_printing_received_form_" + i;
+                        inputBox.id = "rec_" + i;
+                        inputBox.maxLength = "10";
+                        inputBox.placeholder = "Rec" + i;
+                        inputBox.required = true;
+                        inputBox.style.marginLeft = "15%";
+                        
+                        dynamicInputBoxes.appendChild(inputBox);
+                    }
+                }
+                
+                // Call the function initially and whenever the pages_1 value changes
+                document.getElementById("pages_1").addEventListener("change", updateInputBoxes);
+                updateInputBoxes(); // Initial call
+                </script>
+
+             {% endcomment %}
+            
+            
+
+
+
+            <script>
+              $(document).ready(function() {
+               var max_fields_limit= 51;
+               var x = 1;
+               $('.add_more_button').click(function(e){ 
+               e.preventDefault();
+               $('#myDiv').show();
+               if(x < max_fields_limit){ 
+                   x++;  
+                   $('.input_fields_container').append(
+                       
+                   //'<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description"><input type="text" pattern="[a-z A-Z 0-9\s]+" class="form-control mobile" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" placeholder="brand name" value="" required maxlength="30" /></div><div class="col-md-2 form-group "><input type="text" class="form-control mobile" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" maxlength="30" placeholder="Class Name" min=""  pattern="^[a-z A-Z 0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;"  name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" type="text" maxlength="30" placeholder=" Medium" min=""  pattern="^[a-zA-Z0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" placeholder="Subject" value="" required maxlength="30"></div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+                       // <input type="text" class="form-control mobile" name="amount_'+x.toString()+'" id="amount_'+x.toString()+'" placeholder="Amount" value="" required />
+                    '<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" required><option disabled selected value>Select Brand</option>{% for i in book %}<option>{{i.books_name}}</option>{% endfor %}</select>     </div><div class="col-md-2 form-group ">   <select class="form-control mobile" style="width:20%%;" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" required><option disabled selected value>Select Class</option>{% for i in book %}<option>{{i.books_class}}</option>{% endfor %}</select>     </div><div class="col-md-2 form-group description">    <select class="form-control mobile" style="width:20%%;" name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" required><option disabled selected value>Select Medium</option>{% for i in book %}<option>{{i.medium}}</option>{% endfor %}</select>      </div><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" required><option disabled selected value>Select Subject</option>{% for i in book %}<option>{{i.subject}}</option>{% endfor %}</select>   </div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+
+                   }
+     
+     
+           });  
+           $('.input_fields_container').on("click",".remove_field", function(e){ //user click on remove text links
+               e.preventDefault(); $(this).parent('div').remove(); x--;
+              
+           })
+       });
+     
+     
+       function restrictMinus(e) {
+               var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+     
+               if (inputKeyCode != null) {
+                   if (inputKeyCode == 45) e.preventDefault();
+               }
+       }
+     
+       </script>
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+      modal.style.display = "none";
+      }
+  }
+
+  </script>
+
+
+
+
+
+  <script>
+    document.getElementById("from_date").onchange = function () {
+    var input = document.getElementById("to_date");
+    input.setAttribute("min", this.value);
+  }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+    <script type="text/javascript">
+  
+<script>
+  $(document).ready(function() {
+    $('#add-row').DataTable({
+        dom: 'lBfrtip',
+        "ordering": false,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        buttons: [
+           'excel', 'pdf', 'print'
+        ],
+        initComplete: function () {
+        this.api().columns([2,3]).every( function () {
+            var column = this;
+            var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+            
+            .appendTo( $("#type_filter_" + column[0][0]).empty())
+                
+            .on( 'change', function () {
+
+            var val = $(':selected', select).map(function(index, element) {
+            return $.fn.dataTable.util.escapeRegex($(this).val());
+            }).toArray().join('|');
+                  
+            column
+                .search( val ? '^'+val+'$' : '', true, false )
+                .draw();
+            } );
+
+            column.data().unique().sort().each( function ( d, j ) {
+                select.append( '<option value="'+d+'">'+d+'</option>' )
+            });
+        });        
+      }
+    });
+
+    $("#column_id_2").select2({
+      placeholder:" Select Date",
+      closeOnSelect: true,
+      width: '90%',
+    })
+
+    $("#column_id_3").select2({
+      placeholder:" Select Number",
+      closeOnSelect: true,
+      width: '80%',
+    })
+
+  });
+</script>
+
+
+
+
+
+<script>
+    $(function () {
+        $('.deleteBtn').on('click', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = $(this).attr("data-id");
+                    $.ajax({
+                        type: "POST",
+                        url: "/delete-orders/" + id + "/" ,
+                        data: { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value },
+                        success: function (response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Bill deleted successfully.',
+                                'success',
+                                {
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                })
+                                .then(function () {
+                                    location.reload();
+                                });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!",
+                                confirmButtonClass: "btn-success",
+                                allowOutsideClick: false,
+                                allowEscapeKey: false
+                            })
+                                .then(function () {
+                                    location.reload();
+                                });
+                        }
+                    });
+                }
+            })
+        });
+    });
+    
+    </script>
+
+
+
+
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Function to update the options of a dropdown based on the selected values of dependent fields
+        function updateDropdownOptions(dropdownId, dependentFields) {
+        var dropdown = document.getElementById(dropdownId);
+        var selectedOptions = [];
+    
+        // Get the selected values of the dependent fields
+        for (var i = 0; i < dependentFields.length; i++) {
+            var fieldId = dependentFields[i];
+            var fieldValue = document.getElementById(fieldId).value;
+            selectedOptions.push(fieldValue);
+        }
+    
+        // Update the options of the dropdown based on the selected values
+        for (var i = 0; i < dropdown.options.length; i++) {
+            var option = dropdown.options[i];
+            var dependsOnBrand = option.getAttribute('data-depends-on-brand');
+            var dependsOnClass = option.getAttribute('data-depends-on-class');
+            var dependsOnMedium = option.getAttribute('data-depends-on-medium');
+            var dependsOnSubject = option.getAttribute('data-depends-on-subject');
+            var dependsOnPages = option.getAttribute('data-depends-on-pages');
+    
+            // Check if the option should be displayed based on the selected values
+            if (
+            (!dependsOnBrand || dependsOnBrand === selectedOptions[0]) &&
+            (!dependsOnClass || dependsOnClass === selectedOptions[1]) &&
+            (!dependsOnMedium || dependsOnMedium === selectedOptions[2]) &&
+            (!dependsOnSubject || dependsOnSubject === selectedOptions[3]) &&
+            (!dependsOnPages || dependsOnPages === selectedOptions[4])
+            ) {
+            option.style.display = '';
+            } else {
+            option.style.display = 'none';
+            }
+        }
+        }
+    
+        // Add event listeners to the dependent fields to update the dropdown options
+        document.getElementById('brand_name_1').addEventListener('change', function () {
+        updateDropdownOptions('class_name_1', ['brand_name_1']);
+        });
+    
+        document.getElementById('class_name_1').addEventListener('change', function () {
+        updateDropdownOptions('medium_1', ['brand_name_1', 'class_name_1']);
+        });
+    
+        document.getElementById('medium_1').addEventListener('change', function () {
+        updateDropdownOptions('subject_1', ['brand_name_1', 'class_name_1', 'medium_1']);
+        });
+    
+        document.getElementById('subject_1').addEventListener('change', function () {
+        updateDropdownOptions('pages_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1']);
+        });
+    
+        document.getElementById('pages_1').addEventListener('change', function () {
+        updateDropdownOptions('single_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+        updateDropdownOptions('double_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+        updateDropdownOptions('four_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+        });
+    
+        document.getElementById('single_1').addEventListener('change', function () {
+        updateDropdownOptions('double_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+        });
+    
+        document.getElementById('double_1').addEventListener('change', function () {
+        updateDropdownOptions('four_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+        });
+    </script> 
+
+     {% endcomment %}
+
+    
+
+
+<script>
+  flatpickr("#date", {
+    dateFormat: "d-m-Y",
+    altInput: true,
+    altFormat: "F j, Y",
+    allowInput: true,
+    maxDate: "today"
+  });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        // Function to sort the dropdown options numerically
+        function sortDropdownOptions(selectElement) {
+            var options = selectElement.find('option');
+            var selectedValue = selectElement.val();
+            
+            options.sort(function(a, b) {
+                return parseInt($(a).val()) - parseInt($(b).val());
+            });
+            
+            selectElement.empty().append(options);
+            selectElement.val(selectedValue);
+        }
+        
+        // Call the sortDropdownOptions function for your specific dropdown
+        sortDropdownOptions($('#class_name_1'));
+    });
+</script>
+
+
+
+
+
+ 
+
+
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+    /* Style the page wrapper */ 
+.page-wrapper {
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+/* Style the page content */
+.page-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 900px; /* Adjust the max-width as needed */
+    margin-top: 55px auto; /* Center the container horizontally */
+}
+
+/* Style the breadcrumb section */
+.page-breadcrumb {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: lightcyan;
+    border-radius: 5px;
+}
+
+/* Style the breadcrumb title */
+.breadcrumb-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Style the form elements */
+.form-label {
+    font-weight: bold;
+}
+
+.form-control {
+
+    border-radius: 5px;
+}
+
+/* Style the buttons */
+.btn {
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+/* Style the Back button */
+.btn-back {
+    background-color: #3498db;
+    color: #fff;
+}
+
+/* Style the Save button */
+.btn-save {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+/* Center align elements */
+.text-center {
+    text-align: center;
+}
+
+/* Responsive layout for small screens */
+@media (max-width: 768px) {
+    .d-grid {
+        display: block;
+    }
+    
+    .col-sm-6 {
+        width: 100%;
+    }
+}
+
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-6">Update Data</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                    
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                        <div class="form-group">
+                          <label style="color: black;">Name<span style="color: red;">*</span></label>
+                          <div class="input-group mb-4">
+                            <input style="color: black;" width="50" type="text" min="0" placeholder="Prefix"
+                              name="cust_prefix" id="" class="form-control" maxlength="" value="{{data.cust_prefix}}" required="">
+                          
+                            <input style="color: black;" width="50" type="text" placeholder="Enter Name" name="cust_name" id=""
+                              class="form-control" step="any" maxlength=""
+                              oninput="this.value = this.value.replace(/[^a-zA-Z ]/g, '');" value="{{data.cust_name}}" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                            <label class="form-label">GSTIN No.</label>
+                            <input type="tel" name="c_vender_gst" minlength="" class="form-control"
+                                value="{{data.c_vender_gst}}" id="gstin_input" placeholder="" maxlength="" >
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label class="form-label">Alias</label>
+                            <input type="text" class="form-control radius-10" id="" name="cust_alias"
+                                value="{{data.cust_alias}}" required="">
+                        </div>  -->
+                        <div class="mb-3">
+                            <label class="form-label">Code</label>
+                            <input type="text" class="form-control radius-10" id="" name="code"
+                                value="{{data.code}}" required="">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Group </label>
+                            
+                                <select name="group" id="group"  required class="form-control radius-10">
+                                    <option disabled selected value>Select </option>
+                                    {% for object in data09 %}
+                                    <option value="{{ object.group_name }}" {% if object.group_name == data.group %}selected{% endif %}>{{ object.group_name }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                       <div class="mb-3">
+                            <label class="form-label">Whatsapp No</label>
+                            <input type="tel" name="cust_whatsapp" minlength="10" class="form-control"
+                                value="{{data.cust_whatsapp}}" id="" placeholder="" maxlength="" required="">
+                        </div> 
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Opening Balance(Dr/Cr)</label>
+                             <div class="input-group mb-3">
+                            <input type="tel" name="cust_opening_balence" minlength="" class="form-control"
+                                value="{{data.cust_opening_balence}}" id="" placeholder="" maxlength="" required="">
+                            <div class="input-group-append">
+                                <select class="custom-select" name="debit_customer">
+                                   
+                                    <option value="Dr" {% if data.debit_customer == 'Dr' %}selected{% endif %}>Dr</option>
+                                    <option value="Cr" {% if data.debit_customer == 'Cr' %}selected{% endif %}>Cr</option>
+                                    <!-- <option value="sheet">sheet</option> -->
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                        {% comment %} <div class="mb-3">
+                            <label class="form-label">Machine Rate</label>
+                            <input type="tel" name="machine_rate" minlength="" class="form-control"
+                                value="{{data.machine_rate}}" id="" placeholder="" maxlength="" required="">
+                        </div> {% endcomment %}
+
+                    </div>
+
+                        <div class="col-md-12" style="text-align: center;">
+                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'customer_ledger' %}" style="color:white;">Back</a></button>
+
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color:mediumaquamarine; color:white;">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- <script>
+      const inputElement = document.getElementById('gstin_input');
+  
+      inputElement.addEventListener('input', function() {
+          const gstinPattern = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+          const validInput = inputElement.value.match(gstinPattern);
+          if (!validInput) {
+              inputElement.setCustomValidity('Please enter a valid GSTIN with Two Numbers and five uppercase alphabets and four numbers and one alphabets and one numbers or alphabets and Z(one numbers or alphabets) example 07DDIPA9391G1ZC .');
+          } else {
+              inputElement.setCustomValidity('');
+          }
+      });
+  </script> -->
+    {% endblock %}

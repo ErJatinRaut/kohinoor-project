@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    * {
+        font-family: Georgia;
+    }
+    .btn-no-underline {
+    text-decoration: none !important;
+}
+</style>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb mb-3 p-5" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Update Database Data</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="d-grid gap-2 col-sm-6">
+                            <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control radius-10" id="" name="pname"
+                                    value="{{data.pname}}" maxlength="30">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Alias</label>
+                                <input type="text" class="form-control radius-10" id="" name="palias"
+                                    value="{{data.palias}}">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Print Name</label>
+                                <input type="text" name="p_print_name" minlength="" class="form-control"
+                                    value="{{data.p_print_name}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label  class="form-label">Material Center</label>
+                                    <select name="by_material_center" id="by_material_center"  required class="form-control">
+                                    <option disabled selected value>Select Material Center</option>
+                                    {% for object in data1 %}
+                                    <option value="{{ object.centre_name }}" {% if object.centre_name == data.by_material_center %}selected{% endif %}>{{ object.centre_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Opening Stock(QTY)</label>
+                                <input type="tel" name="opening_stock_p" minlength="" class="form-control"
+                                    value="{{data.opening_stock_p}}" id="" placeholder="" maxlength="" readonly/>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Opening Stock(Value)</label>
+                                <input type="text" class="form-control radius-10" id="" name="p_opening_stock_value"
+                                    value="{{data.p_opening_stock_value}}" maxlength="30">
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Unit 1 Conversion</label>
+                                <input type="tel" name="punit1_conversion" minlength="" class="form-control"
+                                    value="{{data.punit1_conversion}}" id="" placeholder="" maxlength="" readonly/>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Unit 2 Conversion</label>
+                                <input type="tel" name="punit2_conversion" minlength="" class="form-control"
+                                    value="{{data.punit2_conversion}}" id="" placeholder="" maxlength="" readonly/>
+                                
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Unit 2 </label>
+                                <input type="tel" name="punit2" minlength="" class="form-control"
+                                    value="{{data.punit2}}" id="" placeholder="" maxlength="" readonly/>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Unit 3 </label>
+                                <input type="tel" name="punit3" minlength="" class="form-control"
+                                    value="{{data.punit3}}" id="" placeholder="" maxlength="" readonly/>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Sale Price</label>
+                                <input type="tel" name="sale_price" minlength="" class="form-control"
+                                    value="{{data.sale_price}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Purchase Price</label>
+                                <input type="tel" name="purchase_price" minlength="" class="form-control"
+                                    value="{{data.purchase_price}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">M.R.P</label>
+                                <input type="tel" name="mrp" minlength="" class="form-control"
+                                    value="{{data.mrp}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Min Sale Price</label>
+                                <input type="tel" name="min_sale_price" minlength="" class="form-control"
+                                    value="{{data.min_sale_price}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Sale Value Price</label>
+                                <input type="tel" name="sale_value_price" minlength="" class="form-control"
+                                    value="{{data.sale_value_price}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Rate Of Tax(local)</label>
+                                <input type="tel" name="product_tax_local" minlength="" class="form-control"
+                                    value="{{data.product_tax_local}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Rate Of Tax(Central)</label>
+                                <input type="tel" name="product_tax_central" minlength="" class="form-control"
+                                    value="{{data.product_tax_central}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">GST</label>
+                                <input type="tel" name="product_gst" minlength="" class="form-control"
+                                    value="{{data.product_gst}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Item Description</label>
+                                <input type="tel" name="product_item_description" minlength="" class="form-control"
+                                    value="{{data.product_item_description}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" style="text-align: center;">
+                            
+                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'by_product' %}" style="color:white;" class="btn-no-underline">Back</a></button>
+
+
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color:mediumaquamarine; color:white;">Save</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+    {% endblock %}

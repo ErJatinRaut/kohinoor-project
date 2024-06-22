@@ -1,0 +1,803 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: lightcyan;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 850px){
+  .modal-content-mobile{
+      width : 90%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Vouchers</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color:mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;create Vouchers</button>
+                    
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content modal-content-mobile" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Create Vouchers</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" onsubmit="return myfun()" id="profile-form" >
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="left">
+                                        <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                            <div class="row">
+
+                                        <div class = "col-md-6">
+
+
+                                              <div class="col-md-12">
+                                                <div class="mb-0">
+                                                    <label style="color: black;">Date<span style="color: red;">*</span></label>
+                                                    <div class="input-group">
+                                                      <input type="date" class="form-control mobile" name="date" id="date" placeholder="{% now 'Y-m-d' %}" value="" disabled max="{% now 'Y-m-d' %}" />
+                                                  </div>
+                                                    
+                                                </div>
+                                             </div>
+                                             <div class="col-md-12">
+                                              <div class="mb-0">
+                                                  <label style="color: black;">Voucher Type<span style="color: red;">*</span></label>
+                                                  <div class="input-group">
+                                                      <select style="color: black;" name="voucher_type" id="voucher_type" class="form-control" onchange="generateVoucherNo()">
+                                                          <option value="" disabled selected>Select Voucher Type</option>
+                                                          <option value="contra">Contra</option>
+                                                          <option value="credit Note"> Credit Note</option>
+                                                          <option value="debit note ">Debit Note</option>
+                                                          <option value="delivery Note">Delivery Note</option>
+                                                          <option value="journal">Journal</option>
+                                                          <option value="material in">Material in</option>
+                                                          <option value="material out">Material out</option>
+                                                          <option value="Payment">Payment</option>
+                                                          <option value="Physicalstock">Physical stock</option>
+                                                          <option value="Purchase">Purchase</option>
+                                                          <option value="Purchase order">Purchase order</option>
+                                                          <option value="Receipt">Receipt</option>
+                                                          <option value="sales">Sales</option>
+                                                          <option value="sales order">Sales order</option>
+                                                          <option value="Print order">Print order</option>
+                                                          <option value="Binding order">Binding order</option>
+                                                          <option value="stock transfer">Stock transfer</option>
+                                                          <!-- Add more options as needed -->
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                          </div>
+
+                                        </div>
+
+                                        <div class = "col-md-6 mb-5">
+                                          <div class="col-md-12">
+                                            <div class="mb-0">
+                                                <label style="color:black ;">Voucher No<span style="color: red;">*</span></label>
+                                                <div class="input-group">
+                                                    <input style="color: black;" width="50" type="voucherno" min="0" placeholder="Enter voucher No"
+                                                        name="voucher_no" id="voucher_no" class="form-control" maxlength="" value=""
+                                                        required="" placeholder="voucherno" >
+                                                </div>
+                                            </div>
+                                          </div> 
+                                                <!-- <div class="col-md-12">
+                                                    <div class="mb-0">
+                                                        <label style="color:black ;">Series<span style="color: red;">*</span></label>
+                                                        <div class="input-group">
+                                                         <input style="color: black;" width="50" type="Series" min="0" placeholder="Enter series"
+                                                            name="series" id="" class="form-control" maxlength="" value=""
+                                                            required="" placeholder="series" >
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+                                        </div>
+
+
+                                      
+                                                <div class="col-sm-2 " style = "padding:0; width: 200px; margin-left:28px">
+                                                  <div class="mb-0">
+                                                      <label style="color:black ;">D/C<span style="color: red;">*</span></label>
+                                                      
+                                                      <div class="input-group">
+                                                        <select style="color: black; border-radius: 0;" name="dc" id="code_1" class="form-control" required>
+                                                            <option value="" selected disabled>Select D/C</option>
+                                                            <option value="debit">Debit</option>
+                                                            <option value="credit">Credit</option>
+                                                        </select>
+                                                    </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-sm-2" style = "padding:0; width: 200px;">
+                                                <div class="mb-0">
+                                                    <label style="color:black;">Account<span style="color: red;">*</span></label>
+                                                    <div class="input-group">
+                                                        <select class="form-control" name="account" id="class_name_1" style="width:100%;border-radius: 0" required>
+                                                            <option disabled selected value>Select Vendor</option>
+                                                            
+                                                            {% for i in data_combined %}
+                                                                <option>
+                                                                {{ i.organization_name|default_if_none:'' }}{{ i.prefix|default_if_none:'' }}{{ i.name|default_if_none:'' }} {{ i.g_prefix|default_if_none:'' }}{{ i.g_name|default_if_none:'' }} {{ i.s_prefix|default_if_none:'' }}{{ i.s_name|default_if_none:'' }} {{ i.p_prefix|default_if_none:'' }}{{ i.p_name|default_if_none:'' }} {{ i.m_prefix|default_if_none:'' }}{{ i.m_name|default_if_none:'' }} {{ i.c_prefix|default_if_none:'' }}{{ i.c_name|default_if_none:'' }} {{ i.pack_prefix|default_if_none:'' }}{{ i.pack_name|default_if_none:'' }} {{ i.g_prefix|default_if_none:'' }}{{ i.g_name|default_if_none:'' }} {{ i.cust_prefix|default_if_none:'' }}{{ i.cust_name|default_if_none:'' }}</option>
+                                                            {% endfor %}
+                                                           
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                                <div class="col-sm-2" style = "padding:0; width: 200px;">
+                                                  <div class="mb-0">
+                                                      <label style="color:black ;">Debit Rs<span style="color: red;">*</span></label>
+                                                      <div class="input-group">
+                                                       <input style="color: black;border-radius: 0" width="50" type="Series" min="0" placeholder="Enter debit"
+                                                          name="debit" id="brand_name_1"class="form-control" maxlength="" value=""
+                                                         >
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-sm-2" style = "padding:0; width: 200px;">
+                                                <div class="mb-0">
+                                                    <label style="color:black ;">Credit Rs<span style="color: red;">*</span></label>
+                                                    <div class="input-group">
+                                                     <input style="color: black;border-radius: 0" width="50" type="Series" min="0" placeholder="Enter credit"
+                                                        name="credit" id="subject_1" class="form-control" maxlength="" value=""
+                                                         >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                
+                                                  <div class="col-sm-2" style = "padding:0; width: 200px;">
+                                                  <div class="mb-0">
+                                                      <label style="color: black;">Short Narration<span style="color: red;">*</span></label>
+                                                      <div class="input-group">
+                                                          <input type="text" name="short_narration"  class="form-control" id="midium_1" placeholder="Enter narration"  style="width: 200px;border-radius: 0" required >
+                                                      </div>
+                                                  </div>
+                                              </div> 
+
+                                            
+                                              <div class="input_fields_container mb-3">
+                                                <!-- Newly added items will be appended here -->
+                                            </div><br>
+                                              <div class="col-md-12 text-center mb-0">
+                                                <button class="btn btn-primary btn-sm " id="add_more_button"
+                                                    style="background-color:mediumaquamarine;">Add New Items</button>
+                                            </div>
+
+                                              
+                                               
+                                                 
+                                            
+                                                
+                                                {% comment %} <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Party<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="textarea" min="0" 
+                                                                name="party" id="" class="form-control" maxlength="" value="" placeholder="Enter Party">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                 <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;">Material Centre<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color:black ;" width="50" type="text" min="0" 
+                                                                name="material_centre" id="" class="form-control" maxlength="" value="" placeholder="Enter material centre" oninput="this.value = this.value.replace(/[^a-z A-Z]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                  <div class="mb-3">
+                                                      <label style="color: black;">Tax Type<span style="color: red;">*</span></label>
+                                                      <div class="input-group mb-4">
+                                                          <select style="color: black;" name="tax_type" id="tax_type" class="form-control">
+                                                              <option value="" disabled selected>Select Tax type</option>
+                                                              <option value="debit">Debit</option>
+                                                              <option value="credit"> Credit</option>
+                                                            </select>
+                                                          </div>
+                                                      </div>
+                                                  </div> {% endcomment %}
+                                                  
+                                                  
+                                                  
+                                                    
+                                                    <div class="col-md-12 text-center mt-3">
+                                                      <button class="btn btn-primary" style="background-color: mediumaquamarine; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                          {% comment %} <button type="button" class="btn btn-success" style="background-color: mediumaquamarine; color:white;" onclick="submitForm()" >Save</button> {% endcomment %}
+                                                    <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;">
+                                            <th align="center">Sr.No</th>
+                                            <th align="center">Voucher Type</th>
+                                            
+                                            <th align="center">Vouchers No </th>
+                                            <th align="center">D/C</th> 
+                                            <th align="center">Account</th>
+                                            <th align="center">Debit</th>
+                                            <th align="center">Credit</th>
+                                            <th align="center">Short Narration</th>
+                                            <th align="center">Date </th>
+                                            <th align="center">Action</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td>
+                                                {{ i.voucher_type}}
+                                            </td>
+                                            
+                                             
+                                            <td >
+                                                {{ i.voucher_no }}
+                                            </td>
+                                            <td >
+                                                {{ i.dc }}
+                                            </td> 
+                                            <td >
+                                                {{ i.account }}
+                                            </td>
+                                            <td>
+                                                {{i.debit}}
+                                            </td> 
+                                            <td>
+                                              {{i.credit}}
+                                          </td> 
+                                          <td>
+                                            {{i.short_narration}}
+                                        </td> 
+                                            <td >
+                                              {{ i.date }}
+                                          </td>    
+                                                                                                                              
+                                            <td>
+                                                <div>
+                                                  {% comment %} <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a> {% endcomment %}
+
+                                                 {% if request.user.is_authenticated and request.user.is_superuser   %} 
+                                                     
+                                                 <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+
+                                                    {% if request.user.is_authenticated and request.user.is_printing and request.user.is_voucher_listing and request.is_voucher_viewing  %}
+                                                     
+                                                    <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.is_voucher_viewing  %}
+                                                     
+                                                    <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.is_voucher_viewing  %}
+                                                     
+                                                    <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_binding and request.user.is_voucher_listing and request.user.is_voucher_viewing  %}
+                                                     
+                                                    <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_voucher_listing and request.user.is_voucher_viewing  %}
+                                                     
+                                                    <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_packing and request.user.is_voucher_listing and request.user.is_voucher_viewing  %}
+                                                     
+                                                    <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_sale and request.user.is_voucher_listing and request.user.is_voucher_viewing  %}
+                                                     
+                                                    <a  href="/view_voucher/{{i.id}}/"><i class="bi bi-eye"></i></a>
+                                                    {% endif %}
+
+
+
+
+
+
+
+                                                    {% comment %} {% if request.user.is_authenticated and request.user.is_superuser   %} 
+                                                    <a  href="/edit-voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_printing and request.user.is_voucher_listing and request.user.is_voucher  %}
+                                                    <a  href="/edit-voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.user.is_voucher  %}
+                                                    <a  href="/edit-voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_binding and request.user.is_voucher_listing and request.user.is_voucher  %}
+                                                    <a  href="/edit-voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_voucher_listing and request.user.is_voucher  %}
+                                                    <a  href="/edit-voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_packing and request.user.is_voucher_listing and request.user.is_voucher  %}
+                                                    <a  href="/edit-voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_sale and request.user.is_voucher_listing and request.user.is_voucher  %}
+                                                    <a  href="/edit-voucher/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    {% endif %} {% endcomment %}
+
+                                                    {% if request.user.is_authenticated and request.user.is_superuser   %} 
+                                                    <a  href="/delete-vouchers/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_printing and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                                                    <a  href="/delete-vouchers/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_gathering and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                                                    <a  href="/delete-vouchers/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_binding and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                                                    <a  href="/delete-vouchers/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_cutting and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                                                    <a  href="/delete-vouchers/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_packing and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                                                    <a  href="/delete-vouchers/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    {% endif %}
+                                                    {% if request.user.is_authenticated and request.user.is_sale and request.user.is_voucher_listing and request.user.is_voucher_deletion  %}
+                                                    <a  href="/delete-vouchers/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    {% endif %}
+                                                   
+                                                    
+                                                </div>
+                                               
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          // Get the dropdown element
+          var dropdown = document.getElementById("code_1");
+  
+          // Get the input fields
+          var debitField = document.getElementById("brand_name_1");
+          var creditField = document.getElementById("subject_1");
+  
+          // Add event listener for change event on the dropdown
+          dropdown.addEventListener("change", function () {
+              if (dropdown.value === "debit") {
+                  debitField.readOnly = false; // Make debit field editable
+                  creditField.readOnly = true; // Make credit field readonly
+                  creditField.value = ""; // Clear the credit field
+              } else if (dropdown.value === "credit") {
+                  creditField.readOnly = false; // Make credit field editable
+                  debitField.readOnly = true; // Make debit field readonly
+                  debitField.value = ""; // Clear the debit field
+              }
+          });
+      });
+  </script>
+
+
+
+   <script>
+      $(document).ready(function () {
+          var max_fields_limit = 16;
+          var x = 0;
+  
+          function calculateAmount(index) {
+              var opening_stock_of_cover = parseFloat($('input[name="opening_stock_of_cover_' + index + '"]').val()) || 0;
+              var cover_recived_after_cutting = parseFloat($('input[name="cover_recived_after_cutting_' + index + '"]').val()) || 0;
+              var cover_issued_for_pasting = parseFloat($('input[name="cover_issued_for_pasting_' + index + '"]').val()) || 0;
+              var cover_returned_by_paster = parseFloat($('input[name="cover_returned_by_paster_' + index + '"]').val()) || 0;
+  
+              var total = (opening_stock_of_cover + cover_recived_after_cutting) - (cover_issued_for_pasting + cover_returned_by_paster);
+  
+              $('input[name="cover_balance_' + index + '"]').val(total.toFixed(2));
+          }
+  
+          function updateDropdowns(index) {
+              // Add your logic to update dropdowns based on the selected value
+              var opening_stock_of_cover = parseFloat($('input[name="opening_stock_of_cover_' + index + '"]').val()) || 0;
+              var cover_recived_after_cutting = parseFloat($('input[name="cover_recived_after_cutting_' + index + '"]').val()) || 0;
+              var cover_issued_for_pasting = parseFloat($('input[name="cover_issued_for_pasting_' + index + '"]').val()) || 0;
+              var cover_returned_by_paster = parseFloat($('input[name="cover_returned_by_paster_' + index + '"]').val()) || 0;
+  
+              var total = (opening_stock_of_cover + cover_recived_after_cutting) - (cover_issued_for_pasting + cover_returned_by_paster);
+  
+              $('input[name="cover_balance_' + index + '"]').val(total.toFixed(2));
+              // ...
+  
+              // Add an event listener for quantity fields to update forms-per-set
+              $('input[name="opening_stock_of_cover_' + index + '"]').on("input", function () {
+                  calculateAmount(index);
+              });
+              $('input[name="cover_recived_after_cutting_' + index + '"]').on("input", function () {
+                  calculateAmount(index);
+              });
+              $('input[name="cover_issued_for_pasting_' + index + '"]').on("input", function () {
+                  calculateAmount(index);
+              });
+              $('input[name="cover_returned_by_paster_' + index + '"]').on("input", function () {
+                  calculateAmount(index);
+              });
+          }
+  
+          $('#add_more_button').click(function (e) {
+              e.preventDefault();
+              if (x < max_fields_limit) {
+                  x++;
+                  $('.input_fields_container').append(
+                    '<div class=" row mx-3">' +
+                      '<div class="col-md-2  description" style = "padding:0; width: 200px;">' +
+                      {% comment %} '<label for="dc" class="control-label"><b>D/C<span style="color:red;">*</span></b></label>' + {% endcomment %}
+                      {% comment %} '<input placeholder="Enter D/C" style="border-radius: 0" type="text" class="form-control mobile" required name="dc' + x.toString() + '" id="code_' + x.toString() + '" >' + {% endcomment %}
+                      '<select class="form-select dc-dropdown" name="dc' + x.toString() + '" id="code_' + x.toString() + '">' +
+                        '<option value="" selected disabled>Select</option>' +
+                       
+                        '<option>Debit</option>' +
+                        '<option>Credit</option>' +
+                        
+                        '</select>' +
+                        
+    
+                      '</div>' +
+                      '<div class="col-md-2  description" style = "padding:0; width: 200px;">' +
+                      {% comment %} '<label for="account" class="control-label"><b>Account<span style="color:red;">*</span></b></label>' + {% endcomment %}
+                      
+                      '<select class="form-control" name="account' + x.toString() + '" id="class_name_' + x.toString() + '" style="border-radius: 0"" required>'+
+                      '<option disabled selected value>Select Vendor</option>'+
+                        
+                      '{% for i in data_combined %}'+
+                      '<option>{{ i.prefix|default_if_none:'' }}{{ i.name|default_if_none:'' }} {{ i.g_prefix|default_if_none:'' }}{{ i.g_name|default_if_none:'' }} {{ i.s_prefix|default_if_none:'' }}{{ i.s_name|default_if_none:'' }} {{ i.p_prefix|default_if_none:'' }}{{ i.p_name|default_if_none:'' }} {{ i.m_prefix|default_if_none:'' }}{{ i.m_name|default_if_none:'' }} {{ i.c_prefix|default_if_none:'' }}{{ i.c_name|default_if_none:'' }} {{ i.pack_prefix|default_if_none:'' }}{{ i.pack_name|default_if_none:'' }} {{ i.g_prefix|default_if_none:'' }}{{ i.g_name|default_if_none:'' }} {{ i.cust_prefix|default_if_none:'' }}{{ i.cust_name|default_if_none:'' }}</option>'+
+                      '{% endfor %}'+
+                       
+                      '</select>'+
+                      '</div>' +
+                      '<div class="col-md-2  description" style = "padding:0; width: 200px;">' +
+                      {% comment %} '<label for="debit" class="control-label"><b>Debit Rs<span style="color:red;">*</span></b></label>' + {% endcomment %}
+                      '<input placeholder="Debit" style="border-radius: 0" type="text" class="form-control mobile debit-input" required name="debit' + x.toString() + '" id="brand_name_' + x.toString() + '" >' +
+                      '</div>' +
+                      '<div class="col-md-2  description" style = "padding:0; width: 200px;">' +
+                      {% comment %} '<label for="credit" class="control-label"><b>Credit Rs<span style="color:red;">*</span></b></label>' + {% endcomment %}
+                      '<input placeholder="Credit" style="border-radius: 0" type="text" class="form-control mobile credit-input" required name="credit' + x.toString() + '" id="subject_' + x.toString() + '" >' +
+                      '</div>' +
+                      '<div class="col-md-2  description" style = "padding:0; width: 200px;">' +
+                      {% comment %} '<label for="short_narration" class="control-label"><b>Short Narration<span style="color:red;">*</span></b></label>' + {% endcomment %}
+                      '<input placeholder="Enter Narration" style="border-radius: 0" type="text" class="form-control mobile" required name="short_narration' + x.toString() + '" id="midium_1' + x.toString() + '" oninput="calculateAmount(' + x + ')">' +
+                      '</div>' +
+
+                      
+                      
+                      '<a href="#" class="remove_field  col-md-2" style="text-align:center;">Remove</a>' +
+                      '</div>'
+
+                      
+                  );
+                  updateDropdowns(x);
+              }
+          });
+
+          // Event listener for dropdown change
+          $(document).on('change', '.dc-dropdown', function() {
+            var selectedOption = $(this).val();
+            var parentRow = $(this).closest('.row');
+            if (selectedOption === 'Debit') {
+                parentRow.find('.debit-input').prop('disabled', false);
+                parentRow.find('.credit-input').prop('disabled', true);
+            } else if (selectedOption === 'Credit') {
+                parentRow.find('.debit-input').prop('disabled', true);
+                parentRow.find('.credit-input').prop('disabled', false);
+            } else {
+                parentRow.find('.debit-input').prop('disabled', true);
+                parentRow.find('.credit-input').prop('disabled', true);
+            }
+          });
+  
+          $('.input_fields_container').on("click", ".remove_field", function (e) {
+              e.preventDefault();
+              $(this).parent('div').remove();
+              x--;
+          });
+  
+          // Add an event listener for the code fields to update other fields
+          $('.input_fields_container').on("change", "select[name^='dc']", function () {
+              const inputName = $(this).attr('name');
+              const index = inputName.split('_')[1];
+              updateDropdowns(index);
+          });
+  
+          // Your existing script for table and other functionality goes here...
+  
+      });
+  </script>
+  
+    <script>
+      function generateVoucherNo() {
+          // Get the selected voucher type
+          var selectedVoucherType = document.getElementById('voucher_type').value;
+  
+          // You can customize the voucher number generation logic based on your requirements
+          var generatedVoucherNo = selectedVoucherType.substring(0, 3).toUpperCase() + Math.floor(Math.random() * 1000);
+  
+          // Set the generated voucher number to the voucher_no input field
+          document.getElementById('voucher_no').value = generatedVoucherNo;
+      }
+  </script>
+  <script >
+    var today = new Date();
+    
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+    
+        if(dd<10) {
+            dd = '0'+dd
+        } 
+    
+        if(mm<10) {
+            mm = '0'+mm
+        } 
+    
+        // today = yyyy + '/' + mm + '/' + dd;
+         today = yyyy + '-' + mm + '-' + dd;
+    
+        console.log(today);
+        document.getElementById('date').value = today;
+    </script>
+    
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+
+
+        </script>
+
+        <script>
+          function submitForm() {
+            // Submit the form using AJAX
+            $.ajax({
+              url: $('#profile-form').attr('action'),
+              type: 'POST',
+              data: $('#profile-form').serialize(),
+              success: function(response) {
+                // Show a success message using SweetAlert
+                swal({
+                  title: "Success!",
+                  text: "Vouchers created Successfully",
+                  icon: "success",
+                  button: "OK",
+                });
+              },
+              error: function(response) {
+                // Show an error message using SweetAlert
+                swal({
+                  title: "Error!",
+                  text: response.responseText,
+                  icon: "error",
+                  button: "OK",
+                });
+              }
+            });
+          }
+        </script>
+
+        <script>
+          document.getElementById("from_date").onchange = function () {
+          var input = document.getElementById("to_date");
+          input.setAttribute("min", this.value);
+        }
+          </script>
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+          <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+          <script type="text/javascript">
+        var rad = document.cash_memo_add.stamp_type;
+        var prev = null;
+        for (var i = 0; i < rad.length; i++) {
+            rad[i].addEventListener('change', function() {
+                (prev) ? console.log(prev.value): null;
+                if (this !== prev) {
+                    prev = this;
+                }
+                if(this.value == 'merchant_stamp')
+                {
+                    document.getElementById('default_stmaps').style.display = 'block';
+                    document.getElementById('own_stamps').style.display = 'none';
+                }
+                else if(this.value == 'own_stamp')
+                {
+                    // document.getElementById('messageError').innerHTML = "";
+                    document.getElementById('default_stmaps').style.display = 'none';
+                    document.getElementById('own_stamps').style.display = 'block';
+                }
+            });
+        }
+      </script>
+
+</body>  
+
+{% endblock %}

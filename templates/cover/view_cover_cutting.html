@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+   <style type="text/css">
+    *
+    {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    } 
+
+
+      table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 90%;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  /*background-color: #dddddd;*/
+}
+.div1
+{
+   
+  width: 90%;
+  height: 453px;
+  border: 1px solid black;
+   border-radius: 15px 50px;
+  box-shadow: 10px 11px 5px  lightgreen inset;
+   /*border-radius: 15px 50px;
+*/
+}
+
+.div2 {
+  width: 90%;
+  height: 900px;  
+  padding: 0px;
+  padding-right: 0%;
+  
+}
+ 
+   </style>
+
+</head>
+<body>
+<center>
+    <div class="btn-class">
+      <button class="btn btn-primary" style="padding: 6px; border-radius: 20px; font-size: 18px; "><a href="{% url 'cover_cutting' %}"  style="color:black;" >Back</a></button>
+      <button id="pdf-button" onclick="savePage()" style="padding: 8px; border-radius: 20px; font-size: 18px;">Download PDF</button>
+      <button id="print-button"  onclick="window.print()" style="padding: 8px; border-radius: 20px; font-size: 18px;">Print</button>
+
+    </div>
+   <div class="div1" style="padding-top:20px;">
+   <h1 style="padding-left: 5%;">Cover Output Generated</h1>
+   {% comment %} <img src="images/logo2 kohinoor.png"style="width: 5%;height: 5%;"><span style="padding-right: 3%;color: purple; font-size:400%;">KOHINOOR</span>
+  <h4>776, GULGULWAR NIWAS, GOLIBAR CHOWK, NAGPUR</h4>
+  
+  <h4>GOLIBAR CHOWK, NAGPUR</h4>
+  <h4>GST NO.: 27AAYPA2006L2ZL</h4>
+  <!-- <h4 style="padding-left: 70%;">DATE: {{data.date}}</h4> -->
+   <h4> PARTY:SHARPINDUSTRIES, NAGPUR</h4>
+   <h4>LOT</h4> {% endcomment %}
+   <!-- <span style="padding-left: 15%;">Binding Order No.</span>{{data.border_id}} -->
+
+   <div class="text-center" style=" margin-left: 12px; font-weight: bold;">
+      <span>Cover Output:</span><span>{{data.id}}</span>
+      <h4 >DATE: {{data.cutting_date}}</h4>
+   </div><br><br>
+
+
+<div class="div2">
+   <table >
+ 
+   <tr>
+    {% for i in data2 %}
+        <th>Sr No</th><td>{{ forloop.counter }}</td>
+
+        <th style='text-align:center;'>PLATE NO</th>
+        <td style='text-align:center;'>{{ data.cutting_plate_no }}</td>
+
+        {% if i.subject1 is not none %}
+            <th style='text-align:center;'>SUBJECT1</th>
+            <td style='text-align:center;'>{{ i.subject1 }}</td>
+        {% endif %}
+
+        {% if i.subject2 is not none %}
+            <th style='text-align:center;'>SUBJECT2</th>
+            <td style='text-align:center;'>{{ i.subject2 }}</td>
+        {% endif %}
+
+        {% if i.subject3 is not none %}
+            <th style='text-align:center;'>SUBJECT3</th>
+            <td style='text-align:center;'>{{ i.subject3 }}</td>
+        {% endif %}
+
+        {% if i.subject4 is not none %}
+            <th style='text-align:center;'>SUBJECT4</th>
+            <td style='text-align:center;'>{{ i.subject4 }}</td>
+        {% endif %}
+
+        {% if i.subject5 is not none %}
+            <th style='text-align:center;'>SUBJECT5</th>
+            <td style='text-align:center;'>{{ i.subject5 }}</td>
+        {% endif %}
+
+        {% if i.subject6 is not none %}
+            <th style='text-align:center;'>SUBJECT6</th>
+            <td style='text-align:center;'>{{ i.subject6 }}</td>
+        {% endif %}
+
+        {% if i.subject7 is not none %}
+            <th style='text-align:center;'>SUBJECT7</th>
+            <td style='text-align:center;'>{{ i.subject7 }}</td>
+        {% endif %}
+
+        {% if i.subject8 is not none %}
+            <th style='text-align:center;'>SUBJECT8</th>
+            <td style='text-align:center;'>{{ i.subject8 }}</td>
+        {% endif %}
+
+        <th style='text-align:center;'>Quantity</th>
+        <td style='text-align:center;'>{{ data.cutting_quantity }}</td>
+    {% endfor %}
+</tr>
+
+   
+  
+      </tr>  
+</table>
+</div>
+</center>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.js"></script>
+<script type="text/javascript">
+  function savePage() {
+    // Hide the buttons temporarily
+    var pdfButton = document.getElementById('pdf-button');
+    var printButton = document.getElementById('print-button');
+    pdfButton.style.display = 'none';
+    printButton.style.display = 'none';
+
+    // Get the current HTML of the page
+    var html = document.documentElement;
+
+    // Set the options for the PDF conversion
+    var options = {
+      margin: [10, 10],
+      filename: 'Sale bill.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+
+    // Convert the HTML to PDF using html2pdf.js
+    html2pdf().set(options).from(html).save();
+
+    // Restore the visibility of the buttons after PDF generation
+    pdfButton.style.display = 'block';
+    printButton.style.display = 'block';
+  }
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,784 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  margin-right: 110px;
+  border: 1px solid #888;
+  width: 70%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: lightcyan;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  
+</style>
+<style>
+    /*create company responsive code*/
+    @media (max-width: 00px) {
+  .modal-content {
+    padding: 15px;
+    width:90%;
+  }
+  .input-cont .d-grid{
+    display: block;
+  }
+  .inputbox{
+    overflow: hidden;
+  }
+ 
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Company Info</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color:mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Add Company</button>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content" style="background-color:lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+
+                      
+                        <div class="panel panel-default">
+                            <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Create Company</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" id="profile-form1" >
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                            <div class="row input-cont" style="text-align: left;">
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 190px;">Select Company Type<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-3 "style="overflow:hidden;width:350px;" >
+                                                            <select name="company_type" class="select-style inputbox"style="width:400px; padding:9px; overflow: hidden;" required=""/>
+                                                                <option value="">Select</option>
+                                                                <option  value="Self company">Self Company</option>
+                                                                <option  value="Seller Company">Seller Company</option>
+                                                            </select>
+                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 230px;">Company Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4" >
+                                                            <input style="color: black; width:90px;" size="5" width="10" type="text" min="0" placeholder="Prefix"
+                                                               name="prefix" id=""  maxlength="" value="" required="" class="col-sm-3">
+                                                            <input width="50" type="text" min="0" 
+                                                                name="company_name" id="" class="form-control" maxlength="100" value="" placeholder="Enter Company Name"  oninput="this.value = this.value.replace(/[^a-z A-Z]/g, '').replace(/(\..*?)\..*/g, '$1');" required/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% comment %} <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 150px;">Course Type<span id="messages" style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                          <select name="courses_name" class="select-style"style="width:200px;padding:9px;" required/>
+                                                                  <option value="">Select</option>
+                                                                  <option  value="IT">IT</option>
+                                                                  <option  value="Digital Marketing">Digital Marketing</option>
+                                                          </select>
+                                                            <!-- <input style="color: black;" width="50" type="text" min="0" 
+                                                                name="courses_name" id="" class="form-control" maxlength="50" value=""  required> -->
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 290px;">Address<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <textarea style="color:black ;" width="50" type="text" min="0" 
+                                                                name="company_address" id="" class="form-control" maxlength="" value="" placeholder="Enter Address"  required/></textarea>
+                                                                
+                                                      </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-grid gap-2 col-sm-6">
+                                                        <div class="mb-3">
+                                                            <label style="color: black; margin-right: 300px;">State<span style="color: red;">*</span></label>
+                                                            <div class="input-group mb-4">
+                                                            <select style="color: black;" name="state" id="stateDropdown" class="form-control" required/>
+                                                                
+                                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                                <option value="Assam">Assam</option>
+                                                                <option value="Bihar">Bihar</option>
+                                                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                                                <option value="Goa">Goa</option>
+                                                                <option value="Gujarat">Gujarat</option>
+                                                                <option value="Haryana">Haryana</option>
+                                                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                                <option value="Jharkhand">Jharkhand</option>
+                                                                <option value="Karnataka">Karnataka</option>
+                                                                <option value="Kerala">Kerala</option>
+                                                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                                <option value="Maharashtra">Maharashtra</option>
+                                                                <option value="Manipur">Manipur</option>
+                                                                <option value="Meghalaya">Meghalaya</option>
+                                                                <option value="Mizoram">Mizoram</option>
+                                                                <option value="Nagaland">Nagaland</option>
+                                                                <option value="Odisha">Odisha</option>
+                                                                <option value="Punjab">Punjab</option>
+                                                                <option value="Rajasthan">Rajasthan</option>
+                                                                <option value="Sikkim">Sikkim</option>
+                                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                                <option value="Telangana">Telangana</option>
+                                                                <option value="Tripura">Tripura</option>
+                                                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                                <option value="Uttarakhand">Uttarakhand</option>
+                                                                <option value="West Bengal">West Bengal</option>
+                                                            </select>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="d-grid gap-2 col-sm-6">
+                                                        <div class="mb-3">
+                                                            <label style="color: black; margin-right: 300px;">Country<span style="color: red;">*</span></label>
+                                                            <div class="input-group mb-4">
+                                                                <select style="color: black;" name="country" id="countryDropdown" class="form-control" required/>
+                                                                    <option value="Afghanistan">Afghanistan</option>
+                                                                    <option value="Albania">Albania</option>
+                                                                    <option value="Algeria">Algeria</option>
+                                                                    <option value="Andorra">Andorra</option>
+                                                                    <option value="Angola">Angola</option>
+                                                                    <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                                                                    <option value="Argentina">Argentina</option>
+                                                                    <option value="Armenia">Armenia</option>
+                                                                    <option value="Australia">Australia</option>
+                                                                    <option value="Austria">Austria</option>
+                                                                    <option value="Azerbaijan">Azerbaijan</option>
+                                                                    <option value="Bahamas">Bahamas</option>
+                                                                    <option value="Bahrain">Bahrain</option>
+                                                                    <option value="Bangladesh">Bangladesh</option>
+                                                                    <option value="Barbados">Barbados</option>
+                                                                    <option value="Belarus">Belarus</option>
+                                                                    <option value="Belgium">Belgium</option>
+                                                                    <option value="Belize">Belize</option>
+                                                                    <option value="Benin">Benin</option>
+                                                                    <option value="Bhutan">Bhutan</option>
+                                                                    <option value="Bolivia">Bolivia</option>
+                                                                    <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                                                                    <option value="Botswana">Botswana</option>
+                                                                    <option value="Brazil">Brazil</option>
+                                                                    <option value="Brunei">Brunei</option>
+                                                                    <option value="Bulgaria">Bulgaria</option>
+                                                                    <option value="Burkina Faso">Burkina Faso</option>
+                                                                    <option value="Burundi">Burundi</option>
+                                                                    
+                                                                    <option value="Canada">Canada</option>
+                                                                    <option value="Cape Verde">Cape Verde</option>
+                                                                    <option value="Central African Republic">Central African Republic</option>
+                                                                    <option value="Chad">Chad</option>
+                                                                    <option value="Chile">Chile</option>
+                                                                    
+                                                                    <option value="China">China</option>
+                                                                    <option value="Colombia">Colombia</option>
+                                                                    <option value="Comoros">Comoros</option>
+                                                                    <option value="Congo">Congo</option>
+                                                                    <option value="Cook Islands">Cook Islands</option>
+                                                                    <option value="Costa Rica">Costa Rica</option>
+                                                                    <option value="Cote d'Ivoire">Cote d'Ivoire</option>
+                                                                    <option value="Croatia">Croatia</option>
+                                                                    <option value="Cuba">Cuba</option>
+                                                                    <option value="Cyprus">Cyprus</option>
+                                                                    <option value="Czech Republic">Czech Republic</option>
+                                                                    <option value="Denmark">Denmark</option>
+                                                                    <option value="Djibouti">Djibouti</option>
+                                                                    <option value="Dominica">Dominica</option>
+                                                                    <option value="Dominican Republic">Dominican Republic</option>
+                                                                    <option value="Ecuador">Ecuador</option>
+                                                                    <option value="Egypt">Egypt</option>
+                                                                    <option value="El Salvador">El Salvador</option>
+                                                                    <option value="Equatorial Guinea">Equatorial Guinea</option>
+                                                                    <option value="Eritrea">Eritrea</option>
+                                                                    <option value="Estonia">Estonia</option>
+                                                                    <option value="Ethiopia">Ethiopia</option>
+                                                                    <option value="Fiji">Fiji</option>
+                                                                    <option value="Finland">Finland</option>
+                                                                    <option value="France">France</option>
+                                                                    <option value="Gabon">Gabon</option>
+                                                                    <option value="Gambia">Gambia</option>
+                                                                    <option value="Georgia">Georgia</option>
+                                                                    <option value="Germany">Germany</option>
+                                                                    <option value="Ghana">Ghana</option>
+                                                                    <option value="Greece">Greece</option>
+                                                                    <option value="Grenada">Grenada</option>
+                                                                    <option value="Guatemala">Guatemala</option>
+                                                                    <option value="Guinea">Guinea</option>
+                                                                    <option value="Guinea-Bissau">Guinea-Bissau</option>
+                                                                    <option value="Guyana">Guyana</option>
+                                                                    <option value="Haiti">Haiti</option>
+                                                                    <option value="Honduras">Honduras</option>
+                                                                    <option value="Hungary">Hungary</option>
+                                                                    <option value="Iceland">Iceland</option>
+                                                                    <option value="India">India</option>
+                                                                    <option value="Indonesia">Indonesia</option>
+                                                                    <option value="Iran">Iran</option>
+                                                                    <option value="Iraq">Iraq</option>
+                                                                    <option value="Ireland">Ireland</option>
+                                                                    <option value="Israel">Israel</option>
+                                                                    <option value="Italy">Italy</option>
+                                                                    <option value="Jamaica">Jamaica</option>
+                                                                    <option value="Japan">Japan</option>
+                                                                    <option value="Jordan">Jordan</option>
+                                                                    <option value="Kazakhstan">Kazakhstan</option>
+                                                                    <option value="Kenya">Kenya</option>
+                                                                    <option value="Kiribati">Kiribati</option>
+                                                                    <option value="Korea, North">Korea, North</option>
+                                                                    <option value="Korea, South">Korea, South</option>
+                                                                    <option value="Kosovo">Kosovo</option>
+                                                                    <option value="Kuwait">Kuwait</option>
+                                                                    <option value="Kyrgyzstan">Kyrgyzstan</option>
+                                                                    <option value="Laos">Laos</option>
+                                                                    <option value="Latvia">Latvia</option>
+                                                                    <option value="Lebanon">Lebanon</option>
+                                                                    <option value="Lesotho">Lesotho</option>
+                                                                    <option value="Liberia">Liberia</option>
+                                                                    <option value="Libya">Libya</option>
+                                                                    <option value="Liechtenstein">Liechtenstein</option>
+                                                                    <option value="Lithuania">Lithuania</option>
+                                                                    <option value="Luxembourg">Luxembourg</option>
+                                                                    <option value="Macedonia">Macedonia</option>
+                                                                    <option value="Madagascar">Madagascar</option>
+                                                                    <option value="Malawi">Malawi</option>
+                                                                    <option value="Malaysia">Malaysia</option>
+                                                                    <option value="Maldives">Maldives</option>
+                                                                    <option value="Mali">Mali</option>
+                                                                    <option value="Malta">Malta</option>
+                                                                    <option value="Marshall Islands">Marshall Islands</option>
+                                                                    <option value="Mauritania">Mauritania</option>
+                                                                    <option value="Mauritius">Mauritius</option>
+                                                                    <option value="Mexico">Mexico</option>
+                                                                    <option value="Micronesia">Micronesia</option>
+                                                                    <option value="Moldova">Moldova</option>
+                                                                    <option value="Monaco">Monaco</option>
+                                                                    <option value="Mongolia">Mongolia</option>
+                                                                    <option value="Montenegro">Montenegro</option>
+                                                                    <option value="Morocco">Morocco</option>
+                                                                    <option value="Mozambique">Mozambique</option>
+                                                                    <option value="Myanmar">Myanmar</option>
+                                                                    <option value="Namibia">Namibia</option>
+                                                                    <option value="Nauru">Nauru</option>
+                                                                    <option value="Nepal">Nepal</option>
+                                                                    <option value="Netherlands">Netherlands</option>
+                                                                    <option value="New Zealand">New Zealand</option>
+                                                                    <option value="Nicaragua">Nicaragua</option>
+                                                                    <option value="Niger">Niger</option>
+                                                                    <option value="Nigeria">Nigeria</option>
+                                                                    <option value="Norway">Norway</option>
+                                                                    <option value="Oman">Oman</option>
+                                                                    <option value="Pakistan">Pakistan</option>
+                                                                    <option value="Palau">Palau</option>
+                                                                    <option value="Panama">Panama</option>
+                                                                    <option value="Papua New Guinea">Papua New Guinea</option>
+                                                                    <option value="Paraguay">Paraguay</option>
+                                                                    <option value="Peru">Peru</option>
+                                                                    <option value="Philippines">Philippines</option>
+                                                                    <option value="Poland">Poland</option>
+                                                                    <option value="Portugal">Portugal</option>
+                                                                    <option value="Qatar">Qatar</option>
+                                                                    <option value="Romania">Romania</option>
+                                                                    <option value="Russia">Russia</option>
+                                                                    <option value="Rwanda">Rwanda</option>
+                                                                    <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                                                                    <option value="Saint Lucia">Saint Lucia</option>
+                                                                    <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+                                                                    <option value="Samoa">Samoa</option>
+                                                                    <option value="San Marino">San Marino</option>
+                                                                    <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+                                                                    <option value="Saudi Arabia">Saudi Arabia</option>
+                                                                    <option value="Senegal">Senegal</option>
+                                                                    <option value="Serbia">Serbia</option>
+                                                                    <option value="Seychelles">Seychelles</option>
+                                                                    <option value="Sierra Leone">Sierra Leone</option>
+                                                                    <option value="Singapore">Singapore</option>
+                                                                    <option value="Slovakia">Slovakia</option>
+                                                                    <option value="Slovenia">Slovenia</option>
+                                                                    <option value="Solomon Islands">Solomon Islands</option>
+                                                                    <option value="Somalia">Somalia</option>
+                                                                    <option value="South Africa">South Africa</option>
+                                                                    <option value="South Sudan">South Sudan</option>
+                                                                    <option value="Spain">Spain</option>
+                                                                    <option value="Sri Lanka">Sri Lanka</option>
+                                                                    <option value="Sudan">Sudan</option>
+                                                                    <option value="Suriname">Suriname</option>
+                                                                    <option value="Sweden">Sweden</option>
+                                                                    <option value="Switzerland">Switzerland</option>
+                                                                    <option value="Syria">Syria</option>
+                                                                    <option value="Taiwan">Taiwan</option>
+                                                                    <option value="Tajikistan">Tajikistan</option>
+                                                                    <option value="Tanzania">Tanzania</option>
+                                                                    <option value="Thailand">Thailand</option>
+                                                                    <option value="Timor-Leste">Timor-Leste</option>
+                                                                    <option value="Togo">Togo</option>
+                                                                    <option value="Tonga">Tonga</option>
+                                                                    <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                                                                    <option value="Tunisia">Tunisia</option>
+                                                                    <option value="Turkey">Turkey</option>
+                                                                    <option value="Turkmenistan">Turkmenistan</option>
+                                                                    <option value="Tuvalu">Tuvalu</option>
+                                                                    <option value="Uganda">Uganda</option>
+                                                                    <option value="Ukraine">Ukraine</option>
+                                                                    <option value="United Arab Emirates">United Arab Emirates</option>
+                                                                    <option value="United Kingdom">United Kingdom</option>
+                                                                    <option value="United States">United States</option>
+                                                                    <option value="Uruguay">Uruguay</option>
+                                                                    <option value="Uzbekistan">Uzbekistan</option>
+                                                                    <option value="Vanuatu">Vanuatu</option>
+                                                                    <option value="Vatican City">Vatican City</option>
+                                                                    <option value="Venezuela">Venezuela</option>
+                                                                    <option value="Vietnam">Vietnam</option>
+                                                                    <option value="Yemen">Yemen</option>
+                                                                    <option value="Zambia">Zambia</option>
+                                                                    <option value="Zimbabwe">Zimbabwe</option>
+                                                    
+    
+                                                        
+                                                                    <!-- Add more countries as needed -->
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                       
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 250px;">Pin Code<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color:black ;" width="50" type="text" maxlength="6" 
+                                                                name="pincode" id="" class="form-control" maxlength="" value="" placeholder="Enter Pin" required/>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 250px;">GSTIN No<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="textarea" min="0" 
+                                                                name="gstin_no" id="gstin_input" class="form-control" maxlength="15" value="" pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$"  placeholder="Enter Gstin No" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                 <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 260px;">Mobile No<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="number" name="company_contact"  class="form-control" id="company_contact"placeholder="Enter Mobile No" maxlength="10" style="width:200px;padding:6px;" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ; margin-right: 230px;">Email Address<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="email" min="0" placeholder="Enter Email-id"
+                                                                name="company_email" id="" class="form-control" maxlength="" value=""
+                                                                required placeholder="Enter Email" >
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                
+                                                
+                                              
+                                              
+                                                <div class="d-grid gap-2 col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label style="color:black ;margin-right: 290px;">Website<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color:black ;" width="50" type="text" min="0" 
+                                                                name="website" id="" class="form-control" maxlength="" value="" placeholder="www" >
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                              
+                                                </div> 
+                                                <div class="col-md-8 text-center"></div>
+                                                    <div class="col-md-12">
+                                                      <a href="{{ form.get_cancel_link }}" >
+                                                      <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                                                  </a>
+                                          {% comment %} <button type="button" class="btn btn-success" style="background-color: mediumaquamarine; color:white;" onclick="submitForm()" >Save</button> {% endcomment %}
+                                                    <input type="submit" class="btn btn-primary" style="background-color: mediumaquamarine; color:white;" onclick="submitForm()" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;">
+                                            <th align="center">Sr.No</th>
+                                            <th align="center">Company Type </th>
+                                            <th align="center">GSTIN No</th>
+                                            <th align="center">Company Name </th>
+                                            <th align="center">Mobile No </th>
+                                            <th align="center">Email</th> 
+                                            <th align="center">State</th>
+                                            <th align="center">Address</th>
+                                            <th align="center">Company Created At</th>
+                                            <th align="center">Pin Code</th> 
+                                            <th align="center">Website</th>
+                                            <th align="center">Country</th>
+                                            <th align="center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td >
+                                                {{ i.company_type }}
+                                            </td>
+                                            <td>
+                                                {{ i.gstin_no }}
+                                            </td>
+                                             <td >
+                                                {{ i.company_name }}
+                                            </td>
+                                            <td >
+                                                {{ i.company_contact }}
+                                            </td>
+                                            <td >
+                                                {{ i.company_email }}
+                                            </td> 
+                                            <td >
+                                                {{ i.state }}
+                                            </td>
+                                            <td>
+                                                {{i.company_address}}
+                                            </td>     
+                                            <td >
+                                                {{ i.company_created_by }}
+                                            </td>  
+                                            <td >
+                                                {{ i.pincode }}
+                                            </td>  
+                                            <td >
+                                                {{ i.website }}
+                                            </td> 
+                                            <td >
+                                                {{ i.country }}
+                                            </td>                                                                                                                                           
+                                            <td>
+                                                <div>
+                                                     <a  href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a>
+                                                    <div id="popup1 {{i.id}}" class="overlay">
+                                                        <div class="popup">
+                                                            <h4 style="background-color :mediumaquamarine;padding : 10px; color:white;">View Details</h4>
+                                                            <a class="close" href="#">&times;</a>
+                                                            <br><br>
+                                                            <div style = "color: black; font-size: 15px;" class="content">
+
+                                                               <span><b>Gstin No</b> = {{i.gstin_no}}</span> <br><br>
+                                                               <span><b>Company Name</b> = {{i.company_name}}</span> <br><br> 
+                                                               <span><b>Mobile No</b> = {{i.company_contact}}</span> <br><br>
+                                                               <span><b>Email</b> = {{i.company_email}}</span> <br><br>
+                                                               
+                        
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <a  href="/edit_company/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    <a  href="/delete_company/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                           
+                                                </div>
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // Add an event listener to the input field
+    document.getElementById('company_contact').addEventListener('input', function () {
+        // Get the input value and remove any non-digit characters
+        let inputValue = this.value.replace(/\D/g, '');
+
+        // Limit the input to a maximum of 10 characters
+        if (inputValue.length > 10) {
+            inputValue = inputValue.slice(0, 10);
+        }
+
+        // Update the input value
+        this.value = inputValue;
+    });
+   </script>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Get the select element by its ID
+            const stateDropdown = document.getElementById('stateDropdown');
+    
+            // Set the default option to "Maharashtra"
+            const defaultState = 'Maharashtra';
+    
+            // Loop through all options in the select element
+            for (let i = 0; i < stateDropdown.options.length; i++) {
+                const option = stateDropdown.options[i];
+    
+                // Check if the option's value matches the default state
+                if (option.value === defaultState) {
+                    // Set the option as selected
+                    option.selected = true;
+                    break; // Exit the loop once found
+                }
+            }
+        });
+    </script>
+    
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Get the select element by its ID
+            const countryDropdown = document.getElementById('countryDropdown');
+    
+            // Set the default option to "India"
+            const defaultCountry = 'India';
+    
+            // Loop through all options in the select element
+            for (let i = 0; i < countryDropdown.options.length; i++) {
+                const option = countryDropdown.options[i];
+    
+                // Check if the option's value matches the default country
+                if (option.value === defaultCountry) {
+                    // Set the option as selected
+                    option.selected = true;
+                    break; // Exit the loop once found
+                }
+            }
+        });
+    </script>
+    {% comment %} <script>
+        const states = [
+            "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+            "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+            "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur","Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+            "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
+            "Uttar Pradesh", "Uttarakhand", "West Bengal"
+        ];
+
+        const stateDropdown = document.getElementById("stateDropdown");
+
+        states.forEach(state => {
+            const option = document.createElement("option");
+            option.value = state;
+            option.text = state;
+            stateDropdown.appendChild(option);
+        });
+
+        stateDropdown.addEventListener("change", function() {
+            const selectedState = stateDropdown.value;
+            console.log("Selected State:", selectedState);
+            // You can perform any action here based on the selected state
+        });
+    </script> {% endcomment %}
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+
+
+        </script>
+
+        <!-- <script>
+          function submitForm() {
+            // Submit the form using AJAX
+            $.ajax({
+              url: $('#profile-form1').attr('action'),
+              type: 'POST',
+              data: $('#profile-form1').serialize(),
+              success: function(response) {
+                // Show a success message using SweetAlert
+                swal({
+                  title: "Success!",
+                  text: "Company Added Successfully",
+                  icon: "success",
+                  button: "OK",
+                });
+              },
+              error: function(response) {
+                // Show an error message using SweetAlert
+                swal({
+                  title: "Error!",
+                  text: response.responseText,
+                  icon: "error",
+                  button: "OK",
+                });
+              }
+            });
+          }
+        </script> -->
+
+</body>  
+{% endblock %}

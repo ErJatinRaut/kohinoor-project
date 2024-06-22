@@ -1,0 +1,359 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Gathering Info</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button"><i class="fa fa-plus" ></i>&nbsp;Add Gathering</button>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content">
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:#6e95fc;text-align:center;"><h4 style="color:white ;">Create Class</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" onsubmit="return myfun()">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                            <div class="row">
+                                               <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Total Received Forms <span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input width="50" type="text" min="0" 
+                                                                name="total_received_form" id="" class="form-control" maxlength="10" value="" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Course Type<span id="messages" style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                          <select name="courses_name" class="select-style"style="width:200px;padding:9px;" required="">
+                                                                  <option value="">Select</option>
+                                                                  <option  value="IT">IT</option>
+                                                                  <option  value="Digital Marketing">Digital Marketing</option>
+                                                          </select>
+                                                            <!-- <input style="color: black;" width="50" type="text" min="0" 
+                                                                name="courses_name" id="" class="form-control" maxlength="50" value=""  required> -->
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                 <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Printed Forms<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="name" name="printed_form" minlength="" class="form-control" id="" placeholder="Enter Brand Name" maxlength="" style="width:200px;padding:6px;" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Brand Size<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Brand Size"
+                                                                name="brand_size" id="" class="form-control" maxlength="" value=""
+                                                                required="">
+                                                        </div>
+                                                    </div>
+                                                </div>  {% endcomment %}
+                                                 {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Class Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4" >
+                                                            <select name="class_name" class="select-style" style="width:200px;padding:8px;" required="">
+                                                                  <option value="">Select</option>
+                                                                  <option  value="5 std">5 std</option>
+                                                                  <option  value="6 std">6 std</option>
+                                                                  <option  value="7 std">7 std</option>
+                                                                  <option  value="8 std">8 std</option>
+                                                                  <option  value="9 std">9 std</option>
+                                                                  <option  value="10 std">10 std</option>
+                                                                  <option  value="11 std">11 std</option>
+                                                                  <option  value="12 std">12 std</option>
+
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>  {% endcomment %}
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Wastage Forms<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="textarea" min="0" 
+                                                                name="wastage_form" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                {% comment %} <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Subject<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="textarea" min="0" 
+                                                                name="subject" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                 <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Medium<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color:black ;" width="50" type="text" min="0" 
+                                                                name="medium" id="" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                
+                                                <div class="col-md-8 text-center"></div>
+                                                    <div class="col-md-4" style="padding-top:30px;">
+                                                      <button class="btn btn-success" style="background-color: #ff9122; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                          <button type="submit" class="btn btn-success" style="background-color: #ff9122; color:white;">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover" >
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th align="center">Sr.No</th>
+                                            <th align="center">Total Received Form</th>
+                                            <th align="center">Printed Forms </th>
+                                            <th align="center">Wastage Forms</th>
+                                            <th align="center">Gathering Added On</th>
+                                            <th align="center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                                {{ i.id }}
+                                            </td>
+                                            <td>
+                                                {{ i.total_received_form }}
+                                            </td>
+                                            <td >
+                                                {{ i.printed_form }}
+                                            </td>
+                                            <td >
+                                                {{ i.wastage_form }}
+                                            </td>
+                                            <td >
+                                                {{ i.gathering_added_on }}
+                                            </td>                                                                                      
+                                            <td>
+                                                <div>
+                                                     <a  href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a>
+                                                    <div id="popup1 {{i.id}}" class="overlay">
+                                                        <div class="popup">
+                                                            <h4 style="background-color :#6e95fc;padding : 10px; color:white;">View Details</h4>
+                                                            <a class="close" href="#">&times;</a>
+                                                            <br><br>
+                                                            <div style = "color: black; font-size: 15px;" class="content">
+
+                                                               <span><b>total received form</b> = {{i.total_received_form}}</span> <br><br>
+                                                               <span><b>printed form</b> = {{i.printed_form}}</span> <br><br>
+                                                               <span><b>wastage form</b> = {{i.wastage_form}}</span> <br><br>
+                        
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    {% comment %} <a  href="/delete-classes/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    <a  href="/edit-classes/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a> {% endcomment %}
+                                                </div>
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+
+
+        </script>
+
+</body>  
+
+{% endblock %}

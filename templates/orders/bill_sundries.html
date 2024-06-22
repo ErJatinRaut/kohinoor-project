@@ -1,0 +1,494 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+
+<style>
+    *
+    {
+     font-family: Georgia;
+    }
+    .modal-content {
+   background-color: #fefefe;
+   margin: auto;
+   padding: 20px;
+   border: 1px solid #888;
+   width: 50%;
+ }
+
+ .container {
+    display: flex;
+ }
+ 
+ /* The Close Button */
+ .close {
+   color: #aaaaaa;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+ }
+ 
+ .close:hover,
+ .close:focus {
+   color: #000;
+   text-decoration: none;
+   cursor: pointer;
+ }
+ .box {
+   width: 48%;
+   margin: 0 auto;
+   background: rgba(255,255,255,0.2);
+   padding: 35px;
+   border: 2px solid #fff;
+   border-radius: 20px/50px;
+   background-clip: padding-box;
+   text-align: center;
+ }
+ 
+ .button {
+   font-size: 1em;
+   padding: 10px;
+   color: #fff;
+   border: 2px solid #06D85F;
+   border-radius: 20px/50px;
+   text-decoration: none;
+   cursor: pointer;
+   transition: all 0.3s ease-out;
+ }
+ .button:hover {
+   background: #06D85F;
+ }
+ 
+ .overlay {
+   position: fixed;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background: rgba(0, 0, 0, 0.7);
+   transition: opacity 500ms;
+   visibility: hidden;
+   opacity: 0;
+ }
+ .overlay:target {
+   visibility: visible;
+   opacity: 1;
+ }
+ 
+ .popup {
+   margin: 70px auto;
+   padding: 20px;
+   background: lightcyan;
+   border-radius: 5px;
+   width: 30%;
+   position: relative;
+   transition: all 5s ease-in-out;
+ }
+ 
+ .popup h4 {
+   margin-top: 0;
+   color: #333;
+   /* font-family: Tahoma, Arial, sans-serif; */
+ }
+ .popup .close {
+   position: absolute;
+   top: 20px;
+   right: 30px;
+   transition: all 200ms;
+   font-size: 30px;
+   font-weight: bold;
+   text-decoration: none;
+   color: #333;
+ }
+ .popup .close:hover {
+   color: #06D85F;
+ }
+ .popup .content {
+   max-height: 30%;
+   overflow: auto;
+ }
+ 
+ @media screen and (max-width: 700px){
+   .box{
+     width: 70%;
+   }
+   .popup{
+     width: 70%;
+   }
+ }
+ 
+ </style>
+ <style type="text/css">
+   .select-style{
+     border-radius: 0.25rem;
+     border-color: black;
+   }
+   .form-control{
+     border-radius: 0.25rem;
+     border-color: black;
+   }
+
+   .box {
+    width: 48%; /* Adjust this width as needed */
+    margin: 0 auto; /* Centers the box horizontally */
+    padding: 10px;
+    background: lightcyan;
+    border-radius: 3px;
+   }
+   
+ </style>
+ <style>
+    / Add some basic styling for better presentation /
+    .form-container {
+        max-width: 400px;
+        margin: 4 10px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+    }
+    
+</style>
+
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+ <div class="page-wrapper">
+    <div class="page-content" style="background-color: lightcyan;height:auto; ">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb mb-3 text-center">
+            <div class="breadcrumb-title mx-auto"><h3><b>Bill Sundries</b></h3></div>
+                <hr style="color:black">
+                <div class="d-flex justify-content-center"> <!-- Centering the box -->
+                    <div class="box text-center" style="background-color: rgb(205 36 36); color:white;">
+                        <h4 >Modify bill Sundry Master</h4> <!-- Heading inside the box -->
+                    </div>
+                </div>
+            </div>
+        <form method="post" enctype="multipart/form-data">          
+                {% csrf_token %} 
+            <div class="container" style="display: flex; flex-wrap: wrap;">
+                
+                <div style="width:50%">
+                    <!---1st block-->
+                     <div style="display:flex">
+                    <div class="m-1 p-1"style="width:60%;">
+                           <span>Name</span><br>
+                           <span>Alis</span><br>
+                           <span>Print Name</span><br>
+                           <span>Bill Sundry Type</span><br>
+                           <span>Bill Sundry Nature </span><br>
+                           <span>Default Value</span><span><br>
+                           <span>Sub total Hearing</span><br>
+                           <span>Affects the Cost of Goods in Sale</span><br>
+                           <span>Affects the Cost of Goods in Purchase</span><br>
+                           <span>Affects the Cost of Goods in Material Issue</span><br>
+                           <span>Affects the Cost of Goods in Material Receipt</span><br>
+                           <span>Affects the Cost of Goods in Stock Transfer</span><br>
+                           
+
+                    </div>
+                    <style>
+                        .inputbox input{
+                            border:none;
+                            background-color: lightcyan;
+                            padding:0px 0px 0px 5px;
+                            margin: 0px 0px 0px 5px;
+                            
+                        }
+                    </style>
+                    <div class="m-1 p-1 inputbox"style="width:50%;">
+                        <span>:-  </span><input type="text" name="bil_sundries_name" value=""/><br>
+                        <span>:-  </span><input type="text" name="bill_sundries_alias" value=""/><br>
+                        <span>:-  </span><input type="text" name="print_name" value=""/><br>
+                        <span>:-  </span><select name="bill_sundry_type" id="bill_sundry_type">
+                                        <option disabled selected value>Select</option>
+                                        <option value="additive">Additive</option>
+                                        <option value="subtractive">Subtractive</option>
+                                        </select><br>
+                        <span>:-  </span><input type="text" name="bill_sundry_nature" value=""/><br> 
+                        <span>:-  </span><input type="text" name="bill_sundry_default_value" value=""/><br>
+                        <span>:-  </span><span>Total</span><br> 
+                        <span>:-  </span><select name="cost_good_sale" id="cost_good_sale">
+                                            <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select><br>
+                        <span>:-  </span><select name="cost_good_purchase" id="cost_good_purchase" >
+                                        <option disabled selected value>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                     </select><br>
+                        <span>:-  </span><select name="cost_good_material_issue" id="cost_good_material_issue" >
+                                        <option disabled selected value>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select><br>
+                        <span>:-  </span><select name="cost_good_material_receipt" id="cost_good_material_receipt" >
+                                        <option disabled selected value>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                 </select><br><br>
+                        <span>:-  </span><select name="cost_good_stock_transfer" id="cost_good_stock_transfer">
+                                        <option disabled selected value>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                             </select><br>
+                       
+                        </div>
+                    </div>
+
+         <!-- <h4>Account in sale</h4> -->
+                   
+                             <div style="border:1px solid black;" class="m-1 p-1">
+                            <div class="row">
+                                <label style="color:black;"><span><b>Account in Sale</b><span style="color: red;">*</span></span></label>
+                            </div>
+                            <div style="display:flex">
+                                 <div style="width:50%;">
+                                    <span>Affect Accounting</span><br>
+                                    <span>Adjust in Sale Amount</span><br>
+                                    <span>Specify Acc Here</span><br>
+                                    <span>Account Head to Post </span><br>
+                                    <span>Tax</span><br>
+                                    <span>Adjust in party Amount</span><br>
+                                    <span>Account Head to post</span><br>
+                                    <span>Post Over and Above</span><br>
+                                </div>
+                                 <div style="width:50%;">
+                                    <span><select name="acc_affect_accounting" id="acc_affect_accounting" >
+                                                <option disabled selected value>Select</option>
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                           </select></span><br>
+                                           <span><select name="sale_amount_accounting" id="sale_amount_accounting">
+                                                <option disabled selected value>Select</option>
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                     </select></span>
+                                     <span><select name="specify_acc"  >
+                                                    <option>Select</option>
+                                                    <option>Specify Here</option>
+                                                    <option>Specify in value</option>
+                                            </select></span>  <br><br>
+                                    <span><input type="value" name="account_head_post" id=""/></span> <br><br>
+                                    <span><select name="adjust_party_amount" id="adjust_party_amount">
+                                            <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                 </select></span><br><br>
+                                 <span><select name="post_over_and_above" id="post_over_and_above">
+                                    <option disabled selected value>Select</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                             </select></span>
+
+                                </div>
+                            </div>
+                        </div>
+                             <!-- <h4>Account in purchase</h4> --> 
+                             <div style="border:1px solid black;" class="m-1 p-1">
+                                <div class="row">
+                                    <label style="color:black;"><span><b>Accounting In Purchase</b><span style="color: red;">*</span></span></label>
+                                </div>
+                                <div style="display:flex">
+                                    <div style="width:50%;">
+                                        <span>Affect Accounting</span><br>
+                                        <span>Adjust in Purchase Amount</span><br>
+                                        <span>Account Head to Post </span><br>
+                                        <span>Adjust in party Amount</span><br>
+                                        <span>Account Head to post</span><br>
+                                        <span>Post Over And Above</span><br>  
+                                        <span>Impact Zero Tax Items</span>
+                                        
+                                        </div>
+                                        <div style="width:50%;">
+                                            <span><select name="purchase_affect" id="purchase_affect">
+                                                <option disabled selected value>Select</option>
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                         </select></span><br>
+                                         <span><select name="purchase_amount" id="purchase_amount">
+                                            <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                   </select></span>
+                                   <span><select name="purchase_account_head" id="">
+                                                  <option>Select</option>
+                                                  <option value="specify here">Specify Here</option>
+                                              <option value="specify in value">Specify in value</option>
+                                          </select></span>  <br><br>
+                                          <span><select name="purchase_party_amount" id="" >
+                                            <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                     </select></span><br><br><br>
+                                     <span><select name="zero_tax_item" id="zero_tax_item">
+                                           <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                 </select></span>
+                                        </div>
+                                        </div>
+
+                                </div>
+                        </div>
+                                <!-----Accounting in material Issue/Receipt/Stock Transfer-------->
+                <div style="width:50%">
+                    <div style="border:1px solid black;" class="m-1 p-2">
+                        <div class="row">
+                            <label style="color:black;"><span><b>Accounting in material Issue/Receipt/Stock Transfer</b><span style="color: red;">*</span></span></label>
+                        </div> 
+                        <div class="m-1 p-2">
+                          <span><input type="radio" name="material_issue" value="material issue"/></span>&nbsp;<span>Material Issue</span>
+                          <span><input type="radio" name="material_issue" value="material receipt"/></span>&nbsp;<span>Material Receipt</span>
+                          <span><input type="radio" name="material_issue" value="stock transfer"/></span>&nbsp;<span>Stock Transfer</span>
+                        </div>
+                        <div style="display:flex; border:1px solid black;" class="m-1 p-1">
+                            <div style="width: 50%;">
+                                <span>Affect Accounting</span><br>
+                                <span>Other Side</span><br><br>
+                                <span>Account Head To Post</span><br>
+                                <span>Adjust in Party</span><br>
+                                <span>Specify Acc Here</span><br>
+                                <span>Account Head To Post</span><br>
+                                <span>Post Over And Above</span>
+                            </div>
+                            <div style="width: 50%;">
+                                <span><select name="stock_affects_accounting" id="stock_affects_accounting">
+                                            <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                             </select></span><br>
+                             <span><select name="stock_other_side" id="stock_other_side" >
+                                <option >Select</option>
+                                <option value="specify acc here">Specify Acc. Here</option>
+                            <option value="specify acc value">Specify Acc. in value</option>
+                        </select></span><br><br>
+                        <span><input type="text" name="stock_account_head_to_post" id="stock_account_head_to_post"  style=" margin: 0px 0px 0px 1px;"/></span><br>
+                        <span><select name="stock_adjust_party" id="stock_adjust_party">
+                            <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                     </select></span> <span><select name="stock_specify_acc_here" id="bill_sundry_type"><option>Select</option>
+                                       <option value="specify acc here" >Specify Acc. Here</option>
+                                       <option value="specify acc value">Specify Acc. in value</option>
+                                       </select></span> <br><br><br>
+                                       <span><select name="stock_post_over_above" id="stock_post_over_above" >
+                                        <option disabled selected value>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                 </select></span>
+
+                            </div>
+
+                        </div>
+                    </div>
+                          <!-- <h4 >account of bill sundry to be fed as</h4> -->
+                    <div style="border:1px solid black;" class="m-1 p-2">
+                        <div class="row">
+                            <label style="color:black;"><span><b>Account of Bill Sundry to be fed as</b><span style="color: red;">*</span></span></label>
+                        </div>
+                        <div class="m-2 p-1">
+                            <span><input type="radio" name="percent" value="absolute amount"/></span>&nbsp;<span>Absolute Amount</span>
+                            <span><input type="radio" name="percent" value="per main qty"/></span>&nbsp;<span>Per Main Qty</span>
+                            <span><input type="radio" name="percent" value="per alt. qty."/></span>&nbsp;<span>Per Alt. Qty.</span><br>
+                            <span><input type="radio" name="percent" value="per packaging qty"/></span>&nbsp;<span>Per Packaging Qty</span>
+                            <span><input type="radio" name="percent" value="percentage"/></span>&nbsp;<span>Percentage</span>
+                          </div>
+                          <div class="m-2 p-1" style="border:1px solid black;">
+                            <span><b>Of</b></span><br>
+                            <span>100.00    % of</span><br>
+                            <span><input type="radio" name="item_basic_amt" id="item_basic_amt" value=""/></span>&nbsp;<span>Net Bill Amount</span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span>Selective Calculation</span><span><select name="selective_calculation" id="selective_calculation">
+                                                                    <option disabled selected value>Select</option>
+                                                                    <option value="yes">Yes</option>
+                                                                    <option value="no">No</option>
+                                                                    </select></span><br>
+                             <span><input type="radio" name="item_basic_amt" value=""/></span>&nbsp;<span>Items Basic Amt.</span><br>
+                             <span><input type="radio" name="item_basic_amt" value=""/></span>&nbsp;<span>Total MRP of Items</span><br>
+                             <span><input type="radio" name="item_basic_amt" value=""/></span>&nbsp;<span>Taxable Amount</span>
+                             <div style="border:1px solid rgb(166, 159, 159); float: right;" class="m-1 p-1" >
+                                <span ><b>Previous Bill Sundry(s)Details</b></span><br>
+                                <span class="p-1">No. of Bill Sundry(s)  </span> <span>1</span>     <br>
+                                <span class="p-1">Consolidate Bill Sundries Amt.</span><span><select name="consolidate_bill_sundry" id="consolidate_bill_sundry">
+                                                                                    <option disabled selected value>Select</option>
+                                                                                    <option value="yes">Yes</option>
+                                                                                    <option value="no">No</option>
+                                                                                  </select></span>
+                             </div><br>
+                             <span><input type="radio" name="item_basic_amt" value=""/></span>&nbsp;<span>Previous Bill Sundry(s) Amount</span> <br>
+                             <span><input type="radio" name="item_basic_amt" value=""/></span>&nbsp;<span>Other Bill Sundry(s)</span> <br>
+                             <div style="border:1px solid rgb(166, 159, 159); float: right;" class="m-1 p-1">
+                                 <span><b>Bill Sundry to be Calculated on</b></span><br>
+                                 <span><input type="radio" name="bill_sundry_amount" value=""/></span>&nbsp;<span>Bill Sundry Amount</span>&nbsp;
+                                 <span><input type="radio" name="bill_sundry_amount" value=""/></span>&nbsp;<span>Bill Sundry Applied On</span>
+                             </div><br>
+                             <span><input type="radio" name="item_basic_amt" value=""/></span>&nbsp;<span>Item Description</span>
+
+
+                          </div>
+                        </div>
+                    <!--Bill Sundry Amount Round Off-->
+                    <div style="border:1px solid black;" class="m-1 p-2">
+                        <div class="row">
+                            <label style="color:black;"><span><b>Bill Sundry Amount Round Off</b><span style="color: red;">*</span></span></label>
+                        </div>
+                        <div class="m-1 p-1">
+                       <span style="padding-right: 80px;">Round off Bill Sundry Amount</span><span><select name="round_off_bill" id="round_off_bill" >
+                                                                        <option disabled selected value>Select</option>
+                                                                        <option value="yes">Yes</option>
+                                                                        <option value="no">No</option>
+                                                                       </select></span><br>
+                        <span style="padding-right: 100px;">Rounding off Nearest to.</span><span><input type="text" name="Rs" value="RS"/></span>
+                        </div> 
+                        </div>
+
+
+
+
+
+
+
+                    
+                            
+                   
+                
+               
+                    
+               
+           
+         
+         
+            
+                
+                           
+            
+        <!-- <h4 >Skip Bill lasttttt</h4> -->
+        <div class="col-md-12" style="text-align: center;">
+            <button class="btn btn-primary" style="background-color: mediumaquamarine; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+          <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;" value="Save">
+        </div>
+    </div>   
+    </form>
+    
+ </div>
+ </div>
+    </div>
+
+ 
+</div>
+{% endblock %}
+               
+                   
+                  
+               
+                   
+                   
+                        
+                 
+                    
+
+                     
+                    
+                

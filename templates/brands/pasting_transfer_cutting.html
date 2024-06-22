@@ -1,0 +1,837 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Binding info</title>
+  <style>
+  *{
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 50px;
+  border: 1px solid #888;
+  width: 50%; 
+  max-width: 750px;
+}
+
+
+.select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+    padding-left:10%;
+  }
+  .title h3{
+  
+  border-bottom: 2px solid blueviolet ;
+  display: inline-block;
+   color: #000;
+  font-weight: bold;
+}
+.title h5{
+
+  display: inline-block;
+   
+}
+
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Pasting Info</div>
+            <hr>
+            {% comment %} <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                <button class="btn btn-primary me-md-2" id="myBtn"  type="button"><i class="fa fa-plus" ></i>&nbsp;Pasting info</button>
+               <a href="/stiching_transfer_pasting/">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button"><i class="fa fa-plus" ></i>&nbsp;Stiching Transfer</button>
+                </a> 
+            </div><br> {% endcomment %}
+            <div id="myModal" class="modal">
+                <div class="modal-content">                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="color:black; background-color:#6e95fc;text-align:center;"><h4 style="color:white ;">Pasting Binding Info</h4></div>
+                        <hr style="color:black">
+                        <form method="POST" onsubmit="return myfun()">
+                            {% csrf_token %}
+                            <div class="panel-body" >
+                                <div class="" >
+                                    {% comment %} <div class="title">
+                                        <h4 style="margin-left:205px;">Winwings Publications</h4><br><br>
+                                        <h5 style="color: rgb(90, 88, 88); font-size:17px;"><b>Address:</b> 780,Gulgulwar Niwas,Golibar Chowk,<br>Nagpur-440002</h5>
+                                    </div> {% endcomment %}
+                                    <div class="row" style="text-align: right;">
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-4">
+                                            <div class="form-group" >
+                                                <div class="input-group">
+                                                    <input type="date" class="form-control mobile" name="pasting_print_date" id="date" placeholder="{% now 'Y-m-d' %}"  disabled value="" max="{% now 'Y-m-d' %}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <br><br>   
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="name" class="control-label"><b>Vendor Name<span style="color:red;">*</span></b></label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" name="pasting_vender_name" id="v1_name" style="width:100%;" required>
+                                                <option disabled selected value>Select Vendor</option>
+                                                {% for i in vend %}
+                                                    <option>{{i.organization_name}}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>                                    
+                                        </div>
+                                    </div> <br>
+                                    {% comment %} <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="name" class="control-label"><b>Address</b></label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" id="a1_name" style="width:100%;" name="b_adress_name" required>
+                                                    <option disabled selected value>Select address</option>
+                                                    {% for i in vend %}
+                                                    <option>{{i.vender_address}}</option>
+                                                    {% endfor %}
+                                                </select> 
+                                            </div>  
+                                        </div>
+                                    </div><br>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="name" class="control-label"><b>Mobile No<span style="color:red;">*</span></b></label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" id="m1_no" style="width:100%;" name="b_mobile_no" required>
+                                                    <option disabled selected value>Select Mobile</option>
+                                                    {% for i in vend %}
+                                                    <option>{{i.vender_contact}}</option>
+                                                    {% endfor %}                                       
+                                                </select> 
+                                            </div>  
+                                        </div>
+                                    </div><br>   {% endcomment %}
+                                    
+                                    <div class="col-md-12" style="">
+                                        
+                                        <div class="col-md-12" style="">
+                                            <div class="input_fields_container">
+                                                <div class="form-group" style="padding-left: 12px; padding-bottom: 0px;">
+                                                    <div class="row" id="myDiv" style=" padding-top: 12px ;padding-bottom: 0%;"> 
+                                                        <div class="col-md-2"><label>Book Code<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Brand Name<span style="color:red;">*</span></label></div>
+                                                       
+                                                        <div class="col-md-2"><label>Class Name<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Medium<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Subject<span style="color:red;">*</span></label></div>
+                                                       
+                                                        <div class="col-md-2"><label>pasting<span style="color:red;">*</span></label></div>
+                                                        
+                                                                                                                <div class="form-group row">
+                                                            <div class="col-md-2" style="padding-left:0;"> 
+                                                                 
+                                                                <input class="form-control" id="m_code" style="width:20%%;" name="pasting_code" required>
+                                                                    {% comment %} <option disabled selected value>Select code</option>
+                                                                    {% for i in obj %}
+                                                                    
+                                                                    <option value="{{ i.code }}">{{ i.code }}</option>
+                                                                    
+                                                                    {% endfor %}
+                                                                </select>  {% endcomment %}
+                                                            </div> 
+                                                            <div class="col-md-2" style="padding-left:0;">                                                           
+                                                                <input class="form-control" id="brand_name_1" style="width:20%%;" name="pasting_brand_name1" required>
+                                                                    {% comment %} <option disabled selected value>Select Brand</option>
+                                                                    {% for i in obj1|dictsort:"books_name" %}
+                                                                    {% if i.books_name == "Spark" %}
+                                                                    <option value="{{ i.books_name }}">{{ i.books_name }}</option>
+                                                                    {% endif %}
+                                                                    {% endfor %}
+                                                                </select> {% endcomment %}
+                                                            </div>
+                                                            <input class="form-control" id="class_name_1" style="width:15%;" name="pasting_class_name1" required>
+                                                                {% comment %} <option disabled selected value>Select Class</option>
+                                                                {% for i in book %}
+                                                                {% if i.books_name == "Spark" %}
+                                                                <option value="{{ i.books_class }}" data-brand="{{i.books_name}}">{{i.books_class}}</option>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                            </select> {% endcomment %}
+                                                            <div class="col-md-2 form-group quantity">
+                                                                <input class="form-control" id="medium_1" style="width:15%%;pading-left:10%;" name="pasting_medium1" required>
+                                                                    {% comment %} <option disabled selected value>Select Medium</option>
+                                                                    {% for i in book %}
+                                                                    {% if i.books_name == "Spark" %}
+                                                                    <option value="{{i.medium}}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}">{{i.medium}}</option>
+                                                                    {% endif %}
+                                                                    {% endfor %}
+                                                                </select> {% endcomment %}
+                                                            </div>
+                                                            <input class="form-control" id="subject_1" style="width:15%;" name="pasting_subject1" required>
+                                                                {% comment %} <option disabled selected value>Select Subject</option>
+                                                                {% for i in book %}
+                                                                {% if i.books_name == "Spark" %}
+                                                                <option value="{{i.subject}}" data-depends-on-brand="{{ i.books_name }}" data-depends-on-class="{{ i.books_class }}" data-depends-on-medium="{{ i.medium }}">{{i.subject}}</option>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                            </select> {% endcomment %}
+                                                            
+                                                           
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="pasting_pasting1" id="pasting1" style="margin-left:15%" placeholder="pasting" /></div>
+                                                           
+                                                            
+                                                           {% comment %} <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="total_gather" value="{{total_gather}}"id="total_gather" style="margin-left:15%" /></div>                                        {% endcomment %}
+                                                        </div>
+                                                    </div>
+                                                </div><br>
+                                            </div>
+                                          
+                                      </div>
+
+                                        
+                                        <div class="col-md-12" >
+                                            <div class="form-group">
+                                                <label style="padding-right:100%;">Note</label>
+                                                <input type="text" class="form-control mobile" name="term_and_condition1" maxlength="60" 
+                                                id="term_and_condition1" placeholder="1. Terms and Conditions" value="{{first_condition}}" style="border-bottom: 1px solid rgb(214, 213, 213);
+                                                border-left:none ; border-top: none; border-right: none; margin-bottom: 13px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 text-center"></div>
+                                        <div class="col-md-12">
+                                          <div class="text-center mt-3 mb-3">
+                                              <button type="submit" class="btn btn-primary" name="create_form_btn" value="save_cashmemo_btn">Create</button>
+                                              <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+                                          </div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" style="margin-left: 26px;" >
+                <div class="row" style="text-align: center;" >
+                    <div class="col-md-18" >
+                        <div class="table-responsive" >
+                           <div style="overflow-x: auto;">
+                            <table  class="display table table-hover table-striped table-bordered" >
+                                <thead>
+                                    <tr style="text-align: center; background-color: lightcyan;">
+                                        <th align="center">Sr.No</th>
+                                        <th align="center">Book Code</th>
+                                        <th align="center">Vendor Name</th>
+                                        <th align="center">Brand Name</th>
+                                        <th align="center">Class Name</th>
+                                        <th align="center">Medium</th>
+                                        <th align="center">Subject</th>
+                                        <th align="center">Total Transferred</th>
+                                        <th align="center">Material Centre</th>
+                                        <th align="center"> Date</th>
+                                       
+                                        
+                                        
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    {% for i in data1 %}
+                                    <tr >
+                                        <td>{{ forloop.counter }}</td> 
+                                        <td>{{i.pasting_code}}</td>
+                                        <td>{{i.pasting_vender_name }}</td>
+                                        <td>{{i.pasting_brand_name1}}</td>
+                                        <td>{{i.pasting_class_name1}}</td>
+                                        <td>{{i.pasting_medium1}}</td>
+                                        <td>{{i.pasting_subject1}}</td>
+                                        <td>{{i.transfer}}</td> 
+                                        <td>{{i.Material_center}}</td> 
+                                        <td>{{i.pasting_print_date}}</td>     
+                                        
+                                        
+                                        
+                                                                                                              
+                                        <td>
+                                            {% comment %} <div>
+                                                <a  href="/edit_pasting/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                <a  href="/delete_pasting/{{i.id}}/" ><i class="bi bi-archive"></i></a>
+                                               
+                                           </div> {% endcomment %}
+                                        </td>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+            <script>
+            
+                // Get references to the dropdown elements
+                const codeDropdown = document.getElementById('m_code');
+                const brandDropdown = document.getElementById('brand_name_1');
+                const classDropdown = document.getElementById('class_name_1');
+                const mediumDropdown = document.getElementById('medium_1');
+                const subjectDropdown = document.getElementById('subject_1');
+                const pagesDropdown = document.getElementById('pages_1');
+                const singleDropdown = document.getElementById('single_1');
+                const doubleDropdown = document.getElementById('double_1');
+                const fourDropdown = document.getElementById('four_1');
+            // Get the dynamic input boxes container
+            
+                // Create a dictionary to store the book data
+                const bookData = {
+                    // Populate this object with book data from your backend
+                    {% for i in book %}
+                    "{{ i.code }}": {
+                        brand: "{{ i.books_name }}",
+                        class: "{{ i.books_class }}",
+                        medium: "{{ i.medium }}",
+                        subject: "{{ i.subject }}",
+                        pages: "{{ i.no_of_pages }}",
+                        single: "{{ i.onec_rate }}",
+                        double: "{{ i.twoc_rate }}",
+                        four: "{{ i.fourc_rate }}"
+                    },
+                    {% endfor %}
+                };
+            
+                // Function to update input boxes based on "pages_1" value
+               
+            
+                // Add a change event listener to the "code" dropdown
+                codeDropdown.addEventListener('change', function () {
+                    const selectedCode = this.value;
+                    
+                    
+                    // Populate other dropdowns with data based on the selected "code"
+                    brandDropdown.value = bookData[selectedCode].brand;
+                    classDropdown.value = bookData[selectedCode].class;
+                    mediumDropdown.value = bookData[selectedCode].medium;
+                    subjectDropdown.value = bookData[selectedCode].subject;
+                    pagesDropdown.value = bookData[selectedCode].pages;
+                    singleDropdown.value = bookData[selectedCode].single;
+                    doubleDropdown.value = bookData[selectedCode].double;
+                    fourDropdown.value = bookData[selectedCode].four;
+            
+                    // You might also need to trigger the "calculateFormsPerSet()" function here
+                    calculateFormsPerSet();
+                    
+                });
+                   
+                 const mCodeField = document.getElementById('m_code');
+
+                 mCodeField.addEventListener('input', function () {
+                    const inputValue = this.value.toUpperCase();
+                
+                    if (!inputValue.startsWith('S')) {
+                        // Agar input 'S' se nahi shuru hota hai, to usko clear karein.
+                        this.value = '';
+                    }
+                });
+                // Add an event listener to handle "pages_1" value changes
+               
+            
+                // Trigger the initial calls
+                codeDropdown.dispatchEvent(new Event('change'));
+                updateInputBoxes(); // Initial call
+            </script>
+       
+
+            
+          
+
+            <script>
+              $(document).ready(function() {
+               var max_fields_limit= 51;
+               var x = 1;
+               $('.add_more_button').click(function(e){ 
+               e.preventDefault();
+               $('#myDiv').show();
+               if(x < max_fields_limit){ 
+                   x++;  
+                   $('.input_fields_container').append(
+                       
+                   //'<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description"><input type="text" pattern="[a-z A-Z 0-9\s]+" class="form-control mobile" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" placeholder="brand name" value="" required maxlength="30" /></div><div class="col-md-2 form-group "><input type="text" class="form-control mobile" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" maxlength="30" placeholder="Class Name" min=""  pattern="^[a-z A-Z 0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;"  name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" type="text" maxlength="30" placeholder=" Medium" min=""  pattern="^[a-zA-Z0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" placeholder="Subject" value="" required maxlength="30"></div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+                       // <input type="text" class="form-control mobile" name="amount_'+x.toString()+'" id="amount_'+x.toString()+'" placeholder="Amount" value="" required />
+                    '<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" required><option disabled selected value>Select Brand</option>{% for i in book %}<option>{{i.books_name}}</option>{% endfor %}</select>     </div><div class="col-md-2 form-group ">   <select class="form-control mobile" style="width:20%%;" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" required><option disabled selected value>Select Class</option>{% for i in book %}<option>{{i.books_class}}</option>{% endfor %}</select>     </div><div class="col-md-2 form-group description">    <select class="form-control mobile" style="width:20%%;" name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" required><option disabled selected value>Select Medium</option>{% for i in book %}<option>{{i.medium}}</option>{% endfor %}</select>      </div><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" required><option disabled selected value>Select Subject</option>{% for i in book %}<option>{{i.subject}}</option>{% endfor %}</select>   </div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+
+                   }
+     
+     
+           });  
+           $('.input_fields_container').on("click",".remove_field", function(e){ //user click on remove text links
+               e.preventDefault(); $(this).parent('div').remove(); x--;
+              
+           })
+       });
+     
+     
+       function restrictMinus(e) {
+               var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+     
+               if (inputKeyCode != null) {
+                   if (inputKeyCode == 45) e.preventDefault();
+               }
+       }
+     
+       </script>
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+      modal.style.display = "none";
+      }
+  }
+
+  </script>
+
+
+
+
+
+  <script>
+    document.getElementById("from_date").onchange = function () {
+    var input = document.getElementById("to_date");
+    input.setAttribute("min", this.value);
+  }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+    <script type="text/javascript">
+  var rad = document.cash_memo_add.stamp_type;
+  var prev = null;
+  for (var i = 0; i < rad.length; i++) {
+      rad[i].addEventListener('change', function() {
+          (prev) ? console.log(prev.value): null;
+          if (this !== prev) {
+              prev = this;
+          }
+          if(this.value == 'merchant_stamp')
+          {
+              document.getElementById('default_stmaps').style.display = 'block';
+              document.getElementById('own_stamps').style.display = 'none';
+          }
+          else if(this.value == 'own_stamp')
+          {
+              // document.getElementById('messageError').innerHTML = "";
+              document.getElementById('default_stmaps').style.display = 'none';
+              document.getElementById('own_stamps').style.display = 'block';
+          }
+      });
+  }
+</script>
+<script type="text/javascript">
+  jQuery.validator.addMethod("greaterStart", function (value, element, params) {
+      return this.optional(element) || new Date(value) >= new Date($(params).val());
+  },'Must be greater than from date.');
+  
+  $("#add_merchant_form").validate({
+      rules: {
+          chk: {
+              required: true,
+          },
+      },
+
+  });
+  $("#stamp_image_form").validate({
+      rules: {
+          chkcashmeo: {
+              required: true,
+          },
+      },
+
+  });
+  $("#bill_info_filter_form").validate({
+      rules: {
+          from_date: {
+              required: true,
+          },
+          to_date: {
+              required: true,
+              greaterStart: "#from_date",
+          },
+      },
+
+  });
+  $(document).ready(function() {
+// $('input[name=to_date]').change(function() {
+//         var to_date = $('#to_date').val();
+//         document.getElementById('from_date').setAttribute("max", to_date);
+// })
+
+// $('input[name=from_date]').change(function() {
+//   var from_date = $('#from_date').val();
+//     document.getElementById('to_date').setAttribute("min", from_date);
+// })
+})
+</script>
+<script>
+  $(document).ready(function() {
+    $('#add-row').DataTable({
+        dom: 'lBfrtip',
+        "ordering": false,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        buttons: [
+           'excel', 'pdf', 'print'
+        ],
+        initComplete: function () {
+        this.api().columns([2,3]).every( function () {
+            var column = this;
+            var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+            
+            .appendTo( $("#type_filter_" + column[0][0]).empty())
+                
+            .on( 'change', function () {
+
+            var val = $(':selected', select).map(function(index, element) {
+            return $.fn.dataTable.util.escapeRegex($(this).val());
+            }).toArray().join('|');
+                  
+            column
+                .search( val ? '^'+val+'$' : '', true, false )
+                .draw();
+            } );
+
+            column.data().unique().sort().each( function ( d, j ) {
+                select.append( '<option value="'+d+'">'+d+'</option>' )
+            });
+        });        
+      }
+    });
+
+    $("#column_id_2").select2({
+      placeholder:" Select Date",
+      closeOnSelect: true,
+      width: '90%',
+    })
+
+    $("#column_id_3").select2({
+      placeholder:" Select Number",
+      closeOnSelect: true,
+      width: '80%',
+    })
+
+  });
+</script>
+
+
+<script >
+var today = new Date();
+
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    // today = yyyy + '/' + mm + '/' + dd;
+     today = yyyy + '-' + mm + '-' + dd;
+
+    console.log(today);
+    document.getElementById('date').value = today;
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_venderlist").on('change', function()
+        {
+
+            var state = $("#id_venderlist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Orderlist/"+state,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'organization_name': state
+                },
+                success: function(result){
+                  
+                    $("#id_courselist").empty();
+                    var empty = ""
+                    $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Address *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_courselist").on('change', function()
+        {
+
+            var state = $("#id_courselist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Addresslist/"+maha,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'medium': maha
+                },
+                success: function(result){
+                  
+                    $("#id_offervalue").empty();
+                    var empty = ""
+                    $('#id_offervalue').append("<option value='" + empty + "' disabled selected value>" + "Select special offer*" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_offervalue').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_brand").on('change', function()
+        {
+
+            var state = $("#id_brand").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Brandlist/"+city,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'books_name': city
+                },
+                success: function(result){
+                  
+                    $("#id_classname").empty();
+                    var empty = ""
+                    $('#id_classname').append("<option value='" + empty + "' disabled selected value>" + "Select classname *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_classname').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+<script>
+    $(function () {
+        $('.deleteBtn').on('click', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = $(this).attr("data-id");
+                    $.ajax({
+                        type: "POST",
+                        url: "/delete-orders/" + id + "/" ,
+                        data: { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value },
+                        success: function (response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Bill deleted successfully.',
+                                'success',
+                                {
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                })
+                                .then(function () {
+                                    location.reload();
+                                });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!",
+                                confirmButtonClass: "btn-success",
+                                allowOutsideClick: false,
+                                allowEscapeKey: false
+                            })
+                                .then(function () {
+                                    location.reload();
+                                });
+                        }
+                    });
+                }
+            })
+        });
+    });
+    
+    </script>
+
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
+<script>
+    // Function to update the options of a dropdown based on the selected values of dependent fields
+    function updateDropdownOptions(dropdownId, dependentFields) {
+      var dropdown = document.getElementById(dropdownId);
+      var selectedOptions = [];
+  
+      // Get the selected values of the dependent fields
+      for (var i = 0; i < dependentFields.length; i++) {
+        var fieldId = dependentFields[i];
+        var fieldValue = document.getElementById(fieldId).value;
+        selectedOptions.push(fieldValue);
+      }
+  
+      // Update the options of the dropdown based on the selected values
+      for (var i = 0; i < dropdown.options.length; i++) {
+        var option = dropdown.options[i];
+        var dependsOnBrand = option.getAttribute('data-depends-on-brand');
+        var dependsOnClass = option.getAttribute('data-depends-on-class');
+        var dependsOnMedium = option.getAttribute('data-depends-on-medium');
+        var dependsOnSubject = option.getAttribute('data-depends-on-subject');
+        var dependsOnPages = option.getAttribute('data-depends-on-pages');
+  
+        // Check if the option should be displayed based on the selected values
+        if (
+          (!dependsOnBrand || dependsOnBrand === selectedOptions[0]) &&
+          (!dependsOnClass || dependsOnClass === selectedOptions[1]) &&
+          (!dependsOnMedium || dependsOnMedium === selectedOptions[2]) &&
+          (!dependsOnSubject || dependsOnSubject === selectedOptions[3]) &&
+          (!dependsOnPages || dependsOnPages === selectedOptions[4])
+        ) {
+          option.style.display = '';
+        } else {
+          option.style.display = 'none';
+        }
+      }
+    }
+  
+    // Add event listeners to the dependent fields to update the dropdown options
+    document.getElementById('brand_name_1').addEventListener('change', function () {
+      updateDropdownOptions('class_name_1', ['brand_name_1']);
+    });
+  
+    document.getElementById('class_name_1').addEventListener('change', function () {
+      updateDropdownOptions('medium_1', ['brand_name_1', 'class_name_1']);
+    });
+  
+    document.getElementById('medium_1').addEventListener('change', function () {
+      updateDropdownOptions('subject_1', ['brand_name_1', 'class_name_1', 'medium_1']);
+    });
+  
+    document.getElementById('subject_1').addEventListener('change', function () {
+      updateDropdownOptions('pages_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1']);
+    });
+  
+    document.getElementById('pages_1').addEventListener('change', function () {
+      updateDropdownOptions('single_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+      updateDropdownOptions('double_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+      updateDropdownOptions('four_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+    });
+  
+    document.getElementById('single_1').addEventListener('change', function () {
+      updateDropdownOptions('double_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+    });
+  
+    document.getElementById('double_1').addEventListener('change', function () {
+      updateDropdownOptions('four_1', ['brand_name_1', 'class_name_1', 'medium_1', 'subject_1', 'pages_1']);
+    });
+  </script>
+ 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+            <script>
+                $(document).ready(function() {
+                    $('#brand_name_1').change(function() {
+                        var selectedBrand = $(this).val();
+                        $('#class_name_1').empty().append('<option disabled selected value>Select Class</option>');
+                
+                        // Collect unique class names associated with the selected brand
+                        var classNames = [];
+                        {% for i in book %}
+                            if ("{{ i.books_name }}" === selectedBrand) {
+                                var className = "{{ i.books_class }}";
+                                if ($.inArray(className, classNames) === -1) {
+                                    classNames.push(className);
+                                }
+                            }
+                        {% endfor %}
+                
+                        // Sort and populate the dropdown options
+                        classNames.sort();
+                        $.each(classNames, function(index, value) {
+                            $('#class_name_1').append('<option value="' + value + '" data-brand="' + selectedBrand + '">' + value + '</option>');
+                        });
+                    });
+                });
+                </script>
+  
+{% endblock %}

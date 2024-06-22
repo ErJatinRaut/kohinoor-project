@@ -1,0 +1,634 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>orders</title>
+  <style>
+  *{
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 50px;
+  border: 1px solid #888;
+  width: 40%; 
+  max-width: 750px;
+}
+
+
+.select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+    padding-left:10%;
+  }
+  .title h3{
+  
+  border-bottom: 2px solid blueviolet ;
+  display: inline-block;
+   color: #000;
+  font-weight: bold;
+}
+.title h5{
+
+  display: inline-block;
+   
+}
+.div1 {
+    width: 800px;
+    height: 453px;
+    border: 1px solid black;
+    border-radius: 15px 50px;
+    box-shadow: 10px 11px 5px lightgreen inset;
+    /* border-radius: 15px 50px; */
+    background-color: lightcyan;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Order Info</div>
+            <hr>
+            <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                <button class="btn btn-primary me-md-2" id="myBtn"  type="button"><i class="fa fa-plus" ></i>&nbsp;Order Now</button>
+            </div><br>
+            <div id="myModal" class="modal">
+                <div class="modal-content">                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="color:black; background-color:#6e95fc;text-align:center;"><h4 style="color:white ;">Order Now</h4></div>
+                        <hr style="color:black">
+                        <form method="POST" onsubmit="return myfun()">
+                            {% csrf_token %}
+                            <div class="panel-body" >
+                                <div class="" >
+                                    <div class="title">
+                                        <h4 style="margin-left:205px;">Winwings Publications</h4><br><br>
+                                        <h5 style="color: rgb(90, 88, 88); font-size:17px;"><b>Address:</b> 780,Gulgulwar Niwas,Golibar Chowk,<br>Nagpur-440002</h5>
+                                    </div>
+                                    <div class="row" style="text-align: right;">
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-4">
+                                            <div class="form-group" >
+                                                <div class="input-group">
+                                                    <input type="date" class="form-control mobile" name="date" id="date" placeholder="{% now 'Y-m-d' %}" value="" required max="{% now 'Y-m-d' %}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <br><br>   
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="name" class="control-label"><b>Vendor Name<span style="color:red;">*</span></b></label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" name="vender_name" id="vender_name" style="width:100%;" required>
+                                                <option disabled selected value>Select Vendor</option>
+                                                {% for i in vend %}
+                                                    <option>{{i.organization_name}}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>                                    
+                                        </div>
+                                    </div> <br>
+                                    {% comment %} <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="name" class="control-label"><b>Address</b></label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" id="vender_address" style="width:100%;" name="vender_address" required>
+                                                    <option disabled selected value>Select address</option>
+                                                    {% for i in vend %}
+                                                    <option>{{i.vender_address}}</option>
+                                                    {% endfor %}
+                                                </select> 
+                                            </div>  
+                                        </div>
+                                    </div><br>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="name" class="control-label"><b>Mobile No<span style="color:red;">*</span></b></label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="form-control" id="vender_mob" style="width:100%;" name="vender_mob" required>
+                                                    <option disabled selected value>Select Mobile</option>
+                                                    {% for i in vend %}
+                                                    <option>{{i.vender_contact}}</option>
+                                                    {% endfor %}                                       
+                                                </select> 
+                                            </div>  
+                                        </div>
+                                    </div><br>  {% endcomment %}
+                                    
+                                    <div class="col-md-12" style="">
+                                        
+                                        <div class="col-md-12" style="">
+                                            <div class="input_fields_container">
+                                                <div class="form-group" style="padding-left: 12px; padding-bottom: 0px;">
+                                                    <div class="row" id="myDiv" style=" padding-top: 12px ;padding-bottom: 0%;"> 
+                                                        <div class="col-md-2"><label>Brand Name<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Class Name<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Medium<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Subject<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Quantity<span style="color:red;">*</span></label></div>
+                                                        <div class="col-md-2"><label>Rims<span style="color:red;">*</span></label></div></div> 
+                                                        <div class="form-group row">
+                                                            <div class="col-md-2" style="padding-left:0;">                                                             
+                                                                <select class="form-control" id="brand_name_1" style="width:20%%;" name="brand_name_1" required>
+                                                                    <option disabled selected value>Select Brand</option>
+                                                                    {% for i in book %}
+                                                                    <option>{{i.books_name}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <select class="form-control" id="class_name_1" style="width:15%;" name="class_name_1" required>
+                                                                <option disabled selected value>Select Class</option>
+                                                                {% for i in book %}
+                                                                <option>{{i.books_class}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            <div class="col-md-2 form-group quantity">
+                                                                <select class="form-control" id="medium_1" style="width:15%%;pading-left:10%;" name="medium_1" required>
+                                                                    <option disabled selected value>Select Medium</option>
+                                                                    {% for i in book %}
+                                                                    <option>{{i.medium}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <select class="form-control" id="subject_1" style="width:15%;" name="subject_1" required>
+                                                                <option disabled selected value>Select Subject</option>
+                                                                {% for i in book %}
+                                                                <option>{{i.subject}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            <div class="col-md-2 form-group quantity"><input type="number" class="form-control mobile" name="quantity_1" id="quantity_1" maxlength="10" placeholder="Quantity" min="1" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" required style="margin-left:15%" /></div>
+                                                            <div class="col-md-2 form-group rate"><input type="number" class="form-control mobile" name="rim_1" id="rim_1" pattern="[1-9]{1}[0-9]{9}" placeholder="Rims" maxlength="30" step="0.01" oninput="validity.valid||(value='');" onkeypress="return (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))" value="" style="margin-left:15%" /></div>                                      
+                                                        </div>
+                                                    </div>
+                                                </div><br>
+                                        
+                                          <div class="col-md-12" style="text-align: right;">
+                                          <button class="btn btn-primary btn-sm add_more_button" >Add New Items</button>
+                                          </div>
+                                      </div>
+
+                                        
+                                        <div class="col-md-12" >
+                                            <div class="form-group">
+                                                <label style="padding-right:100%;">Note</label>
+                                                <input type="text" class="form-control mobile" name="term_and_condition1" maxlength="60" 
+                                                id="term_and_condition1" placeholder="1. Terms and Conditions" value="{{first_condition}}" style="border-bottom: 1px solid rgb(214, 213, 213);
+                                                border-left:none ; border-top: none; border-right: none; margin-bottom: 13px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 text-center"></div>
+                                        <div class="col-md-12">
+                                          <div class="text-center mt-3 mb-3">
+                                              <button type="submit" class="btn btn-primary" name="create_form_btn" value="save_cashmemo_btn">Create</button>
+                                              <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+                                          </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" >
+                <div class="row" style="text-align: center;" >
+                    <div class="col-md-11" >
+                        <div class="table-responsive">
+                            <table  class="display table table-hover" >
+                                <thead>
+                                    <tr style="text-align: center;">
+                                        <th align="center">Sr.No</th>
+                                        <th align="center">Order Id</th>
+                                        <th align="center">Vendor</th>
+                                        <th align="center">Total Quantity</th>
+                                        <th align="center">Total Rim</th>
+                                        <th align="center">Order Date</th>
+                                        <th align="center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in data8 %}
+                                    <tr >
+                                        <td >{{ forloop.counter }}</td> 
+                                        <td >{{i.order_id}}</td>
+                                        <td>{{ i.vender_name }}</td>
+                                        <td>{{ i.total_quantity }}</td>
+                                        <td>{{ i.total_rim }}</td>
+                                        <td >{{ i.purchase_date }}</td>                                                                                     
+                                        <td>
+                                            <div>
+                                                <a  href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a>
+                                            
+                                                <a  href="/delete-orders/{{i.id}}/" ><i class="bi bi-archive"></i></a>
+                                                {% comment %} <button class="btn btn-link btn-danger btn-lg deleteBtn"><a  href="/delete-orders/{{i.id}}/" ><i class="bi bi-archive"></i></a> </button> {% endcomment %}
+                                               <a  href="/edit-orders/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                           </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <script>
+              $(document).ready(function() {
+               var max_fields_limit= 51;
+               var x = 1;
+               $('.add_more_button').click(function(e){ 
+               e.preventDefault();
+               $('#myDiv').show();
+               if(x < max_fields_limit){ 
+                   x++;  
+                   $('.input_fields_container').append(
+                       
+                   //'<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description"><input type="text" pattern="[a-z A-Z 0-9\s]+" class="form-control mobile" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" placeholder="brand name" value="" required maxlength="30" /></div><div class="col-md-2 form-group "><input type="text" class="form-control mobile" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" maxlength="30" placeholder="Class Name" min=""  pattern="^[a-z A-Z 0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;"  name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" type="text" maxlength="30" placeholder=" Medium" min=""  pattern="^[a-zA-Z0-9]+$" value="" required /></div><div class="col-md-2 form-group description"><input class="form-control mobile" style="width:110%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" placeholder="Subject" value="" required maxlength="30"></div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+                       // <input type="text" class="form-control mobile" name="amount_'+x.toString()+'" id="amount_'+x.toString()+'" placeholder="Amount" value="" required />
+                    '<div class="form-group row" style="padding-left:0px; padding-right:10px;padding-top:20px;"><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="brand_name_'+x.toString()+'" id="brand_name_'+x.toString()+'" required><option disabled selected value>Select Brand</option>{% for i in book %}<option>{{i.books_name}}</option>{% endfor %}</select>     </div><div class="col-md-2 form-group ">   <select class="form-control mobile" style="width:20%%;" name="class_name_'+x.toString()+'" id="class_name_'+x.toString()+'" required><option disabled selected value>Select Class</option>{% for i in book %}<option>{{i.books_class}}</option>{% endfor %}</select>     </div><div class="col-md-2 form-group description">    <select class="form-control mobile" style="width:20%%;" name="medium_'+x.toString()+'" id="medium_'+x.toString()+'" required><option disabled selected value>Select Medium</option>{% for i in book %}<option>{{i.medium}}</option>{% endfor %}</select>      </div><div class="col-md-2 form-group description">   <select class="form-control mobile" style="width:20%%;" name="subject_'+x.toString()+'" id="subject_'+x.toString()+'" required><option disabled selected value>Select Subject</option>{% for i in book %}<option>{{i.subject}}</option>{% endfor %}</select>   </div><div class="col-md-2 form-group quantity"><input type="number" pattern="[0-9\s]+" class="form-control mobile"name="quantity_'+x.toString()+'" id="quantity_'+x.toString()+'" placeholder="Quantity" value="" required maxlength="30"/></div><div class="col-md-2 form-group rate"><input type="number" pattern="[a-zA-Z0-9\s]+" class="form-control mobile"name="rim_'+x.toString()+'" id="rim_'+x.toString()+'" placeholder="Rims" value="" maxlength="30"/></div><a href="#" class="remove_field col-md-12" style="margin-left:10px; text-align:right;">Remove</a></div>'); //add input field
+
+                   }
+     
+     
+           });  
+           $('.input_fields_container').on("click",".remove_field", function(e){ //user click on remove text links
+               e.preventDefault(); $(this).parent('div').remove(); x--;
+              
+           })
+       });
+     
+     
+       function restrictMinus(e) {
+               var inputKeyCode = e.keyCode ? e.keyCode : e.which;
+     
+               if (inputKeyCode != null) {
+                   if (inputKeyCode == 45) e.preventDefault();
+               }
+       }
+     
+       </script>
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+      modal.style.display = "none";
+      }
+  }
+
+  </script>
+
+
+
+
+
+  <script>
+    document.getElementById("from_date").onchange = function () {
+    var input = document.getElementById("to_date");
+    input.setAttribute("min", this.value);
+  }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
+    <script type="text/javascript">
+  var rad = document.cash_memo_add.stamp_type;
+  var prev = null;
+  for (var i = 0; i < rad.length; i++) {
+      rad[i].addEventListener('change', function() {
+          (prev) ? console.log(prev.value): null;
+          if (this !== prev) {
+              prev = this;
+          }
+          if(this.value == 'merchant_stamp')
+          {
+              document.getElementById('default_stmaps').style.display = 'block';
+              document.getElementById('own_stamps').style.display = 'none';
+          }
+          else if(this.value == 'own_stamp')
+          {
+              // document.getElementById('messageError').innerHTML = "";
+              document.getElementById('default_stmaps').style.display = 'none';
+              document.getElementById('own_stamps').style.display = 'block';
+          }
+      });
+  }
+</script>
+<script type="text/javascript">
+  jQuery.validator.addMethod("greaterStart", function (value, element, params) {
+      return this.optional(element) || new Date(value) >= new Date($(params).val());
+  },'Must be greater than from date.');
+  
+  $("#add_merchant_form").validate({
+      rules: {
+          chk: {
+              required: true,
+          },
+      },
+
+  });
+  $("#stamp_image_form").validate({
+      rules: {
+          chkcashmeo: {
+              required: true,
+          },
+      },
+
+  });
+  $("#bill_info_filter_form").validate({
+      rules: {
+          from_date: {
+              required: true,
+          },
+          to_date: {
+              required: true,
+              greaterStart: "#from_date",
+          },
+      },
+
+  });
+  $(document).ready(function() {
+// $('input[name=to_date]').change(function() {
+//         var to_date = $('#to_date').val();
+//         document.getElementById('from_date').setAttribute("max", to_date);
+// })
+
+// $('input[name=from_date]').change(function() {
+//   var from_date = $('#from_date').val();
+//     document.getElementById('to_date').setAttribute("min", from_date);
+// })
+})
+</script>
+<script>
+  $(document).ready(function() {
+    $('#add-row').DataTable({
+        dom: 'lBfrtip',
+        "ordering": false,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        buttons: [
+           'excel', 'pdf', 'print'
+        ],
+        initComplete: function () {
+        this.api().columns([2,3]).every( function () {
+            var column = this;
+            var select = $('<select multiple="multiple" id="column_id_' + column[0][0] + '"><option value=""></option></select>')
+            
+            .appendTo( $("#type_filter_" + column[0][0]).empty())
+                
+            .on( 'change', function () {
+
+            var val = $(':selected', select).map(function(index, element) {
+            return $.fn.dataTable.util.escapeRegex($(this).val());
+            }).toArray().join('|');
+                  
+            column
+                .search( val ? '^'+val+'$' : '', true, false )
+                .draw();
+            } );
+
+            column.data().unique().sort().each( function ( d, j ) {
+                select.append( '<option value="'+d+'">'+d+'</option>' )
+            });
+        });        
+      }
+    });
+
+    $("#column_id_2").select2({
+      placeholder:" Select Date",
+      closeOnSelect: true,
+      width: '90%',
+    })
+
+    $("#column_id_3").select2({
+      placeholder:" Select Number",
+      closeOnSelect: true,
+      width: '80%',
+    })
+
+  });
+</script>
+
+
+<script >
+var today = new Date();
+
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    // today = yyyy + '/' + mm + '/' + dd;
+     today = yyyy + '-' + mm + '-' + dd;
+
+    console.log(today);
+    document.getElementById('date').value = today;
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_venderlist").on('change', function()
+        {
+
+            var state = $("#id_venderlist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Orderlist/"+state,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'organization_name': state
+                },
+                success: function(result){
+                  
+                    $("#id_courselist").empty();
+                    var empty = ""
+                    $('#id_courselist').append("<option value='" + empty + "' disabled selected value>" + "Select Address *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_courselist').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_courselist").on('change', function()
+        {
+
+            var state = $("#id_courselist").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Addresslist/"+maha,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'medium': maha
+                },
+                success: function(result){
+                  
+                    $("#id_offervalue").empty();
+                    var empty = ""
+                    $('#id_offervalue').append("<option value='" + empty + "' disabled selected value>" + "Select special offer*" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_offervalue').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+        $("#id_brand").on('change', function()
+        {
+
+            var state = $("#id_brand").val();
+            // alert(state);
+
+            $.ajax({
+                type: "POST",
+                url: "/Brandlist/"+city,
+                data: {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    'books_name': city
+                },
+                success: function(result){
+                  
+                    $("#id_classname").empty();
+                    var empty = ""
+                    $('#id_classname').append("<option value='" + empty + "' disabled selected value>" + "Select classname *" + "</option>");
+                    $.each(result.data, function (key, value) {
+                        $('#id_classname').append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                }
+            });
+
+        })
+    })
+</script>
+<script>
+    $(function () {
+        $('.deleteBtn').on('click', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = $(this).attr("data-id");
+                    $.ajax({
+                        type: "POST",
+                        url: "/delete-orders/" + id + "/" ,
+                        data: { csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value },
+                        success: function (response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Bill deleted successfully.',
+                                'success',
+                                {
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                })
+                                .then(function () {
+                                    location.reload();
+                                });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!",
+                                confirmButtonClass: "btn-success",
+                                allowOutsideClick: false,
+                                allowEscapeKey: false
+                            })
+                                .then(function () {
+                                    location.reload();
+                                });
+                        }
+                    });
+                }
+            })
+        });
+    });
+    
+    </script>
+
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
+
+{% endblock %}

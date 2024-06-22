@@ -1,0 +1,605 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Form{% endblock %}</title>
+<style>
+    *
+    {
+        font-family: Georgia;
+    }
+    .page-wrapper {
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    /* Style the page content */
+    .page-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        max-width: 950px;
+        /* Adjust the max-width as needed */
+        margin-top: 55px auto;
+        /* Center the container horizontally */
+    }
+
+    /* Style the breadcrumb section */
+    .page-breadcrumb {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: lightcyan;
+        border-radius: 5px;
+    }
+
+    /* Style the breadcrumb title */
+    .breadcrumb-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Style the form elements */
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+
+        border-radius: 5px;
+    }
+
+    /* Style the buttons */
+    .btn {
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-right: 10px;
+    }
+
+    /* Style the Back button */
+    .btn-back {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    /* Style the Save button */
+    .btn-save {
+        background-color: #2ecc71;
+        color: #fff;
+    }
+
+    /* Center align elements */
+    .text-center {
+        text-align: center;
+    }
+
+    /* Responsive layout for small screens */
+    @media (max-width: 768px) {
+        .d-grid {
+            display: block;
+        }
+
+        .col-sm-6 {
+            width: 100%;
+        }
+    }
+</style>
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Update Data</div>
+                <hr>
+                <form  method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                         <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label  class="form-label">Cover Raw Material Name</label>
+                            <input type="text" class="form-control radius-10" id="cmname" name = "cmname" value="{{data.cmname}}" maxlength="30" required="" oninput="updatePrintName()">
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label  class="form-label">Material Center</label>
+                                <select name="cover_material" id="raw_matercover_materialial_center"  required class="form-control">
+                                <option disabled selected value>Select Material Center</option>
+                                {% for object in center %}
+                                <option value="{{ object.centre_name }}" {% if object.centre_name == data.cover_material %}selected{% endif %}>{{ object.centre_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label  class="form-label"> Alias</label>
+                            <input type="text" class="form-control radius-10" id="" name ="cmalias" value="{{data.cmalias}}" required="" >
+                        </div>
+                    </div>
+                      <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">Print Name</label>
+                            <input type="tel" name="cprint_name" minlength="" class="form-control" value="{{data.cprint_name}}" id="cprint_name" placeholder="" maxlength="" required="">
+                        </div>
+                      </div> 
+                      <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">Opening Stock(Value)</label>
+                            <input type="tel" name="copening_stock_value" minlength="" class="form-control" value="{{data.copening_stock_value}}" id="" placeholder="" maxlength="" required="">
+                        </div>
+                      </div> 
+                      
+                    <div class="d-grid gap-2 col-sm-6">
+                        <div class="mb-3">
+                            <label class="form-label">Opening Stock(QTY)</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="opening_stock_rm" minlength="" class="form-control" value="{{data.opening_stock_rm}}" id="opening_stock_rm" placeholder="" maxlength="" required="" oninput="calculate1()" >
+                            <div class="input-group-append">
+                                <select class="custom-select" name="cqunit">
+                                    <option value="kg" {% if data.cqunit == 'kg' %}selected{% endif %}>kg</option>
+                                    <option value="rim" {% if data.cqunit == 'rim' %}selected{% endif %}>rim</option>
+                                    <option value="sheet" {% if data.cqunit == 'sheet' %}selected{% endif %}>sheet</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                <div class="row d-flex">
+                    
+                    <div class="d-grid gap-2 col-sm-3"> 
+                        <div class="mb-3">
+                            <label class="form-label">Gsm</label>
+                            <input type="tel" name="cgsm" minlength="" class="form-control" value="{{data.cgsm}}" id="cgsm" placeholder="" maxlength="" oninput="calculate()" required="">
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-sm-3">
+                        <div class="mb-3">
+                            <label class="form-label">P.Width</label>
+                            <input type="text" name="cp_width" minlength="" class="form-control" value="{{data.cp_width}}" id="cp_width" placeholder="" maxlength="" oninput="calculate()" required="">
+                        </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-3"> 
+                        <div class="mb-3">
+                            <label class="form-label">P.Length</label>
+                            <input type="tel" name="cp_length" minlength="" class="form-control" value="{{data.cp_length}}" id="cp_length" placeholder="" maxlength=""oninput="calculate()"  required="">
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 col-sm-3">
+                        <div class="mb-3">
+                            <label class="form-label">Unit 1 Conversion</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="cunit1_conversion" minlength="" class="form-control" value="{{data.cunit1_conversion}}" id="cunit1_conversion" placeholder="" maxlength="" oninput="calculate()"required="" readonly/>
+                            <div class="input-group-append">
+                                <select class="custom-select" name="cmunit1">
+                                    
+                                    <option value="kg/rim" {% if data.cmunit1 == 'kg/rim' %}selected{% endif %}>kg/rim</option>
+                                    <option value="rim/kg" {% if data.cmunit1 == 'rim/kg' %}selected{% endif %}>rim/kg</option>
+                                    <!-- <option value="sheet">sheet</option> -->
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+                   <div class="row d-flex">
+                    <div class="gap-2 col-sm-6">
+                        <div class="mb-3">
+                        <div class="form-group">
+                            <label style="color: black; margin-right: 300px;">Waste<span style="color: red;"></span></label>
+                             <select style="color: black;" width="50" name="cWaste" id="cWaste"  value="{{data.cWaste}}" class="form-control">
+                             <option value="" disabled selected>Select Waste</option>
+                              <option value="yes" {% if data.cWaste == 'yes' %}selected{% endif %}>Yes</option>
+                             <option value="no" {% if data.cWaste == 'no' %}selected{% endif %}>No</option>
+                             </select>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="gap-2 col-sm-6">
+                        <div class="mb-3" id="wastePercentageContainer" style="display: none;">
+                            <div class="form-group">
+                                <label style="color: black; margin-right: 230px;">Waste Percentage<span style="color: red;"></span></label>
+                                <input style="color: black;" width="50" type="number" placeholder=""  value="{{data.cwaste_percent}}" name="cwaste_percent" id="cwaste_percent" class="form-control" oninput="updateUnit1WithWaste() "  maxlength="" value="" >
+                            </div>
+                        </div>
+                    </div>
+                    </div> <br>
+                   <div style="color: black; margin-center: 200px;"><p><b>Conversion</b></p></div>
+                                            
+
+                   <div class="row d-flex">
+                                           
+                      <div class="gap-2 col-sm-4">
+
+                        <div class="mb-3">
+                            <label class="form-label">Unit2</label>
+                            <div class="input-group mb-3">
+                                <select class="form-control" name="cunit2" id="unit2" style="width:100%;" required>
+                                    <option disabled selected value>Select </option>
+                                    {% for i in data2 %}
+                                        {% if data2|length > 1 and forloop.first %}
+                                        <option value="{{ i.unit_name_master }}" {% if  i.unit_name_master  == data.cunit2 %}selected{% endif %}>{{  i.unit_name_master }}</option>
+                                        {% else %}
+                                        <option value="{{ i.unit_name_master }}" {% if  i.unit_name_master  == data.cunit2 %}selected{% endif %}>{{  i.unit_name_master }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <label class="form-label">Conversion Factor</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="conversion_factor1" minlength="" class="form-control" value="{{data.conversion_factor1}}" id="conversion_factor1" placeholder="" maxlength="" required="" oninput="calculate1()" >
+                            <div class="input-group-append">
+                            <select class="custom-select" name="conversion_unit1" id="conversion_unit1" >
+                                <option disabled selected value>Select </option>
+                                <option value="Kg/Rims" {% if data.conversion_unit1 == 'Kg/Rims' %}selected{% endif %}>Kg/Rims</option>
+                                <!-- <option value="Rims/Kg" {% if data.conversion_unit1 == 'Rims/Kg' %}selected{% endif %}>Rims/Kg</option> -->
+                                
+                                
+                            </select>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                    <div class="gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <label class="form-label">Opening Stock</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="opening_stock1" id="opening_stock1" minlength="" class="form-control" value="{{data.opening_stock1}}"  placeholder="" maxlength="" required=""  oninput="calculate1()" readonly/>
+                            <div class="input-group-append">
+
+                                <select class="custom-select" name="opening_unit1" id="opening_unit1" >
+                                    <option disabled selected value>Select </option>
+                                    <option value="Rims" {% if data.opening_unit1 == 'Rims' %}selected{% endif %}>Rims</option>
+                                   
+                                    
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                   
+                    
+                <div class="row d-flex">
+                    <div class="gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label style="color: black;">Unit3<span style="color: red;">*</span></label>
+                                <div class="input-group mb-3">
+                                    <select class="form-control" name="cunit3" id="cunit3" style="width:100%;" required>
+                                        <option disabled value>Select</option>
+                                        {% for i in data2 %}
+                                            {% if i.unit_name_master == data.cunit3 %}
+                                                <option selected>{{ i.unit_name_master }}</option>
+                                            {% else %}
+                                                <option>{{ i.unit_name_master }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+
+                    <div class="gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <label class="form-label">Conversion Factor</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="cmunit2" minlength="" class="form-control" value="{{data.cmunit2}}" id="cmunit2" placeholder="" maxlength="" required="" oninput="calculate1()" >
+                            <div class="input-group-append">
+                            <select class="custom-select" name="cqunit2" id="cqunit2" >
+                                <option disabled selected value>Select </option>
+                                <!-- <option value="Kg/Sheet" {% if data.cqunit2 == 'Kg/Sheet' %}selected{% endif %}>Kg/Sheet</option>
+                                <option value="Sheet/Kg" {% if data.cqunit2 == 'Sheet/Kg' %}selected{% endif %}>Sheet/Kg</option>
+                                <option value="Rims/Sheet" {% if data.cqunit2 == 'Rims/Sheet' %}selected{% endif %}>Rims/Sheet</option>
+                                <option value="Sheet/Rims" {% if data.cqunit2 == 'Sheet/Rims' %}selected{% endif %}>Sheet/Rims</option> -->
+                                <option value="Kg/Gruce" {% if data.cqunit2 == 'Kg/Gruce' %}selected{% endif %}>Kg/Gruce</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                    <div class="gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <label class="form-label">Opening Stock</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="cunit2_conversion" id="cunit2_conversion" minlength="" class="form-control" value="{{data.cunit2_conversion}}"  placeholder="" maxlength="" required=""  oninput="calculate1()" readonly/>
+                            <div class="input-group-append">
+                                <select class="custom-select" name="cqunit3" id="qunit3" >
+                                    <option disabled selected value>Select </option>
+                                    <!-- <option value="Sheet" {% if data.cqunit3 == 'Sheet' %}selected{% endif %}>Sheet</option> -->
+                                    <option value="Gruce" {% if data.cqunit3 == 'Gruce' %}selected{% endif %}>Gruce</option>
+                                    
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row d-flex">
+                                           
+                      <div class=" gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <label class="form-label">Unit4</label>
+                            <div class="input-group mb-3">
+                                <select class="form-control" name="unit4" id="unit4" style="width:100%;" required>
+                                    <option disabled selected value>Select </option>
+                                    {% for i in data2 %}
+                                        {% if data2|length > 1 and forloop.first %}
+                                        <option value="{{ i.unit_name_master }}" {% if  i.unit_name_master  == data.unit4 %}selected{% endif %}>{{  i.unit_name_master }}</option>
+                                        {% else %}
+                                        <option value="{{ i.unit_name_master }}" {% if  i.unit_name_master  == data.unit4%}selected{% endif %}>{{  i.unit_name_master }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <label class="form-label">Conversion Factor</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="conversion_factor2" minlength="" class="form-control" value="{{data.conversion_factor2}}" id="conversion_factor2" placeholder="" maxlength="" required="" oninput="calculate1()" >
+                            <div class="input-group-append">
+                            <select class="custom-select" name="conversion_unit2"  >
+                                <option disabled selected value>Select </option>
+                                <!-- <option value="Kg/Sheet" {% if data.conversion_unit2 == 'Kg/Sheet' %}selected{% endif %}>Kg/Sheet</option>
+                                <option value="Sheet/Kg" {% if data.conversion_unit2 == 'Sheet/Kg' %}selected{% endif %}>Sheet/Kg</option>
+                                <option value="Rims/Sheet" {% if data.conversion_unit2 == 'Rims/Sheet' %}selected{% endif %}>Rims/Sheet</option>
+                                <option value="Sheet/Rims" {% if data.conversion_unit2 == 'Sheet/Rims' %}selected{% endif %}>Sheet/Rims</option>
+                                <option value="Gruce/Kg" {% if data.conversion_unit2 == 'Gruce/Kg' %}selected{% endif %}>Gruce/Kg</option>
+                                <option value="Kg/Gruce" {% if data.conversion_unit2 == 'Kg/Gruce' %}selected{% endif %}>Kg/Gruce</option>
+                                <option value="Gruce/Rims" {% if data.conversion_unit2 == 'Gruce/Rims' %}selected{% endif %}>Gruce/Rims</option>
+                                <option value="Rims/Gruce" {% if data.conversion_unit2 == 'Rims/Gruce' %}selected{% endif %}>Rims/Gruce</option>
+                                <option value="Gruce/Sheet" {% if data.conversion_unit2 == 'Gruce/Sheet' %}selected{% endif %}>Gruce/Sheet</option>
+                                <option value="Sheet/Gruce" {% if data.conversion_unit2 == 'Sheet/Gruce' %}selected{% endif %}>Sheet/Gruce</option> -->
+                                <option value="Sheet/Rims" {% if data.conversion_unit2 == 'Sheet/Rims' %}selected{% endif %}>Sheet/Rims</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                    <div class="gap-2 col-sm-4">
+                        <div class="mb-3">
+                            <label class="form-label">Opening Stock</label>
+                            <div class="input-group mb-3">
+                            <input type="tel" name="opening_stock2" id="opening_stock2" minlength="" class="form-control" value="{{data.opening_stock2}}"  placeholder="" maxlength="" required="" oninput="calculate1()"  readonly/>
+                            <div class="input-group-append">
+                                <select class="custom-select" name="opening_unit2" id="opening_unit2" >
+                                    <option disabled selected value>Select </option>
+                                    <!-- <option value="Gruce" {% if data.opening_unit2 == 'Gruce' %}selected{% endif %}>Gruce</option> -->
+                                    <option value="Sheets" {% if data.opening_unit2 == 'Sheets' %}selected{% endif %}>Sheets</option>
+                                    
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                   
+                    
+                    
+                    <div class="col-md-12" style="text-align: center;">
+                       <button class="btn btn-primary" style="background-color:mediumaquamarine; ">
+                            <a href="{% url 'cover_rawmaterial' %}" style="color: white;">Back</a>
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;">Save</button>
+                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function calculate1() {
+            // Get the values from the input fields
+            var openingStockRM = parseFloat(document.getElementById("opening_stock_rm").value);
+            var conversionFactor = parseFloat(document.getElementById("conversion_factor1").value);
+            var conversionFactor1 = parseFloat(document.getElementById("cmunit2").value);
+            var conversionFactor2 = parseFloat(document.getElementById("conversion_factor2").value);
+    
+            // Check if openingStockRM and conversionFactor are valid numbers
+            if (!isNaN(openingStockRM) && !isNaN(conversionFactor)) {
+                // Perform the calculation for opening_stock1
+                var openingStock1 = openingStockRM / conversionFactor;
+    
+                // Display the result in the "opening_stock1" field
+                document.getElementById("opening_stock1").value = openingStock1.toFixed(2); // Adjust the precision as needed
+            }
+    
+            // Check if conversionFactor and conversionFactor1 are valid numbers
+            if (!isNaN(openingStockRM) && !isNaN(conversionFactor1)) {
+                // Perform the calculation for unit2_conversion
+                var openingStock2 = openingStockRM / conversionFactor1;
+    
+                // Display the result in the "unit2_conversion" field
+                document.getElementById("cunit2_conversion").value = openingStock2.toFixed(2); // Adjust the precision as needed
+            }
+            if (!isNaN(openingStock2) && !isNaN(conversionFactor2)) {
+                // Perform the calculation for unit2_conversion
+                var openingStock3 = openingStock2 * conversionFactor2;
+    
+                // Display the result in the "unit2_conversion" field
+                document.getElementById("opening_stock2").value = openingStock3.toFixed(2); // Adjust the precision as needed
+            }
+        }
+    </script>
+    <script>
+        function calculate() {
+            var gsm = parseFloat(document.getElementById('cgsm').value) || 0;
+            var pWidth = parseFloat(document.getElementById('cp_width').value) || 0;
+            var pLength = parseFloat(document.getElementById('cp_length').value) || 0;
+    
+            var unit1Conversion = (gsm * pWidth * pLength) / 20000;
+    
+            // Update the unit1_conversion field
+            document.getElementById('cunit1_conversion').value = unit1Conversion.toFixed(2);
+        }
+    
+        function updateUnit1WithWaste() {
+            var wastePercent = parseFloat(document.getElementById('cwaste_percent').value) || 0;
+    
+            // Calculate the new unit1_conversion with waste percentage
+            var newUnit1Conversion = calculateUnit1WithWaste(wastePercent);
+    
+            // Update the unit1_conversion field
+            document.getElementById('cunit1_conversion').value = newUnit1Conversion.toFixed(2);
+        }
+    
+        function calculateUnit1WithWaste(wastePercent) {
+            var gsm = parseFloat(document.getElementById('cgsm').value) || 0;
+            var pWidth = parseFloat(document.getElementById('cp_width').value) || 0;
+            var pLength = parseFloat(document.getElementById('cp_length').value) || 0;
+    
+            var unit1Conversion = (gsm * pWidth * pLength) / 20000;
+    
+            // Calculate the new unit1_conversion with waste percentage
+            var newUnit1Conversion = unit1Conversion + (wastePercent / 100);
+    
+            return newUnit1Conversion;
+        }
+    
+        // Add event listener to cwaste_percent field for input changes
+        document.getElementById('cwaste_percent').addEventListener('input', updateUnit1WithWaste);
+    
+        // Add event listener to cwaste_percent field for delete key press
+        document.getElementById('cwaste_percent').addEventListener('keydown', function (event) {
+            // Check if the pressed key is the delete key
+            if (event.key === 'Delete' || event.key === 'Backspace') {
+                // If wastePercent is not a number (e.g., empty or non-numeric), recalculate unit1_conversion without waste
+                var newUnit1Conversion = calculateUnit1WithWaste(0);
+    
+                // Update the unit1_conversion field
+                document.getElementById('cunit1_conversion').value = newUnit1Conversion.toFixed(2);
+            }
+        });
+    </script>
+    
+    
+  
+    
+    
+    
+    {% comment %} <script>
+    $(document).ready(function () {
+        // Function to update cunit3 options based on unit2 and unit3 selections
+        function updateCUnit3Options() {
+            var unit2Value = $('#cunit2').val();
+            var unit3Value = $('#cunit3').val();
+            var unit3ConversionValue = $('#cmunit2').val();
+
+            // Logic to determine options for cqunit2 based on unit2 and unit3 values
+            var cqunit2Options = [];
+            if (unit2Value === 'Sheet(s)' && unit3Value === 'Rims') {
+                cqunit2Options = ['Sheet(s)/Rims'];
+            } else if (unit2Value === 'Rims' && unit3Value === 'Sheet(s)') {
+                cqunit2Options = ['Rims/Sheet(s)', 'Sheet(s)/Rims', 'Rims/Gruce(s)', 'Gruce(s)/Rims'];
+            } else if (unit2Value === 'Rims' && unit3Value === 'Gruce(s)') {
+                cqunit2Options = ['Rims/Gruce(s)'];
+            } else if (unit2Value === 'Gruce(s)' && unit3Value === 'Rims') {
+                cqunit2Options = ['Gruce(s)/Rims'];
+            } else {
+                // Default options when no specific conditions met
+                cqunit2Options = ['Default Option 1', 'Default Option 2'];
+            }
+
+            // Update cqunit2 options
+            var cqunit2Select = $('#cqunit2');
+            cqunit2Select.empty();
+            $.each(cqunit2Options, function (index, value) {
+                cqunit2Select.append('<option value="' + value + '">' + value + '</option>');
+            });
+
+            // Update cqunit3 based on cqunit2 selection
+            var cqunit3Select = $('#cqunit3');
+            var selectedCQUnit2 = $('#cqunit2 option:selected').text();
+            if (selectedCQUnit2 === 'Sheet(s)/Rims') {
+                cqunit3Select.val('Rims');
+            } else if (selectedCQUnit2 === 'Rims/Sheet(s)') {
+                cqunit3Select.val('Sheet(s)');
+            } else if (selectedCQUnit2 === 'Rims/Gruce(s)') {
+                cqunit3Select.val('Gruce(s)');
+            } else if (selectedCQUnit2 === 'Gruce(s)/Rims') {
+                cqunit3Select.val('Rims');
+            } else {
+                // Reset to default value if condition not met
+                cqunit3Select.val('');
+            }
+
+            // Update unit2_conversion based on cqunit3 selection
+            if (selectedCQUnit2 === 'Sheet(s)/Rims') {
+                $('#cunit2_conversion').val(500 / parseFloat(unit3ConversionValue));
+            } else if (selectedCQUnit2 === 'Rims/Sheet(s)') {
+                $('#cunit2_conversion').val(parseFloat(unit3ConversionValue) / 500);
+            } else if (selectedCQUnit2 === 'Rims/Gruce(s)') {
+                $('#cunit2_conversion').val(parseFloat(unit3ConversionValue) / 144);
+            } else if (selectedCQUnit2 === 'Gruce(s)/Rims') {
+                $('#cunit2_conversion').val(144 / parseFloat(unit3ConversionValue));
+            } else {
+                // Reset to default value if condition not met
+                $('#cunit2_conversion').val('');
+            }
+        }
+
+        // Call the update function on unit2, unit3, and unit3_conversion change
+        $('#cunit2, #cunit3, #cmunit2').on('change input', function () {
+            updateCUnit3Options();
+        });
+
+        // Initial call to populate cqunit2 options on page load
+        updateCUnit3Options();
+    });
+</script> {% endcomment %}
+
+    <script>
+        function updatePrintName() {
+            // Get the value of Raw Material Name
+            var rawMaterialName = document.getElementById('cmname').value;
+    
+            // Update the value of Print Name with the Raw Material Name
+            document.getElementById('cprint_name').value = rawMaterialName;
+        }
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the Waste dropdown and Waste Percentage container
+            var wasteDropdown = document.getElementById('cWaste');
+            var wastePercentageContainer = document.getElementById('wastePercentageContainer');
+    
+            // Add change event listener to the Waste dropdown
+            wasteDropdown.addEventListener('change', function () {
+                // Check if the selected value is 'yes'
+                if (wasteDropdown.value === 'yes') {
+                    // If 'yes', show the Waste Percentage container
+                    wastePercentageContainer.style.display = 'block';
+                } else {
+                    // If 'no', hide the Waste Percentage container
+                    wastePercentageContainer.style.display = 'none';
+                }
+            });
+    
+            // Trigger the change event initially to set the initial state
+            wasteDropdown.dispatchEvent(new Event('change'));
+        });
+    </script>
+
+    {% endblock %}

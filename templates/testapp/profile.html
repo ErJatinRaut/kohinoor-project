@@ -1,0 +1,58 @@
+{%extends 'base.html'%}
+{%block body_block%}
+<div class="container" >
+<h1>Profile</h1><hr>
+<form id="profile-form" action="" method="post" style="margin-left: 200px;">
+    {%csrf_token%}
+    {{form.as_p}}
+
+    {% comment %} <input type="submit" class="btn btn-success" value="Save" > {% endcomment %}
+    <a href="/dashboard/"><input type="button" class="btn btn-success" value="Back"></a>
+    {% comment %} <button type="submit" class="btn btn-success" value="Save" onclick="submitForm()">save</button> {% endcomment %}
+    <input type="submit" class="btn btn-success" value="Save" onclick="submitForm()">
+    
+
+</form>
+
+    
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Wait for the document to be ready
+  $(document).ready(function() {
+      // Handle form submission
+      $('#profile-form').submit(function(event) {
+          // Prevent the default form submission
+          event.preventDefault();
+
+          // Submit the form using AJAX
+          $.ajax({
+              url: $('#profile-form').attr('action'),
+              type: 'POST',
+              data: $('#profile-form').serialize(),
+              success: function(response) {
+                  // Show a success message using SweetAlert
+                  Swal.fire({
+                      title: "Success!",
+                      text: "Profile updated successfully",
+                      icon: "success",
+                  }).then(function() {
+                      // Redirect to the dashboard
+                      window.location.href = "/dashboard/";
+                  });
+              },
+              error: function(error) {
+                  // Show an error message using SweetAlert if there's an issue
+                  Swal.fire({
+                      title: "Error!",
+                      text: "There was an error updating your profile",
+                      icon: "error",
+                  });
+              }
+          });
+      });
+  });
+</script>  
+
+{%endblock%}

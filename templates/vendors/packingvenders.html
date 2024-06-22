@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: lightcyan;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+}
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Packing Vendors Info</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color:mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Add Venders</button>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                      
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="color:black; background-color:#6e95fc;text-align:center;"><h4 style="color:white ; background-color: mediumaquamarine;">Create Vendor</h4></div>
+                                <hr style="color:black">
+                                <form method="POST" onsubmit="return myfun()" id="profile-form" >
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        <!-- <h4 class="modal-title" style="color:black;">Upload & Crop Image</h4> -->
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Organization Name<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input width="50" type="text" min="0" 
+                                                                name="porganization_name1" id="" class="form-control" maxlength="" value="" placeholder="Enter Organization Name" required oninput="this.value = this.value.replace(/[^a-z A-Z]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                 <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Mobile No<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                             <input type="tel" name="pvender_contact1" class="form-control" id="vender_contact" placeholder="Enter Mobile No" maxlength="10" style="width:200px;padding:6px;"  oninput="this.value = this.value.replace(/[^0-9]/g, '')" >
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Email Address<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="email" min="0" 
+                                                                name="pvender_email1" id="" class="form-control" maxlength="" value=""
+                                                                 placeholder="Enter Email" >
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                                                            
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Vender GSTIN No<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" type="text" pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$" 
+                                                              name="pvender_gstin_no1" id="gstin_input" class="form-control" maxlength="15" 
+                                                              value="" placeholder="Enter Gstin No">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Vender Group<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                          <select style="color: black;" width="50" type="textarea" min="0" 
+                                                                name="pvender_group1" id="vender_group" class="form-control" maxlength="" value="" placeholder="Enter Group">
+                                                                <option disabled selected value>Select</option>
+                                                                {% for i in grp %}
+                                                                <option value="{{i.group_type}}">{{i.group_type}}</option>
+                                                                {% endfor %}
+                                                            </select>   
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                 <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Address<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <!-- <input style="color:black ;" width="50" type="text" min="0" 
+                                                                name="vender_address" id="" class="form-control" maxlength="" value="" placeholder="Enter Address" oninput="this.value = this.value.replace(/[^a-z A-Z]/g, '').replace(/(\..*?)\..*/g, '$1');"> -->
+                                                                <textarea style="color:black ;" width="50" type="textarea" min="0" 
+                                                              name="pvender_address1" id="" class="form-control" maxlength="" value="" placeholder="Enter Address" ></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                
+                                                <div class="col-md-8 text-center"></div>
+                                                    <div class="col-md-12" style="padding-top:30px;">
+                                                      <button class="btn btn-primary" style="background-color:mediumaquamarine ; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                          {% comment %} <button type="button" class="btn btn-success" style="background-color:mediumaquamarine ; color:white;" onclick="submitForm()" >Save</button> {% endcomment %}
+                                                    <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;">
+                                            <th align="center">Sr.No</th>
+                                            <th align="center">GSTIN No</th>
+                                            <th align="center">Organization Name </th>
+                                            <th align="center">Mobile No </th>
+                                            <th align="center">Email</th> 
+                                            <th align="center">Vendor Group</th>
+                                            <th align="center">Address</th>
+                                            <th align="center">Vendors Created At</th>
+                                            <th align="center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td>
+                                                {{ i.pvender_gstin_no1 }}
+                                            </td>
+                                             <td >
+                                                {{ i.porganization_name1 }}
+                                            </td>
+                                            <td >
+                                                {{ i.pvender_contact1 }}
+                                            </td>
+                                            <td >
+                                                {{ i.pvender_email1 }}
+                                            </td> 
+                                            <td >
+                                                {{ i.pvender_group1 }}
+                                            </td>
+                                            <td>
+                                                {{i.pvender_address1}}
+                                            </td>     
+                                            <td >
+                                                {{ i.pvender_created_by1 }}
+                                            </td>                                                                                      
+                                            <td>
+                                                <div>
+                                                     <a  href="#popup1 {{i.id}}"><i class="bi bi-eye"></i></a>
+                                                    <div id="popup1 {{i.id}}" class="overlay">
+                                                        <div class="popup">
+                                                            <h4 style="background-color :mediumaquamarine;padding : 10px; color:white;">View Details</h4>
+                                                            <a class="close" href="#">&times;</a>
+                                                            <br><br>
+                                                            <div style = "color: black; font-size: 15px;" class="content">
+
+                                                               <span><b>Gstin No</b> = {{i.pvender_gstin_no1}}</span> <br><br>
+                                                               <span><b>Organization Name</b> = {{i.porganization_name1}}</span> <br><br> 
+                                                               <span><b>Mobile No</b> = {{i.pvender_contact1}}</span> <br><br>
+                                                               <span><b>Email</b> = {{i.pvender_email1}}</span> <br><br>
+                                                               
+                        
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    
+                                                    <a  href="/edit_packingvenders/{{i.id}}/"> <i class="bi bi-pencil-square"></i></a>
+                                                    <a  href="/delete_packingvenders/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                </div>
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+
+
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+      
+        
+           <script>
+            function handleFormSubmission() {
+                // Get the organization name input value
+                var organizationName = document.getElementById("c_organization_name").value;
+            
+                // You can make an AJAX request here to check if the organization name is duplicate
+                // If it's a duplicate, show an error popup; otherwise, show a success popup
+            
+                // For demonstration purposes, I'm simulating a successful submission and a duplicate organization name check
+                var isDuplicate = false; // Set this to true if it's a duplicate
+            
+                if (isDuplicate) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Duplicate Organization Name',
+                        text: 'The organization name already exists. Please choose a different name.',
+                        showConfirmButton: true, // Show the confirm button
+                        confirmButtonText: 'OK', // Text for the confirm button
+                    });
+                    return false; // Prevent form submission
+                } else {
+                    // Simulated successful submission
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Vendor Created ',
+                        text: 'The vendor has been created successfully.',
+                        showConfirmButton: true, // Show the confirm button
+                        confirmButtonText: 'OK', // Text for the confirm button
+                    }).then((result) => {
+                        // This code will be executed when the user clicks the confirm button
+                        if (result.isConfirmed) {
+                            // You can redirect the user or perform any other action here
+                        }
+                    });
+                    return true; // Allow form submission
+                }
+            }
+            </script>
+<script>
+      const inputElement = document.getElementById('gstin_input');
+  
+      inputElement.addEventListener('input', function() {
+          const gstinPattern = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+          const validInput = inputElement.value.match(gstinPattern);
+          if (!validInput) {
+              inputElement.setCustomValidity('Please enter a valid GSTIN with Two Numbers and five uppercase alphabets and four numbers and one alphabets and one numbers or alphabets and Z(one numbers or alphabets) example 07DDIPA9391G1ZC .');
+          } else {
+              inputElement.setCustomValidity('');
+          }
+      });
+  </script>
+    <script>
+      const inputElement = document.getElementById('vender_contact');
+  
+      inputElement.addEventListener('input', function() {
+          const maxLength = 10;
+          if (inputElement.value.length > maxLength) {
+              inputElement.value = inputElement.value.slice(0, maxLength);
+          }
+      });
+    </script>
+</body>  
+
+{% endblock %}

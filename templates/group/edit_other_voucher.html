@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    * {
+        font-family: Georgia;
+    }
+    .btn-no-underline {
+    text-decoration: none !important;
+}
+</style>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb mb-3 p-5" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Update Database Data</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="d-grid gap-2 col-sm-6">
+                            <!-- <div class="mb-3">
+                            <label style = "color: white;" class="form-label">customer ID</label>
+                            <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                        </div> -->
+                            <div class="mb-3">
+                                <label class="form-label">Contes</label>
+                                <input type="text" class="form-control radius-10" id="" name="contes"
+                                    value="{{data.contes}}" maxlength="30">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Dr.</label>
+                                <input type="text" class="form-control radius-10" id="" name="account_dr"
+                                    value="{{data.account_dr}}">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Cr. </label>
+                                <input type="text" name="account_cr" minlength="" class="form-control"
+                                    value="{{data.account_cr}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Debit/Credit</label>
+                                <input type="tel" name="Debit_credit" minlength="" class="form-control"
+                                    value="{{data.Debit_credit}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Account</label>
+                                <input type="text" class="form-control radius-10" id="" name="account"
+                                    value="{{data.account}}" maxlength="30">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Debit</label>
+                                <input type="text" class="form-control radius-10" id="" name="debit"
+                                    value="{{data.debit}}">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Credit</label>
+                                <input type="tel" name="credit" minlength="" class="form-control"
+                                    value="{{data.credit}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Inst Type</label>
+                                <input type="tel" name="inst_type" minlength="" class="form-control"
+                                    value="{{data.inst_type}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Inst No.</label>
+                                <input type="tel" name="inst_no" minlength="" class="form-control"
+                                    value="{{data.inst_no}}" id="" placeholder="" maxlength="">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" style="text-align: center;">
+                            
+                                    <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'contes' %}" style="color:white;" class="btn-no-underline">Back</a></button>
+
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color:mediumaquamarine; color:white;">Save</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+    {% endblock %}

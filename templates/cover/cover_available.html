@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>orders</title>
+    <style>
+        * {
+            font-family: Georgia;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 50px;
+            border: 1px solid #888;
+            width: 100%;
+        }
+
+
+        .select-style {
+            border-radius: 0.25rem;
+            border-color: black;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+            border-color: black;
+            padding-left: 10%;
+        }
+
+        .title h3 {
+
+            border-bottom: 2px solid blueviolet;
+            display: inline-block;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .title h5 {
+
+            display: inline-block;
+
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="page-breadcrumb  mb-3">
+                <div class="breadcrumb-title pe-3">Cover Available Info</div>
+                <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn" type="button"
+                        style="background-color: mediumaquamarine;"><i class="fa fa-plus"></i>&nbsp;Create Cover
+                        available</button>
+                </div>
+                <div id="myModal" class="modal">
+                    <div class="modal-content" style="background-color:lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span>                 -->
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading"
+                                style="color:black; background-color:mediumaquamarine;text-align:center;">
+                                <h4 style="color:white ;"> Cover Available </h4>
+                            </div>
+                            <hr style="color:black">
+                            <form id="form-container" method="POST" onsubmit="return myfun()">
+                              {% csrf_token %}
+                              <div class="panel-body" >
+                                  <div class="" >
+                                     
+                                      <div class="row" style="text-align: right;">
+                                          <div class="col-md-8"></div>
+                                          <div class="col-md-4">
+                                              <div class="form-group" >
+                                                  <div class="input-group">
+                                                      <input type="text" class="form-control mobile" name="production_date" id="date" placeholder="{% now 'Y-m-d' %}" value="" required max="{% now 'Y-m-d' %}" readonly />
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div> <br><br>   
+                                      <div class="">
+                                          <div class="row d-flex">
+  
+                                            <div  class="col-md-2" style = "padding:0; width: 194px;">
+                                                <div class="mb-0">
+                                                  
+                                                  <label for="particular_1" class="control-label" ><b style="font-size: 85%;"> Particular<span style="color:red;">*</span></b></label>
+                                                     <select class="form-control" name="particular_1" id="midium_1" style="border-radius: 0; " required onchange="updateOpeningStock()">
+                                                        <option disabled selected value>Select</option>
+                                                        {% for i in data2 %}
+                                                        
+                                                        <option value="{{i.code}}&nbsp;  *{{i.books_class}}&nbsp; *{{i.subject}}" data-opening-stock="{{i.cover}}">{{i.code}}&nbsp;  *{{i.books_class}}&nbsp; *{{i.subject}}</option>
+                                                        {% endfor %}
+                                                     </select>
+                                                    
+                                                  </div>
+                                              </div>
+                                              <div  class="col-md-2" style = "padding:0; width: 195px;">
+                                                <div class="mb-0">
+                                                  
+                                                    <label for="opening_stock_of_cover_1" class="control-label"><b style="font-size: 85%;">Opening Stock of Cover<span style="color:red;">*</span></b></label>
+                                                    <input type="number" class="form-control mobile" required name="opening_stock_of_cover_1" id="quantity"  readonly style="border-radius: 0;"/>
+                                                </div>
+                                            </div>
+                                            <div  class="col-md-2" style = "padding:0; width: 211px;">
+                                                <div class="mb-0">
+                                                  
+                                                    <label for="cover_recived_after_cutting_1" class="control-label"><b style="font-size: 85%;">Cover recived after cutting<span style="color:red;">*</span></b></label>
+                                                    <input type="number" class="form-control mobile" required name="cover_recived_after_cutting_1" id="code_1" oninput="calculateAmount(1)" style="border-radius: 0;"/>
+                                                </div>
+                                            </div>
+                                            <div  class="col-md-2" style = "padding:0; width: 198px;">
+                                                <div class="mb-0">
+                                                  
+                                                  
+                                                    <label for="cover_issued_for_pasting_1" class="control-label"><b style="font-size: 85%;">Cover issued binders<span style="color:red;">*</span></b></label>
+                                                    <input type="number" class="form-control mobile" required name="cover_issued_for_pasting_1" id="class_name_1" oninput="calculateAmount(1)" style="border-radius: 0;"/>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div  class="col-md-2" style = "padding:0; width: 198px;">
+                                                <div class="mb-0">
+                                                  
+                                                  
+                                                    <label for="cover_returned_by_paster_1" class="control-label"><b style="font-size: 85%;">Cover returned by paster<span style="color:red;">*</span></b></label>
+                                                    <input type="number" class="form-control mobile" required name="cover_returned_by_paster_1" id="brand_name_1" oninput="calculateAmount(1)" style="border-radius: 0;" />
+                                                    
+                                                </div>
+                                            </div>
+                                            <div  class="col-md-2" style = "padding:0; width: 198px;">
+                                                <div class="mb-0">
+                                                  
+                                                <label for="cover_balance_1" class="control-label"><b style="font-size: 85%;">Cover Balance</b></label>
+                                                <input type="text" class="form-control mobile" name="cover_balance_1" id="subject_1"  onselect="calculateFormsPerSet()" readonly style="border-radius: 0;"  />
+                                            </div>
+                                            </div>
+
+                                            <div class="col-md-2" style="padding: 0; width: 100px;" >
+                                                <a href="#"  style="color: transparent;" >Remove</a>
+                                                </div>
+
+                                        </div>
+
+                                        <div class="input_fields_container mb-3">
+                                            <!-- Newly added items will be appended here -->
+                                        </div>
+  
+                                       
+                                       
+                                        
+                                        <div class="col-md-12 text-center" style="margin-bottom: 10px;">
+                                            <button class="btn btn-primary btn-sm " id="add_more_button"
+                                                style="background-color:mediumaquamarine;">Add New Items</button>
+                                        </div>
+                                       
+
+                                        <!-- <div class="col-md-8 text-center"></div> -->
+                                        <div class="col-md-12 text-center ms-3 mt-3">
+                                            <!-- <div class="text-center mt-3 mb-3"> -->
+                                                <a href="{{ form.get_cancel_link }}" >
+                                                      <button type="button" class="btn btn-primary" style="background-color: mediumaquamarine; color:white; pointer-events: auto;">Back</button>
+                                                  </a>
+                                                <button type="submit" class="btn btn-primary" name="create_form_btn"
+                                                    value="save_cashmemo_btn"
+                                                    style="background-color:mediumaquamarine;">Create</button>
+
+                                                <button type="button" class="btn btn-primary close"
+                                                    data-dismiss="modal">Close</button>
+                                            <!-- </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" >
+              <div class="row" style="text-align: center;" >
+                  <div class="col-md-11" >
+                      <div class="table-responsive">
+                          <table  class="display table table-hover table-striped table-bordered" >
+                              <thead>
+                                  <tr style="text-align: center; background-color: lightcyan;">
+                                      <th align="center">Sr.No</th>
+                                      <th align="center">Particulars</th>
+                                      <th align="center">Opening Stock of Cover</th>
+                                      <th align="center">Cover Received after Cutting</th>
+                                      <th align="center">Cover issued for Pasting/Binders</th>
+                                      <th align="center">Cover Returned by Paster</th>
+                                      <th align="center">Cover Balance</th>
+                                      <th align="center">Action</th>
+                                     
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for i in data %}
+                                    
+                                  <tr >
+                                      <td>{{ forloop.counter }}</td> 
+                                      <td>{{i.particular_1}}</td>
+                                      <td>{{ i.opening_stock_of_cover_1}}</td>
+                                      <td>{{i.cover_recived_after_cutting_1}}</td>
+                                     
+                                      
+                                      <td>{{ i.cover_issued_for_pasting_1 }}</td> 
+                                      
+                                      <td >{{ i.cover_returned_by_paster_1 }}</td> 
+                                      <td >{{ i.cover_balance_1 }}</td>
+                                       <td>
+                                                
+                                                    </div>
+                                                    <a  href="/view_cover_available/{{i.id}}/"> <i class="bi bi-eye"></i></a> 
+                                                    <a  href="/delete_cover_available/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                     
+                                                </div>
+                                            </td> 
+                                  </tr>
+                                  {% endfor %}
+                                 
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <script>
+            function calculateAmount(index) {
+                var opening_stock_of_cover = parseInt(document.getElementsByName('opening_stock_of_cover_1' )[0].value) || 0;
+                var cover_recived_after_cutting = parseInt(document.getElementsByName('cover_recived_after_cutting_1')[0].value) || 0;
+                var cover_issued_for_pasting = parseInt(document.getElementsByName('cover_issued_for_pasting_1')[0].value) || 0;
+                var cover_returned_by_paster = parseInt(document.getElementsByName('cover_returned_by_paster_1')[0].value) || 0;
+
+
+                var total = opening_stock_of_cover + cover_recived_after_cutting - cover_issued_for_pasting - cover_returned_by_paster;
+    
+                document.getElementsByName('cover_balance_1')[0].value = total.toFixed(2);
+
+            }
+    
+            function calculateFormsPerSet() {
+                // Add any additional calculation logic if needed
+            }
+        </script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    function updateOpeningStock() {
+        var dropdown = document.getElementById("midium_1");
+        var selectedOption = dropdown.options[dropdown.selectedIndex];
+        console.log(selectedOption);  // Log the selected option
+        var openingStock = selectedOption.getAttribute("data-opening-stock");
+        console.log(openingStock);    // Log the opening stock value
+    
+        // Update the opening stock input field
+        document.getElementById("quantity").value = openingStock;
+    }
+    </script>
+
+<script>
+    $(document).ready(function () {
+        var max_fields_limit = 11;
+        var x = 2;
+
+        function calculateAmount(index) {
+            var opening_stock_of_cover = parseFloat($('input[name="opening_stock_of_cover_' + index + '"]').val()) || 0;
+            var cover_recived_after_cutting = parseFloat($('input[name="cover_recived_after_cutting_' + index + '"]').val()) || 0;
+            var cover_issued_for_pasting = parseFloat($('input[name="cover_issued_for_pasting_' + index + '"]').val()) || 0;
+            var cover_returned_by_paster = parseFloat($('input[name="cover_returned_by_paster_' + index + '"]').val()) || 0;
+
+            var total = (opening_stock_of_cover + cover_recived_after_cutting) - (cover_issued_for_pasting + cover_returned_by_paster);
+
+            $('input[name="cover_balance_' + index + '"]').val(total.toFixed(2));
+        }
+
+        function updateDropdowns(index) {
+            // Add your logic to update dropdowns based on the selected value
+            var opening_stock_of_cover = parseFloat($('input[name="opening_stock_of_cover_' + index + '"]').val()) || 0;
+            var cover_recived_after_cutting = parseFloat($('input[name="cover_recived_after_cutting_' + index + '"]').val()) || 0;
+            var cover_issued_for_pasting = parseFloat($('input[name="cover_issued_for_pasting_' + index + '"]').val()) || 0;
+            var cover_returned_by_paster = parseFloat($('input[name="cover_returned_by_paster_' + index + '"]').val()) || 0;
+
+            var total = (opening_stock_of_cover + cover_recived_after_cutting) - (cover_issued_for_pasting + cover_returned_by_paster);
+
+            $('input[name="cover_balance_' + index + '"]').val(total.toFixed(2));
+            // ...
+
+            // Add an event listener for quantity fields to update forms-per-set
+            $('input[name="opening_stock_of_cover_' + index + '"]').on("input", function () {
+                calculateAmount(index);
+            });
+            $('input[name="cover_recived_after_cutting_' + index + '"]').on("input", function () {
+                calculateAmount(index);
+            });
+            $('input[name="cover_issued_for_pasting_' + index + '"]').on("input", function () {
+                calculateAmount(index);
+            });
+            $('input[name="cover_returned_by_paster_' + index + '"]').on("input", function () {
+                calculateAmount(index);
+            });
+        }
+
+        $('#add_more_button').click(function (e) {
+            e.preventDefault();
+            if (x < max_fields_limit) {
+                x++;
+                $('.input_fields_container').append(
+                    '<div class=" row">' +
+                        '<div class="col-md-2  description" style="padding:0; width:194px;">' +
+                                '<div class="mb-0">'+
+                               '<select class="form-control mobile" name="particular_' + x.toString() + '" id="medium_' + x.toString() + '"  required style="border-radius: 0; ">' +
+                    '<option disabled selected value>Select</option>' +
+                    '{% for i in data2 %}' +
+                    '<option>{{i.code}}&nbsp;  *{{i.books_class}}&nbsp; *{{i.subject}}</option>' +
+                    '{% endfor %}' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-2  description" style="padding:0; width:196px;">' +
+                                '<div class="mb-0">'+
+                                     '<input type="number" class="form-control mobile" required name="opening_stock_of_cover_' + x.toString() + '" id="quantity_' + x.toString() + '" oninput="calculateAmount(' + x + ')" style="border-radius: 0; ">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-2  description" style="padding:0; width:210px;">' +
+                                '<div class="mb-0">'+
+                   
+                    '<input type="number" class="form-control mobile" required name="cover_recived_after_cutting_' + x.toString() + '" id="code_' + x.toString() + '" oninput="calculateAmount(' + x + ')" style="border-radius: 0; ">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-2  description" style="padding:0; width:198px;">' +
+                                '<div class="mb-0">'+
+                   
+                    '<input type="number" class="form-control mobile" required name="cover_issued_for_pasting_' + x.toString() + '" id="class_name_' + x.toString() + '" oninput="calculateAmount(' + x + ')" style="border-radius: 0; ">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-2  description" style="padding:0; width:198px;">' +
+                                '<div class="mb-0">'+
+                    
+                    '<input type="number" class="form-control mobile" required name="cover_returned_by_paster_' + x.toString() + '" id="brand_name_' + x.toString() + '" oninput="calculateAmount(' + x + ')" style="border-radius: 0;">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-2  description" style="padding:0; width:198px;">' +
+                                '<div class="mb-0">'+
+                   
+                    '<input type="text" class="form-control mobile" name="cover_balance_' + x.toString() + '" id="subject_' + x.toString() + '" onselect="calculateFormsPerSet()" readonly style="border-radius: 0;">' +
+                    '</div>' +
+                    '</div>' +
+                    '<a href="#" class="remove_field col" style="">Remove</a>' +
+                    '</div>'
+                );
+                updateDropdowns(x);
+            }
+        });
+
+        $('.input_fields_container').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+        });
+
+        // Add an event listener for the code fields to update other fields
+        $('.input_fields_container').on("change", "select[name^='particular_']", function () {
+            const inputName = $(this).attr('name');
+            const index = inputName.split('_')[1];
+            updateDropdowns(index);
+        });
+
+        // Your existing script for table and other functionality goes here...
+
+    });
+</script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+           
+            
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
+
+            
+
+            <script>
+                // Get the modal
+                var modal = document.getElementById("myModal");
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("myBtn");
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks the button, open the modal 
+                btn.onclick = function () {
+                    modal.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    // ...
+            
+                    function updateDropdowns(index) {
+                        // Add an event listener for the Particular dropdown to update Cover Balance
+                        $('#particular_' + index).on('change', function () {
+                            var selectedSubject = $(this).val();
+                            var coverBalance = $(this).find(':selected').data('cover-balance');
+            
+                            // Update the Cover Balance input field with the embedded cover balance
+                            $('input[name="cover_balance_' + index + '"]').val(coverBalance.toFixed(2));
+                        });
+            
+                        // ...
+                    }
+            
+                    // ...
+                });
+            </script>
+
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
+
+{% endblock %}

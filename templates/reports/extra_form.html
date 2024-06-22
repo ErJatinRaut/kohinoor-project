@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Extra Form</h1>
+    <form action="" method = "POST">
+        {% csrf_token %}
+         {% comment %} <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="vender" class="drop-down w-100">
+                        <option value="" class="" > Select Vendor </option>
+                        {% for i in data6 %}
+                        <option  class="dropdown-item" active>{{i.organization_name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br> {% endcomment %}
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="sub_brand" class="drop-down w-100">
+                        <option value="" class="" > Select Brand </option>
+                        {% for i in data1 %}
+                        <option  class="dropdown-item" active>{{i.brand_name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="stand" class="drop-down w-100">
+                        <option value="" class="" > Select Standard </option>
+                        {% for i in data2 %}
+                        <option  class="dropdown-item" active>{{i.class_name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="med" class="drop-down w-100">
+                        <option value="" class="" > Select Medium </option>
+                        {% for i in data3 %}
+                        <option  class="dropdown-item" active>{{i.medium}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <label for="">Select Month</label> -->
+                    <div class="dropdown">
+                        <select id="target" name="subject" class="drop-down w-100">
+                        <option value="" class="" > Select Subject </option>
+                        {% for i in data4 %}
+                        <option  class="dropdown-item" active>{{i.subject}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <input type="submit" value='search'>
+    </form><br>
+    <p>{{set_1}}</p>
+    <pre><h3>[Form1: {{form_1}}] [Form2: {{form_2}}]  [Form3: {{form_3}}] [Form4: {{form_4}}] [Form5: {{form_5}}] [Form6: {{form_6}}] [Form7: {{form_7}}] [Form8: {{form_8}}] [Form9: {{form_9}}][Form10: {{form_10}}] [Form11: {{form_11}}] [Form12: {{form_12}}]</h3> </pre>
+    <table border='1'>
+        <thead>
+            <td>Order Id</td>
+            <td>Brand Name</td>
+            <td>Standard</td>
+            <td>Medium</td>
+            <td>subject</td>
+            <td>Form 1</td>
+            <td>Form 2</td>
+            <td>Form 3</td>
+            <td>Form 4</td>
+            <td>Form 5</td>
+            <td>Form 6</td>
+            <td>Form 7</td>
+            <td>Form 8</td>
+            <td>Form 9</td>
+            <td>Form 10</td>
+            <td>Form 11</td>
+            <td>Form 12</td>    
+        </thead>
+        
+        {% for i in data13%}
+        <tr>
+            <td>{{i.order_id}}</td>
+            <td>{{i.brand_name_1}}</td>
+            <td>{{i.class_name_1}}</td>
+            <td>{{i.medium_1}}</td>
+            <td>{{i.subject_1}}</td>
+            <td>{{i.form1}}</td>
+            <td>{{i.form2}}</td>
+            <td>{{i.form3}}</td>
+            <td>{{i.form4}}</td>
+            <td>{{i.form5}}</td>
+            <td>{{i.form6}}</td>
+            <td>{{i.form7}}</td>
+            <td>{{i.form8}}</td>
+            <td>{{i.form9}}</td>
+            <td>{{i.form10}}</td>
+            <td>{{i.form11}}</td>
+            <td>{{i.form12}}</td>
+        </tr>
+        {% endfor %}
+      
+        {% comment %} <tr>
+            <td>{{my_list[0]}}</td>
+            <td>{{my_list[1]}}</td>
+            <td>{{my_list[2]}}</td>
+            <td>{{my_list[3]}}</td>
+            <td>{{my_list[4]}}</td>
+            <td>{{form_1}}</td>
+            <td>{{form_2}}</td>
+            <td>{{form_3}}</td>
+            <td>{{form_4}}</td>
+            <td>{{form_5}}</td>
+            <td>{{form_6}}</td>
+            <td>{{form_7}}</td>
+            <td>{{form_8}}</td>
+            <td>{{form_9}}</td>
+            <td>{{form_10}}</td>
+            <td>{{form_11}}</td>
+            <td>{{form_12}}</td>
+        </tr> {% endcomment %}
+     
+    </table> 
+</body>
+</html>

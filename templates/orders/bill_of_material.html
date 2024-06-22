@@ -1,0 +1,668 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<title>{% block title %}Customer{% endblock %}</title>
+
+<style>
+   *
+   {
+    font-family: Georgia;
+   }
+   .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid #06D85F;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: #06D85F;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h4 {
+  margin-top: 0;
+  color: #333;
+  /* font-family: Tahoma, Arial, sans-serif; */
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+  .box{
+    width: 70%;
+  }
+  .popup{
+    width: 70%;
+  }
+.modal-content{
+        width: 53%; / Adjust the width for smaller screens /
+      }
+}
+
+
+</style>
+<style type="text/css">
+  .select-style{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .form-control{
+    border-radius: 0.25rem;
+    border-color: black;
+  }
+  .clonable-field {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.clonable-field .col-md-4 {
+    flex-grow: 1;
+    margin-right: 10px; /* Adjust as needed to add spacing between columns */
+}
+.clonable-field1 {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.clonable-field1 .col-md-4 {
+    flex-grow: 1;
+    margin-right: 10px; /* Adjust as needed to add spacing between columns */
+}
+</style>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb  mb-3">
+            <div class="breadcrumb-title pe-3">Bill Of Material</div>
+            <hr>
+                <div class="d-grid gap-2  justify-content-md-end" style="margin-right: 50px;">
+                    <button class="btn btn-primary me-md-2" id="myBtn"  type="button" style="background-color: mediumaquamarine;"><i class="fa fa-plus" ></i>&nbsp;Create BOM</button>
+                    <!-- <button class="btn btn-primary me-md-2" id=""  type="button" src =><i class="fa fa-plus" ></i>&nbsp;Export PDF</button> -->
+                    {% comment %} <a href="{% url 'pdf_export' %}" class="btn btn-primary">Export PDF</a> {% endcomment %}
+
+                </div>
+                <!-- create -->
+                <div id="myModal" class="modal">
+
+
+
+                    
+                    <div class="modal-content" style="background-color: lightcyan;">
+                        <!-- <span class="close text-end mb-2" onclick="this.parentNode.style.display = 'none'; return false;" style="float: right; font-size: 20px; color:#00569d; cursor: pointer;">✕</span> -->
+                      
+                        <div class="panel panel-default">
+                            
+                            <div class="panel-heading" style="color:black; background-color:mediumaquamarine;text-align:center;"><h4 style="color:white ;">Create Bill of Material</h4></div>
+                                <hr style="color:black">
+                                <form method="POST"  id="profile-form1">
+                                    {% csrf_token %}
+                                    <div class="panel-body" align="center">
+                                        
+                                            <div class="row">
+                                            
+                                                <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name" class="control-label"><b>BOM Name<span style="color:red;">*</span></b></label>
+                                                    <div class="input-group mb-4">
+                                                        <input type="text" class="form-control" name="bom_name"   placeholder="Enter BOM Name" id="bom_name" style="width:100%;" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+ 
+                                             <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Alias<span style="color: red;">*</span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Alias"
+                                                                name="bom_alias" id="bom_alias" class="form-control" maxlength="" value=""
+                                                                required="" >
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Item Produce<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            
+                                                            <select class="form-control" name="bom_item_produce" id="bom_item_produce"
+                                                                style="width:100%;" required/>
+                                                                <option disabled selected value>Select </option>
+                                                                {% for i in data_combined %}
+                                                                <option>{{i.code}}&nbsp;&nbsp;{{i.books_class}}&nbsp;&nbsp;{{i.subject}}{{i.rmname}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                               <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        {% comment %} <label style="color:black ;">Quantity<span style="color: red;">*</span></label> {% endcomment %}
+                                                        <div class="input-group mb-2">
+                                                            <label style="color:black ;">Quantity<span style="color: red;">*</span></label><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <label style="color:black ; margin-left: 65px;">Unit<span style="color: red;">*</span></label><br>
+                                                        </div>
+                                                            <div class="input-group mb-2" style="margin-top: -19px;">
+                                                            <!-- {% comment %} <label style="color:black ;">Quantity<span style="color: red;">*</span></label><br> {% endcomment %} -->
+                                                            <!-- <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Quantity" name="bom_quantity" id="bom_quantity" class="form-control" maxlength="" value=""> -->
+                                                            
+
+                                                                <!-- {% comment %} <label style="color:black ;">Unit<span style="color: red;">*</span></label><br> {% endcomment %} -->
+                                                                <input style="color: black; " type="text" min="0" placeholder="Enter Unit"
+                                                                name="bom_quantity" id="bom_quantity" class="form-control" maxlength="" value="">
+
+                                                                <select class="form-control mx-2" name="bom_unit" id="bom_unit">
+                                                                <option disabled selected value>Select </option>
+                                                                {% for i in data7 %}
+                                                                <option>{{i.unit_name_master}}</option>
+                                                                {% endfor %}
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Expenses/Unit<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Expenses/unit"
+                                                                name="bom_exp" id="bom_exp" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Specify Default MC for item generated<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            
+                                                                <select name="bom_item_generated" id="bom_item_generated" class="form-control">
+                                                                <option disabled selected value>Select</option>
+                                                                {% for object in data2 %}
+                                                                <option value="{{object.centre_name}}">{{object.centre_name}}</option>
+                                                                {% endfor %}
+                                                              </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Specify Default MC for item consumed<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            
+                                                            <select name="bom_item_consumed_1" id="bom_item_consumed_1" class="form-control">
+                                                                <option disabled selected value>Select</option>
+                                                                {% for object in data2 %}
+                                                                <option value="{{object.centre_name}}">{{object.centre_name}}</option>
+                                                                {% endfor %}
+                                                              </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                               
+                                                    <div class="form-group">
+                                                        <label style="color:black ;">Raw Material Consumed<span style="color: red;"></span></label>
+                                                        <div class="input-group mb-4">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                <div class="row d-flex" style="margin-left: 0px;">
+                                                
+                                                <div class="col" style="width:100px; padding:0;">
+                                                   
+                                                        <label style="color:black ;">Item Name<span style="color: red;"></span></label>
+                                                        <div class="input-group ">
+                                                            
+                                                                <select class="form-control" name="bom_item_name_1" id="bom_item_name_1"
+                                                                style="width:100%;" >
+                                                                <option disabled selected value>Select Subject</option>
+                                                                {% for i in data_combined %}
+                                                                <option>{{i.code}}&nbsp;&nbsp;{{i.books_class}}&nbsp;&nbsp;{{i.subject}}{{i.rmname}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    
+                                                </div>
+                                                <div class="col" style="width:100px; padding:0;">
+                                                    
+                                                        <label style="color:black ;">Qty<span style="color: red;"></span></label>
+                                                        <div class="input-group">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Qty"
+                                                                name="bom_qty_1" id="bom_qty_1" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    
+                                                </div>
+                                                <div class="col" style="width:100px; padding:0;">
+                                                    
+                                                        <label style="color:black ;">Unit<span style="color: red;"></span></label>
+                                                        <div class="input-group">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter unit Name"
+                                                                name="bom_unit_1" id="bom_unit_1" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    
+                                                </div>
+                                                <a href="#" class="remove_field col-md-1"  style="margin-left:1px; text-align:right; color: transparent;">Remove</a>
+                                                <!-- Add this hidden template in your HTML -->
+                                                <div id="template" class="clonable-field" style="display: none;">
+                                                    <div class="col" style="padding:0;">
+                                                       
+                                                           
+                                                           <div class="mb-0">
+                                                                
+                                                                <select class="form-control" name="bom_item_name" id="bom_item_name"
+                                                                style="width:100%;" >
+                                                                <option disabled selected value>Select Subject</option>
+                                                                {% for i in data_combined %}
+                                                                <option>{{i.code}}&nbsp;&nbsp;{{i.books_class}}&nbsp;&nbsp;{{i.subject}}{{i.rmname}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="col" style="padding:0;">
+                                                        
+                                                           
+                                                            <div class="mb-0">
+                                                                <input type="text" name="bom_qty"  width="50" class="form-control" placeholder="Enter Qty" >
+                                                            </div>
+                                                       
+                                                    </div>
+
+                                                    <div class="col" style="padding:0;">
+                                                        
+                                                            
+                                                            <div class="mb-0">
+                                                                <input type="text" name="bom_unit" width="50" class="form-control" placeholder="Enter Unit" >
+                                                            </div>
+                                                        
+                                                       
+                                                    </div><br>
+                                                     <a href="#" class="remove_field col-md-1"  style="margin-left:1px; text-align:right;">Remove</a>
+                                                      
+                                                 </div>   
+                                                        
+                                                 
+
+                                                </div>
+                                                <div class="input_fields_container"></div>
+                                                <br>
+                                                <div>
+
+                                                <button class="btn btn-primary" id="add_more_button" style="background-color:mediumaquamarine;">Add New Items</button>
+                                                
+                                                </div><br><br>
+
+                                                
+                                                <div class="form-group">
+                                                    <label style="color:black ;">By Product Generated<span style="color: red;"></span></label>
+                                                    <div class="input-group mb-4">
+                                                        
+                                                    </div>
+                                                </div>
+                                               <div class="row d-flex" style="margin-left: 0px;">
+                                                <div class="col" style="padding:0;">
+                                                   
+                                                        <label style="color:black ;">Item Name<span style="color: red;"></span></label>
+                                                       <div class="mb-0">
+                                                            {% comment %} <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Item Name"
+                                                                name="bom_generated_item" id="bom_generated_item" class="form-control" maxlength="" value=""> {% endcomment %}
+                                                                <select class="form-control" name="bom_generated_item_1" id="bom_generated_item"
+                                                                style="width:100%;" >
+                                                                <option disabled selected value>Select Subject</option>
+                                                                
+                                                                {% for i in data_combined %}
+                                                                <option>{{i.code}}&nbsp;&nbsp;{{i.books_class}}&nbsp;&nbsp;{{i.subject}}{{i.rmname}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                   
+                                                </div>
+                                                <div class="col" style="padding:0;">
+                                                    
+                                                        <label style="color:black ;">Qty<span style="color: red;"></span></label>
+                                                        <div class="mb-0">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter Qty"
+                                                                name="bom_generated_qty_1" id="bom_generated_qty" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    
+                                                </div>
+                                                <div class="col" style="padding:0;">
+                                                   
+                                                        <label style="color:black ;">Unit<span style="color: red;"></span></label>
+                                                        <div class="mb-0">
+                                                            <input style="color: black;" width="50" type="text" min="0" placeholder="Enter unit"
+                                                                name="bom_generated_unit_1" id="bom_generated_unit" class="form-control" maxlength="" value="">
+                                                        </div>
+                                                    
+                                                </div>
+                                                <a href="#" class="remove_field col-md-1" style="margin-left:2px; text-align:right; color: transparent;">Remove</a>
+                                                
+                                               
+                                                 <div id="template1" class="clonable-field1" style="display: none;">
+                                                    <div class="col" style="padding:0;">
+                                                        
+                                                            
+                                                            <div class="mb-0">
+                                                                
+                                                                <select class="form-control" name="bom_generated_item" 
+                                                                style="width:100%;" >
+                                                                <option disabled selected value>Select Subject</option>
+                                                                {% for i in data_combined %}
+                                                                <option>{{i.code}}&nbsp;&nbsp;{{i.books_class}}&nbsp;&nbsp;{{i.subject}}{{i.rmname}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            </div>
+                                                       
+                                                    </div>
+
+                                                    <div class="col" style="padding:0;">
+                                                        
+                                                           
+                                                            <div class="mb-0">
+                                                                <input type="text" name="bom_generated_qty" class="form-control" placeholder="Enter Qty" >
+                                                            </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="col" style="padding:0;">
+                                                        
+                                                            
+                                                            <div class="mb-0">
+                                                                <input type="text" name="bom_generated_unit" class="form-control" placeholder="Enter Unit" >
+                                                            </div>
+                                                        
+                                                        
+                                                    </div><br>
+                                                    <a href="#" class="remove_field col-md-1" style="margin-left:2px; text-align:right;">Remove</a>
+                                                </div>
+                                                        
+                                                   
+                                                    
+                                                </div>
+                                                <div class="input_fields_container1"></div>
+                                                 
+                                                <div>
+                                                    <button class="btn btn-primary" id="add_more_button1" style="background-color:mediumaquamarine;">Add New Items</button>
+                                                   
+                                                </div><br>
+                                               
+                                                                              
+                                                <div class="col-md-8 text-center"></div>
+                                                    <div class="col-md-12" style="padding-top:30px;">
+                                                      <button class="btn btn-primary" style="background-color:mediumaquamarine ; "><a href="{{ form.get_cancel_link }}" style="color:white;" >Back</a></button>
+                                                      <input type="submit" class="btn btn-primary" style="background-color:mediumaquamarine ; color:white;" onsubmit="submitForm()" value="Save">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                <!-- table -->
+                <div class="card-body" style="margin-left: 20px;">
+                    <div class="row" style="text-align: center;" >
+                        <div class="col-md-11" >
+                            <div class="table-responsive">
+                                <table  class="display table table-hover table-striped table-bordered" >
+                                    <thead>
+                                        <tr style="text-align: center; background-color: lightcyan;">
+                                            <th align="center">Sr.No</th>
+                                            <th align="center">BOM</th>
+                                            <th align="center">Alias</th>
+                                            <th align="center">Item Produce</th>
+                                            <th align="center">Quantity</th>
+                                            <th align="center">Expenses/Unit</th>
+                                            <th align="center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in data %}
+                                        <tr >
+                                            <td >
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td >
+                                                {{ i.bom_name }}
+                                            </td>
+                                            <td>
+                                                {{ i.bom_alias }}
+                                            </td>
+                                            <td >
+                                                {{ i.bom_item_produce }}
+                                            </td>
+                                            <td >
+                                                {{ i.bom_quantity }}{{ i.bom_unit}}
+                                            </td> 
+                                            <td>
+                                                {{ i.bom_exp }}  
+                                            </td> 
+                                                                                                                             
+                                            <td>
+                                               
+                                                <a  href="/bill_of_material/{{i.id}}/"> <i class="bi bi-eye"></i></a> 
+                                                    <a  href="/delete_bill_of_material/{{i.id}}/"><i class="bi bi-archive"></i></a>
+                                                    
+                                                </div>
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
+    
+<script>
+  function submitForm() {
+    // Submit the form using AJAX
+    $.ajax({
+      url: $('#profile-form1').attr('action'),
+      type: 'POST',
+      data: $('#profile-form1').serialize(),
+      success: function(response) {
+        // Show a success message using SweetAlert
+        Swal.fire({
+          title: "Success!",
+          text: "Centre Added Successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      },
+      error: function(response) {
+        // Show an error message using SweetAlert
+        Swal.fire({
+          title: "Error!",
+          text: response.responseText,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    });
+  }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var max_fields_limit = 10;
+        var x = 1;
+
+        $('#add_more_button').click(function (e) {
+            e.preventDefault();
+            if (x < max_fields_limit) {
+                x++;
+
+                // Clone the template div
+                var newField = $('#template').clone();
+
+                // Update attributes and content with new values
+                newField.find('[name^="bom_item_name"]').attr('id', 'bom_item_name' + x).attr('name', 'bom_item_name' + x);
+                newField.find('[name^="bom_qty"]').attr('id', 'bom_qty' + x).attr('name', 'bom_qty' + x);
+                newField.find('[name^="bom_unit"]').attr('id', 'bom_unit' + x).attr('name', 'bom_unit' + x);
+
+                // Append the cloned field to the container
+                $('.input_fields_container').append(newField.show());
+            }
+        });
+
+        $('.input_fields_container').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).closest('.clonable-field').remove();
+            x--;
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var max_fields_limit = 10;
+        var x = 1;
+
+        $('#add_more_button1').click(function (e) {
+            e.preventDefault();
+            if (x < max_fields_limit) {
+                x++;
+
+                // Clone the template div
+                var newField = $('#template1').clone();
+
+                // Update attributes and content with new values
+                newField.find('[name^="bom_generated_item"]').attr('id', 'bom_generated_item' + x).attr('name', 'bom_generated_item' + x);
+                newField.find('[name^="bom_generated_qty"]').attr('id', 'bom_generated_qty' + x).attr('name', 'bom_generated_qty' + x);
+                newField.find('[name^="bom_generated_unit"]').attr('id', 'bom_generated_unit' + x).attr('name', 'bom_generated_unit' + x);
+
+                // Append the cloned field to the container
+                $('.input_fields_container1').append(newField.show());
+            }
+        });
+
+        $('.input_fields_container1').on("click", ".remove_field", function (e) {
+            e.preventDefault();
+            $(this).closest('.clonable-field1').remove();
+            x--;
+        });
+    });
+</script>
+
+
+
+</body>  
+
+{% endblock %}

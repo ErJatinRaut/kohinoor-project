@@ -1,0 +1,576 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>{% block title %}Edit Data{% endblock %}</title>
+<style>
+    * {
+        font-family: Georgia;
+    }
+    .btn-no-underline {
+    text-decoration: none !important;
+}
+</style>
+
+<body>
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--breadcrumb-->
+            <div class="page-breadcrumb  mb-3 p-5" style="background-color: lightcyan;">
+                <div class="breadcrumb-title pe-3">Edit Cover Scrap</div>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-6 ">
+                                <!-- <div class="mb-3">
+                                <label style = "color: white;" class="form-label">customer ID</label>
+                                <input type="text" class="form-control radius-10" id="" name= "id" value = "{{customer_data.id}}" readonly>
+                            </div> -->
+                                <div class="mb-3">
+                                    <label class="form-label">Voucher No</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_voucher_no"
+                                        value="{{data.cover_voucher_no}}" maxlength="30" required="">
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars1</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular1" id="cover_scrap_particular1">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular1 }}" selected>{{ data.cover_scrap_particular1 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY1</label>
+                                    <input type="tel" name="cover_scrap_qty1" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty1}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit1</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit1"
+                                        value="{{data.cover_scrap_unit1}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate1</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate1"
+                                        value="{{data.cover_scrap_rate1}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars2</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular2" id="cover_scrap_particular2">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular2 }}" selected>{{ data.cover_scrap_particular2 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY2</label>
+                                    <input type="tel" name="cover_scrap_qty2" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty2}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit2</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit2"
+                                        value="{{data.cover_scrap_unit2}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate2</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate2"
+                                        value="{{data.cover_scrap_rate2}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars3</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular3" id="cover_scrap_particular3">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular3 }}" selected>{{ data.cover_scrap_particular3 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY3</label>
+                                    <input type="tel" name="cover_scrap_qty3" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty3}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit3</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit3"
+                                        value="{{data.cover_scrap_unit3}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate3</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate3"
+                                        value="{{data.cover_scrap_rate3}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars4</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular4" id="cover_scrap_particular4">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular4 }}" selected>{{ data.cover_scrap_particular4 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY4</label>
+                                    <input type="tel" name="cover_scrap_qty4" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty4}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit4</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit4"
+                                        value="{{data.cover_scrap_unit4}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate4</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate4"
+                                        value="{{data.cover_scrap_rate4}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars5</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular5" id="cover_scrap_particular5">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular5 }}" selected>{{ data.cover_scrap_particular5 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY5</label>
+                                    <input type="tel" name="cover_scrap_qty5" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty5}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit5</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit5"
+                                        value="{{data.cover_scrap_unit5}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate5</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate5"
+                                        value="{{data.cover_scrap_rate5}}" required="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex">
+                            
+                        <div class="d-grid gap-2 col-sm-3">
+                            <div class="mb-3">
+                                <label class="form-label">Particulars6</label>
+                                <select type="text" class="form-control mobile" name="cover_scrap_particular6" id="cover_scrap_particular6">
+                                    {% if data %}
+                                        <option value="{{ data.cover_scrap_particular6 }}" selected>{{ data.cover_scrap_particular6 }}</option>
+                                    {% else %}
+                                        <option disabled selected value>Select Books</option>
+                                    {% endif %}
+                                    {% for i in data26 %}
+                                        <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-3 ">
+                            <div class="mb-3">
+                                <label class="form-label">QTY6</label>
+                                <input type="tel" name="cover_scrap_qty6" minlength="" class="form-control"
+                                    value="{{data.cover_scrap_qty6}}" id="" placeholder="" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-3 ">
+                            <div class="mb-3">
+                                <label class="form-label">Unit6</label>
+                                <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit6"
+                                    value="{{data.cover_scrap_unit6}}" maxlength="30" >
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-sm-3 ">
+                            <div class="mb-3">
+                                <label class="form-label">Rate6</label>
+                                <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate6"
+                                    value="{{data.cover_scrap_rate6}}" required="">
+                            </div>
+                        </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars7</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular7" id="cover_scrap_particular7">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular7 }}" selected>{{ data.cover_scrap_particular7 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY7</label>
+                                    <input type="tel" name="cover_scrap_qty7" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty7}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit7</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit7"
+                                        value="{{data.cover_scrap_unit7}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate7</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate7"
+                                        value="{{data.cover_scrap_rate7}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars8</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular8" id="cover_scrap_particular8">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular8 }}" selected>{{ data.cover_scrap_particular8 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY8</label>
+                                    <input type="tel" name="cover_scrap_qty8" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty8}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit8</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit8"
+                                        value="{{data.cover_scrap_unit8}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate8</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate8"
+                                        value="{{data.cover_scrap_rate8}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars9</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular9" id="cover_scrap_particular9">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular9 }}" selected>{{ data.cover_scrap_particular9 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY9</label>
+                                    <input type="tel" name="cover_scrap_qty9" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty9}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit9</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit9"
+                                        value="{{data.cover_scrap_unit9}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate9</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate9"
+                                        value="{{data.cover_scrap_rate9}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Particulars10</label>
+                                    <select type="text" class="form-control mobile" name="cover_scrap_particular10" id="cover_scrap_particular10">
+                                        {% if data %}
+                                            <option value="{{ data.cover_scrap_particular10 }}" selected>{{ data.cover_scrap_particular10 }}</option>
+                                        {% else %}
+                                            <option disabled selected value>Select Books</option>
+                                        {% endif %}
+                                        {% for i in data26 %}
+                                            <option value="{{ i.subject }}">{{ i.subject }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">QTY10</label>
+                                    <input type="tel" name="cover_scrap_qty10" minlength="" class="form-control"
+                                        value="{{data.cover_scrap_qty10}}" id="" placeholder="" maxlength="" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit10</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_unit10"
+                                        value="{{data.cover_scrap_unit10}}" maxlength="30" >
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate10</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_scrap_rate10"
+                                        value="{{data.cover_scrap_rate10}}" required="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-md-12 ">
+                                <div class="mb-3">
+                                    <label style="color:black;">Total Quantity<span style="color: red;"></span></label>
+                                    <div class="input-group mb-4">
+                                        <input style="color: black;" width="50" type="text" placeholder="Total Quantity" name="cover_scrap_total_quantity" id="cover_scrap_total_quantity" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Bill of Material</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_bill_material"
+                                        value="{{data.cover_bill_material}}" required="">
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Bill of Material (BOM)Name</label>
+                                    <input type="tel" name="cover_bill_material_name" minlength="" class="form-control"
+                                        value="{{data.cover_bill_material_name}}" id="" placeholder="" maxlength=""
+                                        required="">
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Alias</label>
+                                    <input type="tel" name="cover_alias" minlength="" class="form-control"
+                                        value="{{data.cover_alias}}" id="" placeholder="" maxlength="" required="">
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Item To produce</label>
+                                    <input type="tel" name="cover_item_produce" minlength="" class="form-control"
+                                        value="{{data.cover_item_produce}}" id="" placeholder="" maxlength="" required="">
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Qty</label>
+                                    <input type="tel" name="cover_qty" minlength="" class="form-control"
+                                        value="{{data.cover_qty}}" id="" placeholder="" maxlength="" required="">
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Unit</label>
+                                    <input type="tel" name="cover_unit" minlength="" class="form-control"
+                                        value="{{data.cover_unit}}" id="" placeholder="" maxlength="" required="">
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Rate</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_rate"
+                                        value="{{data.cover_rate}}" maxlength="30" required="">
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3 ">
+                                <div class="mb-3">
+                                    <label class="form-label">Expenses</label>
+                                    <input type="text" class="form-control radius-10" id="" name="cover_expenses"
+                                        value="{{data.cover_expenses}}" required="">
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="row d-flex">
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">item Generated</label>
+                                    <input type="tel" name="item_generated" minlength="" class="form-control"
+                                        value="{{data.item_generated}}" id="" placeholder="" maxlength="" required="">
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-sm-3">
+                                <div class="mb-3">
+                                    <label class="form-label">item Consumed</label>
+                                    <input type="tel" name="item_consumed" minlength="" class="form-control"
+                                        value="{{data.item_consumed}}" id="" placeholder="" maxlength="" required="">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-12" style="text-align: center;">
+                            
+                            <button class="btn btn-primary" style="background-color:mediumaquamarine; "><a
+                                    href="{% url 'cover_scrap' %}" style="color:white;" class="btn-no-underline">Back</a></button>
+
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color:mediumaquamarine; color:white;">Save</button>
+                        </div>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Bind the input fields to the input event
+            $('input[name^="cover_scrap_qty"]').on('input', function () {
+                calculateTotal();
+            });
+    
+            // Calculate total on page load
+            calculateTotal();
+    
+            function calculateTotal() {
+                var total = 0;
+    
+                // Loop through all input fields starting with the name "cover_scrap_qty"
+                $('input[name^="cover_scrap_qty"]').each(function () {
+                    var quantity = parseFloat($(this).val()) || 0; // Get the value and convert to a float, default to 0 if not a number
+                    total += quantity;
+                });
+    
+                // Update the total_quantity input field with the calculated total
+                $('#cover_scrap_total_quantity').val(total);
+            }
+        });
+    </script>
+    
+    
+    
+    </body>
+    
+
+    {% endblock %}
